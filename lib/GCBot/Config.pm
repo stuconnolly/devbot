@@ -1,10 +1,8 @@
-#! /usr/bin/perl
-
 #
 #  $Id$
 #  
 #  gcbot
-#  http://dev.stuconnolly.com/svn/gcbot/
+#  http://dev.stuconnolly.com/svn/serveadmin/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 # 
@@ -22,30 +20,51 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBotMain;
+package GCBot::Config;
 
 use strict;
 use warnings;
 
-use lib '../lib';
+use Config::File;
 
-use GCBot::Utils;
-use GCBot::Config;
-use Getopt::Long;
-use Bot::BasicBot;
+use base 'Exporter';
 
-my ($version, $help);
+our @EXPORT = qw(get_config);
 
-# Get options
-GetOptions('version|v' => \$version, 'help|h' => \$help);	
+our $VERSION = '1.0';
+
+#
+# Returns the config hash for the supplied config filename.
+#
+sub get_config
+{
+	my $filename = shift;
+	my $config_file = undef;
 	
-# Decide what to do
-usage if $help;
-version if $version;
+	opendir(CONFIG_DIR, '../conf');
+	
+	my @files = grep(/${filename}.*\.conf$/, readdir(CONFIG_DIR));
+	
+	closedir(CONFIG_DIR);
+	
+	die 'No config files found' unless (@files > 0);
+	
+	if (@files == 1) {
+		$config_file = $files[0];
+	}
+	else {
+		foreach my $file (@files) 
+		{
+			if ($file ne "${filename}.conf") {
+				$config_file = $file;
+				last;
+			}
+		}
+	}
+	
+	print $config_file;
+	
+	return Config::File::read_config_file("../conf/${config_file}");
+}
 
-get_config('irc');
-
-# If we reach here, no options were provided
-printf("Type '$0 -h' for usage.\n");
-
-exit 0
+1;
