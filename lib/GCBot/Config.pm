@@ -53,10 +53,10 @@ sub get_config
 		$config_file = $files[0];
 	}
 	else {
-		foreach my $file (@files) 
+		foreach (@files) 
 		{
-			if ($file ne "${filename}.conf") {
-				$config_file = $file;
+			if ($_ ne "${filename}.conf") {
+				$config_file = $_;
 				last;
 			}
 		}
