@@ -1,5 +1,3 @@
-#! /usr/bin/perl
-
 #
 #  $Id$
 #  
@@ -22,27 +20,45 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBot;
+package GCBot::Utils;
 
 use strict;
 use warnings;
 
-use lib '../lib';
+use base 'Exporter';
 
-use GCBot::Utils;
-use Getopt::Long;
-use Bot::BasicBot;
+our @EXPORT = qw(usage version);
 
-my ($version, $help);
+our $VERSION = '1.0';
 
-# Get options
-GetOptions('version|v' => \$version, 'help|h' => \$help);	
+use constant VERSION => '1.0';
+
+#
+# Prints gcbot's usage
+#
+sub usage 
+{
+	print << "EOF";
+Usage: perl $0 [options]
+
+Possible options are:
+      
+  --version (-v)      Print gcbot version
+  --help    (-h)      Print this help message
+
+EOF
+
+	exit 0;
+}
+
+#
+# Prints gcbot's version
+#
+sub version
+{
+	printf("gcbot version %0.1f\n", VERSION);
 	
-# Decide what to do
-usage if $help;
-version if $version;
+	exit 0
+}
 
-# If we reach here, no options were provided
-printf("Type '$0 -h' for usage.\n");
-
-exit 0
+1;
