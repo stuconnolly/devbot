@@ -43,8 +43,6 @@ GetOptions('version|v' => \$version, 'help|h' => \$help);
 usage if $help;
 version if $version;
 
-get_config('irc');
-
 # If we reach here, no options were provided
 printf("Type '$0 -h' for usage.\n");
 

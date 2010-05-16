@@ -61,9 +61,7 @@ sub get_config
 			}
 		}
 	}
-	
-	print $config_file;
-	
+		
 	return Config::File::read_config_file("../conf/${config_file}");
 }
 
