@@ -43,7 +43,29 @@ GetOptions('version|v' => \$version, 'help|h' => \$help);
 usage if $help;
 version if $version;
 
-# If we reach here, no options were provided
-printf("Type '$0 -h' for usage.\n");
+my $conf = get_config('irc');
+
+my $irc_nick    = $conf->{IRC_NICK} || 'gcbot';
+my $irc_server  = $conf->{IRC_SERVER} || 'irc.freenode.net'
+my $irc_port    = $conf->{IRC_PORT} || 6667;
+my $irc_channel = $conf->{IRC_CHANNEL};
+
+die 'No IRC channel provided in IRC config.' unless $irc_channel;
+
+# Create bot
+my $bot = IrcLogBot->new(
+        server       => $irc_server,
+        port         => $irc_port,
+        channels     => [$irc_channel],
+        nick         => $irc_nick,
+        alt_nicks    => ['gcbot_', 'gcbot__'],
+        username     => 'gcbot',
+        name         => "Google Code IRC bot",
+        charset      => "utf-8",
+ 		quit_message => 'Later'
+        );
+
+# Run it
+$bot->run();
 
 exit 0
