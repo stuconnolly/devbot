@@ -46,14 +46,14 @@ version if $version;
 my $conf = get_config('irc');
 
 my $irc_nick    = $conf->{IRC_NICK} || 'gcbot';
-my $irc_server  = $conf->{IRC_SERVER} || 'irc.freenode.net'
+my $irc_server  = $conf->{IRC_SERVER} || 'irc.freenode.net';
 my $irc_port    = $conf->{IRC_PORT} || 6667;
 my $irc_channel = $conf->{IRC_CHANNEL};
 
 die 'No IRC channel provided in IRC config.' unless $irc_channel;
 
 # Create bot
-my $bot = IrcLogBot->new(
+my $bot = Bot::BasicBot->new(
         server       => $irc_server,
         port         => $irc_port,
         channels     => [$irc_channel],
