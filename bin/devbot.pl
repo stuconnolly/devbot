@@ -34,7 +34,7 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my ($version, $help);
+my($version, $help);
 
 # Get options
 GetOptions('version|v' => \$version, 'help|h' => \$help);	

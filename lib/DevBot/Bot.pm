@@ -27,6 +27,8 @@ package DevBot::Bot;
 use strict;
 use warnings;
 
+use DevBot::DB;
+use DevBot::Utils;
 use Bot::BasicBot;
 
 use base 'Bot::BasicBot';
@@ -34,11 +36,117 @@ use base 'Bot::BasicBot';
 our $VERSION = '1.0';
 
 #
-# Override help.
+# Overriden said. Called when someone says something in the channel.
+#
+sub said 
+{
+    my($self, $e) = @_;
+
+    _log($e->{channel}, $e->{who}, $e->{body});
+
+    return undef;
+}
+
+#
+#
+#
+sub emoted 
+{
+	my($self, $e) = @_;
+
+	_log($e->{channel}, '* ' . $e->{who}, $e->{body});
+    
+	return undef;
+}
+
+#
+#
+#
+sub chanjoin 
+{
+	my($self, $e) = @_;
+
+	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel}));
+
+	return undef;
+}
+
+#
+#
+#
+sub chanquit 
+{
+	my($self, $e) = @_;
+	
+	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
+	
+	return undef;
+}
+
+#
+#
+#
+sub chanpart 
+{
+	my($self, $e) = @_;
+	
+	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
+
+	return undef;
+}
+
+#
+#
+#
+sub topic 
+{
+	my($self, $e) = @_;
+	
+	_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic}));
+
+	return undef;
+}
+
+#
+#
+#
+sub nick_change 
+{	
+	my($self, $old, $new) = @_;
+
+	_log($channel, '', sprintf('%s is now known as %s', $old, $new));
+
+	return undef;
+}
+
+#
+#
+#
+sub kicked 
+{
+	my($self, $e) = @_;
+	
+	_log($e->{channel}, '', sprintf('%s was kicked by %s: %s', $e->{nick}, $e->{who}, $e->{reason}));
+	
+	return undef;
+}
+
+#
+# Overriden help.
 #
 sub help 
-{
+{	
 	return 'This is a passive Google Code IRC bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+}
+
+#
+# Logs the supplied arguments to the database.
+#
+sub _log
+{
+	my($channel, $who, $line) = @_;
+	    
+	query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_today, $who, time, $line);
 }
 
 1;
