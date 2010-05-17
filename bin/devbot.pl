@@ -22,7 +22,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBotMain;
+package DevBotMain;
 
 use strict;
 use warnings;
@@ -45,7 +45,7 @@ version if $version;
 
 my $conf = get_config('irc');
 
-my $irc_nick    = $conf->{IRC_NICK} || 'gcbot';
+my $irc_nick    = $conf->{IRC_NICK} || 'devbot';
 my $irc_server  = $conf->{IRC_SERVER} || 'irc.freenode.net';
 my $irc_port    = $conf->{IRC_PORT} || 6667;
 my $irc_channel = $conf->{IRC_CHANNEL};
