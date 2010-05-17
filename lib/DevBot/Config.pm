@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBot::Config;
+package DevBot::Config;
 
 use strict;
 use warnings;

@@ -22,7 +22,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBot::Bot;
+package DevBot::Bot;
 
 use strict;
 use warnings;
