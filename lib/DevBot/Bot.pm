@@ -147,7 +147,7 @@ sub help
 #
 sub _channels_for_nick 
 {
-    my($self, $nick) = shift;
+    my($self, $nick) = @_;
 
     return grep {$self->{channel_data}{$_}{$nick}} keys(%{$self->{channel_data}});
 }
