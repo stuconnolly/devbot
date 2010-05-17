@@ -60,8 +60,8 @@ my $bot = GCBot::Bot->new(
         nick         => $irc_nick,
         alt_nicks    => ['gcbot_', 'gcbot__'],
         username     => 'gcbot',
-        name         => "Google Code IRC bot (http://dev.stuconnolly.com/svn/gcbot/)",
-        charset      => "utf-8",
+        name         => 'Google Code IRC bot',
+        charset      => 'utf-8',
  		quit_message => 'Later'
         );
 
