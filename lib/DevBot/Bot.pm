@@ -113,8 +113,11 @@ sub topic
 sub nick_change 
 {	
 	my($self, $old, $new) = @_;
-
-	_log($channel, '', sprintf('%s is now known as %s', $old, $new));
+	
+	foreach ($self->_channels_for_nick($new)) 
+	{
+		_log($_, '', sprintf('%s is now known as %s', $old, $new));
+	}
 
 	return undef;
 }
@@ -137,6 +140,16 @@ sub kicked
 sub help 
 {	
 	return 'This is a passive Google Code IRC bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+}
+
+#
+#
+#
+sub _channels_for_nick 
+{
+    my($self, $nick) = shift;
+
+    return grep {$self->{channel_data}{$_}{$nick}} keys(%{$self->{channel_data}});
 }
 
 #
