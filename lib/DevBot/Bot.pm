@@ -36,7 +36,7 @@ use base 'Bot::BasicBot';
 our $VERSION = '1.0';
 
 #
-# Overriden said. Called when someone says something in the channel.
+# Overriden said. Called whenever someone says something in the channel.
 #
 sub said 
 {
@@ -48,7 +48,7 @@ sub said
 }
 
 #
-#
+# Overriden emoted.
 #
 sub emoted 
 {
@@ -60,7 +60,7 @@ sub emoted
 }
 
 #
-#
+# Overriden chanjoin. Called whenever someone joins the channel.
 #
 sub chanjoin 
 {
@@ -72,19 +72,7 @@ sub chanjoin
 }
 
 #
-#
-#
-sub chanquit 
-{
-	my($self, $e) = @_;
-	
-	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
-	
-	return undef;
-}
-
-#
-#
+# Overriden chanpart. Called whenever someone leaves the channel. 
 #
 sub chanpart 
 {
@@ -96,7 +84,7 @@ sub chanpart
 }
 
 #
-#
+# Override topic. Called whenever the channel's topic is changed.
 #
 sub topic 
 {
@@ -108,7 +96,7 @@ sub topic
 }
 
 #
-#
+# Overriden nick_change. Called whenever someone's nick changes.
 #
 sub nick_change 
 {	
@@ -123,7 +111,7 @@ sub nick_change
 }
 
 #
-#
+# Overriden kicked. Called whenever some is kicked from the channel.
 #
 sub kicked 
 {
@@ -135,7 +123,20 @@ sub kicked
 }
 
 #
-# Overriden help.
+# Called every minute to fork and perform background processes.
+#
+sub tick 
+{
+	my $self = shift;
+	
+	# Do something in the background
+
+	# Wait 1 minute before another tick event.
+	return 60;
+}
+
+#
+# Overriden help. Tell whoever asked about ourself.
 #
 sub help 
 {	
@@ -143,7 +144,7 @@ sub help
 }
 
 #
-#
+# Returns the channels for the supplied nick.
 #
 sub _channels_for_nick 
 {
