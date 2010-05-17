@@ -2,7 +2,7 @@
 #  $Id$
 #  
 #  devbot
-#  http://dev.stuconnolly.com/svn/gcbot/
+#  http://dev.stuconnolly.com/svn/devbot/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 # 
@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package GCBot::Utils;
+package DevBot::Utils;
 
 use strict;
 use warnings;
