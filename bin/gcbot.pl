@@ -29,10 +29,10 @@ use warnings;
 
 use lib '../lib';
 
+use GCBot::Bot;
 use GCBot::Utils;
 use GCBot::Config;
 use Getopt::Long;
-use Bot::BasicBot;
 
 my ($version, $help);
 
@@ -53,14 +53,14 @@ my $irc_channel = $conf->{IRC_CHANNEL};
 die 'No IRC channel provided in IRC config.' unless $irc_channel;
 
 # Create bot
-my $bot = Bot::BasicBot->new(
+my $bot = GCBot::Bot->new(
         server       => $irc_server,
         port         => $irc_port,
         channels     => [$irc_channel],
         nick         => $irc_nick,
         alt_nicks    => ['gcbot_', 'gcbot__'],
         username     => 'gcbot',
-        name         => "Google Code IRC bot",
+        name         => "Google Code IRC bot (http://dev.stuconnolly.com/svn/gcbot/)",
         charset      => "utf-8",
  		quit_message => 'Later'
         );
