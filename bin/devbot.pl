@@ -29,9 +29,9 @@ use warnings;
 
 use lib '../lib';
 
-use GCBot::Bot;
-use GCBot::Utils;
-use GCBot::Config;
+use DevBot::Bot;
+use DevBot::Utils;
+use DevBot::Config;
 use Getopt::Long;
 
 my ($version, $help);
@@ -53,7 +53,7 @@ my $irc_channel = $conf->{IRC_CHANNEL};
 die 'No IRC channel provided in IRC config.' unless $irc_channel;
 
 # Create bot
-my $bot = GCBot::Bot->new(
+my $bot = DevBot::Bot->new(
         server       => $irc_server,
         port         => $irc_port,
         channels     => [$irc_channel],
