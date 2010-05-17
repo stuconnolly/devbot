@@ -1,7 +1,7 @@
 #
 #  $Id$
 #  
-#  gcbot
+#  devbot
 #  http://dev.stuconnolly.com/svn/gcbot/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
@@ -34,7 +34,7 @@ our $VERSION = '1.0';
 use constant VERSION => '1.0';
 
 #
-# Prints gcbot's usage
+# Prints devbot's usage
 #
 sub usage 
 {
@@ -43,7 +43,7 @@ Usage: perl $0 [options]
 
 Possible options are:
       
-  --version (-v)      Print gcbot version
+  --version (-v)      Print devbot version
   --help    (-h)      Print this help message
 
 EOF
@@ -52,11 +52,11 @@ EOF
 }
 
 #
-# Prints gcbot's version
+# Prints devbot's version
 #
 sub version
 {
-	printf("gcbot version %0.1f\n", VERSION);
+	printf("devbot version %0.1f\n", VERSION);
 	
 	exit 0
 }

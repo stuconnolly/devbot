@@ -3,8 +3,8 @@
 #
 #  $Id$
 #  
-#  gcbot
-#  http://dev.stuconnolly.com/svn/gcbot/
+#  devbot
+#  http://dev.stuconnolly.com/svn/devbot/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 # 
@@ -38,7 +38,7 @@ our $VERSION = '1.0';
 #
 sub help 
 {
-	return 'This is a passive Google Code IRC bot. See http://dev.stuconnolly.com/svn/gcbot/trunk/README';
+	return 'This is a passive Google Code IRC bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
 }
 
 1;

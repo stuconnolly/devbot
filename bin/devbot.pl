@@ -3,8 +3,8 @@
 #
 #  $Id$
 #  
-#  gcbot
-#  http://dev.stuconnolly.com/svn/gcbot/
+#  devbot
+#  http://dev.stuconnolly.com/svn/devbot/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 # 
@@ -58,8 +58,8 @@ my $bot = GCBot::Bot->new(
         port         => $irc_port,
         channels     => [$irc_channel],
         nick         => $irc_nick,
-        alt_nicks    => ['gcbot_', 'gcbot__'],
-        username     => 'gcbot',
+        alt_nicks    => ['devbot_', 'devbot__'],
+        username     => 'devbot',
         name         => 'Google Code IRC bot',
         charset      => 'utf-8',
  		quit_message => 'Later'
