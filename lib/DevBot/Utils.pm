@@ -27,7 +27,7 @@ use warnings;
 
 use base 'Exporter';
 
-our @EXPORT = qw(usage version, gmt_today);
+our @EXPORT = qw(usage version gmt_today);
 
 our $VERSION = '1.0';
 
