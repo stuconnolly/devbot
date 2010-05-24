@@ -32,6 +32,7 @@ use lib '../lib';
 use DevBot::Bot;
 use DevBot::Utils;
 use DevBot::Config;
+use DevBot::GCFeed;
 use Getopt::Long;
 
 my($version, $help);
@@ -42,6 +43,10 @@ GetOptions('version|v' => \$version, 'help|h' => \$help);
 # Decide what to do
 usage if $help;
 version if $version;
+
+get_gc_updated_issues;
+
+exit 0;
 
 my $conf = get_config('irc');
 
