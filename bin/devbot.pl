@@ -44,7 +44,10 @@ GetOptions('version|v' => \$version, 'help|h' => \$help);
 usage if $help;
 version if $version;
 
-get_gc_updated_issues;
+for my $update (get_updated_issues)
+{		
+	printf("Issue #%d (%s): '%s' updated by %s\n", $update->{id}, $update->{url}, $update->{title}, $update->{author});
+}
 
 exit 0;
 
