@@ -41,7 +41,7 @@ our $VERSION = '1.0';
 our $TIME_CHECK_FILE = '/tmp/devbot.tmp';
 
 #
-#
+# Google Code hosting domain
 #
 our $GC_HOSTING_DOMAIN = 'code.google.com';
  
