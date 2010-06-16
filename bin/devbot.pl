@@ -49,8 +49,6 @@ for my $update (get_updated_issues)
 	printf("Issue #%d (%s): '%s' updated by %s\n", $update->{id}, $update->{url}, $update->{title}, $update->{author});
 }
 
-exit 0;
-
 my $conf = get_config('irc');
 
 my $irc_nick    = $conf->{IRC_NICK} || 'devbot';
@@ -74,6 +72,6 @@ my $bot = DevBot::Bot->new(
         );
 
 # Run it
-$bot->run();
+#$bot->run();
 
 exit 0

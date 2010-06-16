@@ -57,7 +57,7 @@ sub get_updated_issues
 	
 	die 'No Google Code project name provided in Google Code config.' unless $project;
 	
-	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=2010-06-05T00:00:00&updated-max=2010-06-06T23:59:59&alt=rss&max-results=100000");		
+	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${updated_min_datetime}&updated-max=${updated_max_datetime}&alt=rss&max-results=100000");		
 		
 	my $rss = new XML::RSS;
 	
