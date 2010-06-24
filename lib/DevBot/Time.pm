@@ -55,6 +55,8 @@ sub get_last_updated_datetime
 		chomp($datetime = <FILE>);
 		
 		close(FILE);
+		
+		_write_datetime(get_current_datetime());
 	}
 	else {
 		$datetime = get_current_datetime();

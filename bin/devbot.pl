@@ -33,7 +33,6 @@ use DevBot::Bot;
 use DevBot::Time;
 use DevBot::Utils;
 use DevBot::Config;
-use DevBot::GCFeed;
 use Getopt::Long;
 
 my($version, $help);
@@ -44,11 +43,6 @@ GetOptions('version|v' => \$version, 'help|h' => \$help);
 # Decide what to do
 usage if $help;
 version if $version;
-
-for my $update (get_updated_issues)
-{		
-	printf("Issue #%d (%s): '%s' updated by %s\n", $update->{id}, $update->{url}, $update->{title}, $update->{author});
-}
 
 my $conf = get_config('irc');
 
@@ -61,19 +55,26 @@ die 'No IRC channel provided in IRC config.' unless $irc_channel;
 
 # Create bot
 my $bot = DevBot::Bot->new(
-        server       => $irc_server,
-        port         => $irc_port,
-        channels     => [$irc_channel],
-        nick         => $irc_nick,
-        alt_nicks    => ['dvbot_', 'dvbot__'],
-        username     => 'devbot',
-        name         => 'Development Bot',
-        charset      => 'utf-8',
- 		quit_message => 'Later'
+		server       => $irc_server,
+		port         => $irc_port,
+		channels     => [$irc_channel],
+		nick         => $irc_nick,
+		alt_nicks    => ['dvbot_', 'dvbot__'],
+		username     => 'devbot',
+		name         => 'Development Bot',
+		charset      => 'utf-8'
         );
 
+my $gc_conf = get_config('gc');
+
+my $update_int = $gc_conf->{GC_UPDATE_INTERVAL};
+
+warn 'No update interval provided in Google Code config. Falling back to default.' unless $update_int;
+
+$bot->set_tick_interval($update_int);
+
 # Run it
-#$bot->run();
+$bot->run();
 
 delete_datetime_log;
 

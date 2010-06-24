@@ -72,11 +72,11 @@ sub get_updated_issues
 	for my $item (@{$rss->{items}}) 
 	{
 		my $issue_id = _extract_issue_id($item->{link});
-				
+			
 		my %issue = ('id'     => $issue_id,
 					 'title'  => $item->{title},
 					 'author' => $item->{author},
-					 'url'    => sprintf($issue_url, $issue_id)
+					 'url'    => _create_issue_url($project, $issue_url, $issue_id)
 					);
 				
 		push(@issues, {%issue});
@@ -98,6 +98,16 @@ sub _extract_issue_id
 	}
 	
 	return $issue_id;
+}
+
+#
+# Creates the URL for the supplied issue details.
+#
+sub _create_issue_url
+{
+	my($project, $issue_tracker, $issue_id) = @_;
+	
+	return ($issue_tracker) ? sprintf($issue_tracker, $issue_id) : sprintf("http://${GC_HOSTING_DOMAIN}/p/%s/issues/detail?id=%d", $project, $issue_id);
 }
 
 1;
