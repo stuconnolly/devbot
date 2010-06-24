@@ -30,9 +30,40 @@ use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_current_datetime);
+our @EXPORT = qw(get_last_updated_datetime get_current_datetime delete_datetime_log);
 
 our $VERSION = '1.0';
+
+#
+# devbot's temporary date/time tracking file
+#
+our $TIME_TRACKING_FILE = '/tmp/devbot.tmp';
+
+#
+# Gets the last updated datetime time from the tracking file or uses 
+# the current datetime if it doesn't exist.
+#
+sub get_last_updated_datetime
+{
+	my $datetime = undef;
+	
+	# If the tracking file doesn't exist use the current datetime
+	if (-s $TIME_TRACKING_FILE) {
+		
+		open(FILE, "<${TIME_TRACKING_FILE}") || die $!;
+		
+		chomp($datetime = <FILE>);
+		
+		close(FILE);
+	}
+	else {
+		$datetime = get_current_datetime();
+		
+		_write_datetime($datetime);
+	}
+	
+	return $datetime;
+}
 
 #
 # Returns the current datetime in W3C format.
@@ -43,10 +74,31 @@ sub get_current_datetime
 
 	my $time = $w3c->format_datetime(DateTime->now);
 
-	# Remove the Timezone 'Z'
 	$time =~ s/Z//g;
 	
 	return $time;
+}
+
+#
+# Deletes the datetime log.
+#
+sub delete_datetime_log
+{
+	unlink($TIME_TRACKING_FILE) || die $!;
+}
+
+#
+# Writes the supplied datetime to the time tracking temp file.
+#
+sub _write_datetime
+{
+	my $datetime = shift;
+	
+	open(FILE, ">$TIME_TRACKING_FILE") || die $!;
+	
+	print FILE "${datetime}\n";
+
+	close(FILE);
 }
 
 1;

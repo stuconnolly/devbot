@@ -27,6 +27,7 @@ use warnings;
 
 use XML::RSS;
 use LWP::Simple;
+use DevBot::Time;
 use DevBot::Config;
 
 use base 'Exporter';
@@ -34,11 +35,6 @@ use base 'Exporter';
 our @EXPORT = qw(get_updated_issues);
 
 our $VERSION = '1.0';
-
-#
-# devbot's temporary date/time tracking file
-#
-our $TIME_CHECK_FILE = '/tmp/devbot.tmp';
 
 #
 # Google Code hosting domain
@@ -57,7 +53,15 @@ sub get_updated_issues
 	
 	die 'No Google Code project name provided in Google Code config.' unless $project;
 	
-	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${updated_min_datetime}&updated-max=${updated_max_datetime}&alt=rss&max-results=100000");		
+	my $min_datetime = get_last_updated_datetime;
+	my $max_datetime = get_current_datetime;
+	
+	# If the datetimes are the same (ignoring seconds) then we've just been started
+	if (substr($min_datetime, -3) eq substr($max_datetime, -3)) {
+		return;
+	}
+									
+	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000");		
 		
 	my $rss = new XML::RSS;
 	

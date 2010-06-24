@@ -61,11 +61,14 @@ sub version
 	exit 0
 }
 
+#
+# Returns the current GMT date.
+#
 sub gmt_today 
 {
 	my @day = gmtime(time);
     
-	return sprintf('%04d-%02d-%02d', $day[5]+1900, $day[4] + 1, $day[3]);
+	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
 }
 
 1;

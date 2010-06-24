@@ -30,6 +30,7 @@ use warnings;
 use lib '../lib';
 
 use DevBot::Bot;
+use DevBot::Time;
 use DevBot::Utils;
 use DevBot::Config;
 use DevBot::GCFeed;
@@ -66,12 +67,14 @@ my $bot = DevBot::Bot->new(
         nick         => $irc_nick,
         alt_nicks    => ['dvbot_', 'dvbot__'],
         username     => 'devbot',
-        name         => 'Google Code IRC bot',
+        name         => 'Development Bot',
         charset      => 'utf-8',
  		quit_message => 'Later'
         );
 
 # Run it
 #$bot->run();
+
+delete_datetime_log;
 
 exit 0

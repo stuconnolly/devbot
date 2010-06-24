@@ -140,7 +140,7 @@ sub tick
 #
 sub help 
 {	
-	return 'This is a passive Google Code IRC bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+	return 'This is a non-interactive development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
 }
 
 #
