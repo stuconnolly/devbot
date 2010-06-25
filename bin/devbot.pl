@@ -76,6 +76,7 @@ $bot->set_tick_interval($update_int);
 # Run it
 $bot->run();
 
+# Get rid of the log
 delete_datetime_log;
 
 exit 0

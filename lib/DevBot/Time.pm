@@ -82,11 +82,13 @@ sub get_current_datetime
 }
 
 #
-# Deletes the datetime log.
+# Deletes the datetime log if it exists.
 #
 sub delete_datetime_log
 {
-	unlink($TIME_TRACKING_FILE) || die $!;
+	if (-e $TIME_TRACKING_LOG) {
+		unlink($TIME_TRACKING_FILE) || die $!;
+	}
 }
 
 #
