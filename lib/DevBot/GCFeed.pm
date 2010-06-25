@@ -56,7 +56,8 @@ sub get_updated_issues
 	my $min_datetime = get_last_updated_datetime;
 	my $max_datetime = get_current_datetime;
 	
-	# If the datetimes are the same (ignoring seconds) then we've just been started
+	# If the datetimes are the same (ignoring seconds) then we've just been started so 
+	# don't bother checking for updates.
 	if (substr($min_datetime, -3) eq substr($max_datetime, -3)) {
 		return;
 	}
