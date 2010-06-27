@@ -37,11 +37,6 @@ use base 'Bot::BasicBot';
 our $VERSION = '1.0';
 
 #
-# Default tick is every minute.
-#
-our $TICK = 60;
-
-#
 # Overriden said. Called whenever someone says something in the channel.
 #
 sub said 
@@ -132,13 +127,14 @@ sub kicked
 # Called every so often to perform background processes.
 #
 sub tick 
-{
+{	
 	my $self = shift;
 			
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
-
-	return $TICK;
+	
+	# Next tick event in 5 minutes			
+	return 300;
 }
 
 #
@@ -150,18 +146,10 @@ sub help
 }
 
 #
-# Sets the tick interval.
-#
-sub set_tick_interval
-{
-	$TICK = shift;
-}
-
-#
 # Checks for any updated issues since the last check and announces them to the channel.
 #
 sub _check_for_updated_issues
-{	
+{			
 	for my $update (get_updated_issues)
 	{		
 		printf("Issue #%d (%s): '%s' updated by %s\n", $update->{id}, $update->{url}, $update->{title}, $update->{author});

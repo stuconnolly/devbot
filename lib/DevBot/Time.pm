@@ -86,7 +86,7 @@ sub get_current_datetime
 #
 sub delete_datetime_log
 {
-	if (-e $TIME_TRACKING_LOG) {
+	if (-e $TIME_TRACKING_FILE) {
 		unlink($TIME_TRACKING_FILE) || die $!;
 	}
 }

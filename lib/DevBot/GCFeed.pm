@@ -61,6 +61,8 @@ sub get_updated_issues
 	if (substr($min_datetime, -3) eq substr($max_datetime, -3)) {
 		return;
 	}
+	
+	print "Requesting: http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000\n";
 									
 	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000");		
 		

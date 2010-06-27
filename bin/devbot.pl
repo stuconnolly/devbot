@@ -65,14 +65,6 @@ my $bot = DevBot::Bot->new(
 		charset      => 'utf-8'
         );
 
-my $gc_conf = get_config('gc');
-
-my $update_int = $gc_conf->{GC_UPDATE_INTERVAL};
-
-warn 'No update interval provided in Google Code config. Falling back to default.' unless $update_int;
-
-$bot->set_tick_interval($update_int);
-
 # Run it
 $bot->run();
 
