@@ -37,7 +37,7 @@ our $VERSION = '1.0';
 #
 # devbot's temporary date/time tracking file
 #
-our $TIME_TRACKING_FILE = '/tmp/devbot.tmp';
+our $TIME_TRACKING_FILE = "/tmp/devbot.$$.tmp";
 
 #
 # Gets the last updated datetime time from the tracking file or uses 
