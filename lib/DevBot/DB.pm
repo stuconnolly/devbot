@@ -34,7 +34,7 @@ our @EXPORT = qw(db_connection query);
 
 our $VERSION = '1.0';
 
-our $DB = undef;
+our $DB;
 
 #
 # Returns the database connection.
