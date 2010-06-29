@@ -94,9 +94,7 @@ sub _extract_issue_id
 	my $issue_id  = 0; 
 	my $issue_url = shift;
 		
-	if ($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)$/) {
-		$issue_id = $1;
-	}
+	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)$/) && ($issue_id = $1);
 	
 	return $issue_id;
 }
