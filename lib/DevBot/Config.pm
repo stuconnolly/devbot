@@ -38,8 +38,8 @@ our $VERSION = '1.0';
 #
 sub get_config
 {
+	my $config_file;
 	my $filename = shift;
-	my $config_file = undef;
 	
 	opendir(CONFIG_DIR, '../conf');
 	

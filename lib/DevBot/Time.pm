@@ -45,7 +45,7 @@ our $TIME_TRACKING_FILE = '/tmp/devbot.tmp';
 #
 sub get_last_updated_datetime
 {
-	my $datetime = undef;
+	my $datetime;
 	
 	# If the tracking file doesn't exist use the current datetime
 	if (-s $TIME_TRACKING_FILE) {
