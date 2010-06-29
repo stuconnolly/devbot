@@ -46,7 +46,7 @@ sub db_connection
 	my $conf = get_config('db');
 	
 	my $dbs = $conf->{DSN} || 'mysql';
-	my $db_name = $conf->{DATABASE} || 'serve';
+	my $db_name = $conf->{DATABASE} || 'devbot';
 	my $db_host = $conf->{HOST} || 'localhost';
 	my $db_port = $conf->{PORT} || '3306';
 	my $db_user = $conf->{USER} || 'root';
