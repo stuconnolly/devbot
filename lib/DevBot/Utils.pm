@@ -42,7 +42,8 @@ sub usage
 Usage: perl $0 [options]
 
 Possible options are:
-      
+  
+  --issues  (-i)      Enable the annoucement of issue updates
   --version (-v)      Print devbot version
   --help    (-h)      Print this help message
 

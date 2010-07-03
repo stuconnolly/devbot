@@ -35,14 +35,18 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my($version, $help);
+my($issues, $version, $help);
 
 # Get options
-GetOptions('version|v' => \$version, 'help|h' => \$help);	
-	
+GetOptions('issues|i'  => \$issues,
+		   'version|v' => \$version, 
+		   'help|h'    => \$help);	
+			
 # Decide what to do
 usage if $help;
 version if $version;
+
+$DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 
 my $conf = get_config('irc');
 
@@ -69,6 +73,6 @@ my $bot = DevBot::Bot->new(
 $bot->run();
 
 # Get rid of the log
-delete_datetime_log;
+delete_datetime_log if $issues;
 
 exit 0

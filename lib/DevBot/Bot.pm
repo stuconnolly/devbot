@@ -32,9 +32,16 @@ use DevBot::Utils;
 use DevBot::GCFeed;
 use Bot::BasicBot;
 
+use vars qw($ANNOUNCE_ISSUE_UPDATES);
+
 use base 'Bot::BasicBot';
 
 our $VERSION = '1.0';
+
+#
+# By default don't annouce issue changes
+#
+our $ANNOUNCE_ISSUE_UPDATES = 0;
 
 #
 # Overriden said. Called whenever someone says something in the channel.
@@ -129,6 +136,8 @@ sub kicked
 sub tick 
 {	
 	my $self = shift;
+	
+	return 0 if !$ANNOUNCE_ISSUE_UPDATES;
 			
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
