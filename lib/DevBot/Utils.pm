@@ -63,7 +63,7 @@ sub version
 }
 
 #
-# Returns the current GMT date.
+# Returns the current GMT date in format YYYY-MM-DD.
 #
 sub gmt_today 
 {

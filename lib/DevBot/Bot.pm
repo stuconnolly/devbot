@@ -39,7 +39,7 @@ use base 'Bot::BasicBot';
 our $VERSION = '1.0';
 
 #
-# By default don't annouce issue changes
+# By default don't announce issue changes
 #
 our $ANNOUNCE_ISSUE_UPDATES = 0;
 
