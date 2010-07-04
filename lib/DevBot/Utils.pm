@@ -27,7 +27,7 @@ use warnings;
 
 use base 'Exporter';
 
-our @EXPORT = qw(usage version gmt_today);
+our @EXPORT = qw(usage version);
 
 our $VERSION = '1.0';
 
@@ -60,16 +60,6 @@ sub version
 	printf("devbot version %0.1f\n", VERSION);
 	
 	exit 0
-}
-
-#
-# Returns the current GMT date in format YYYY-MM-DD.
-#
-sub gmt_today 
-{
-	my @day = gmtime(time);
-    
-	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
 }
 
 1;

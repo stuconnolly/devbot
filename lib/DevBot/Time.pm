@@ -30,7 +30,7 @@ use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_last_updated_datetime get_current_datetime delete_datetime_log);
+our @EXPORT = qw(get_last_updated_datetime get_current_datetime delete_datetime_log gmt_date);
 
 our $VERSION = '1.0';
 
@@ -89,6 +89,16 @@ sub delete_datetime_log
 	if (-e $TIME_TRACKING_FILE) {
 		unlink($TIME_TRACKING_FILE) || die $!;
 	}
+}
+
+#
+# Returns the current GMT date in format YYYY-MM-DD.
+#
+sub gmt_date 
+{
+	my @day = gmtime(time);
+    
+	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
 }
 
 #

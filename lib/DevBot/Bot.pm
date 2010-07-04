@@ -28,7 +28,7 @@ use strict;
 use warnings;
 
 use DevBot::DB;
-use DevBot::Utils;
+use DevBot::Time;
 use DevBot::GCFeed;
 use Bot::BasicBot;
 
@@ -182,7 +182,7 @@ sub _log
 {
 	my($channel, $who, $line) = @_;
 	    
-	query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_today, $who, time, $line);
+	query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_date, $who, time, $line);
 }
 
 1;
