@@ -72,7 +72,7 @@ my $bot = DevBot::Bot->new(
         );
 
 # Run it
-#$bot->run();
+$bot->run();
 
 # Get rid of the log
 delete_datetime_log if $issues;
