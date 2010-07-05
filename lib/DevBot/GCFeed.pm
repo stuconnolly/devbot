@@ -27,6 +27,7 @@ use warnings;
 
 use XML::RSS;
 use LWP::Simple;
+use DevBot::Log;
 use DevBot::Time;
 use DevBot::Config;
 
@@ -61,8 +62,12 @@ sub get_updated_issues
 	if (substr($min_datetime, -3) eq substr($max_datetime, -3)) {
 		return;
 	}
+	
+	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000";
+			
+	log_m("Requesting: $url");
 										
-	my $xml = get("http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000");		
+	my $xml = get($url);		
 		
 	my $rss = new XML::RSS;
 	

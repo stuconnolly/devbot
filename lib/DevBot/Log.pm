@@ -27,6 +27,8 @@ use warnings;
 
 use base 'Exporter';
 
+use vars qw($LOGGING);
+
 our @EXPORT = qw(log_m);
 
 our $VERSION = '1.0';
@@ -37,17 +39,28 @@ our $VERSION = '1.0';
 our $LOG_FILE = 'devbot.log';
 
 #
+# By default don't announce issue changes
+#
+our $LOGGING = 0;
+
+#
 # Logs the supplied message.
 #
 sub log_m
 {
+	return undef unless $LOGGING;
+	
 	my $message = shift;
 	
 	my $log = sprintf('../logs/%s', _log_filename());
 	
 	open(LOG, '>>', $log) || die $!;
 	
-	print LOG "${message}\n";
+	my @day = localtime(time);
+
+	$message = sprintf("[%02d-%02d-%04d %02d:%02d:%02d] %s\n", $day[3], $day[4] + 1, $day[5] + 1900, $day[2], $day[1], $day[0], $message);
+	
+	print LOG $message;
 	
 	close(LOG);
 }
@@ -57,7 +70,7 @@ sub log_m
 #
 sub _log_filename
 {
-	my @day = gmtime(time);
+	my @day = localtime(time);
 	
 	return sprintf('%02d-%02d-%04d-%s', $day[3], $day[4] + 1, $day[5] + 1900, $LOG_FILE);
 }

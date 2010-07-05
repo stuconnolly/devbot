@@ -30,16 +30,16 @@ use warnings;
 use lib '../lib';
 
 use DevBot::Bot;
-use DevBot::Log;
 use DevBot::Time;
 use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my($issues, $version, $help);
+my($issues, $logging, $version, $help);
 
 # Get options
 GetOptions('issues|i'  => \$issues,
+		   'logging|l' => \$logging,
 		   'version|v' => \$version, 
 		   'help|h'    => \$help);	
 			
@@ -47,6 +47,7 @@ GetOptions('issues|i'  => \$issues,
 usage if $help;
 version if $version;
 
+$DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 
 my $conf = get_config('irc');
@@ -71,7 +72,7 @@ my $bot = DevBot::Bot->new(
         );
 
 # Run it
-$bot->run();
+#$bot->run();
 
 # Get rid of the log
 delete_datetime_log if $issues;
