@@ -30,6 +30,7 @@ use warnings;
 use lib '../lib';
 
 use DevBot::Bot;
+use DevBot::Log;
 use DevBot::Time;
 use DevBot::Utils;
 use DevBot::Config;

@@ -50,7 +50,7 @@ sub get_last_updated_datetime
 	# If the tracking file doesn't exist use the current datetime
 	if (-s $TIME_TRACKING_FILE) {
 		
-		open(FILE, "<${TIME_TRACKING_FILE}") || die $!;
+		open(FILE, $TIME_TRACKING_FILE) || die $!;
 		
 		chomp($datetime = <FILE>);
 		
@@ -108,7 +108,7 @@ sub _write_datetime
 {
 	my $datetime = shift;
 	
-	open(FILE, ">$TIME_TRACKING_FILE") || die $!;
+	open(FILE, '>', $TIME_TRACKING_FILE) || die $!;
 	
 	print FILE "${datetime}\n";
 
