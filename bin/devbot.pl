@@ -29,6 +29,7 @@ use warnings;
 
 use lib '../lib';
 
+use Cwd;
 use DevBot::Bot;
 use DevBot::Time;
 use DevBot::Utils;
@@ -41,7 +42,7 @@ my($issues, $logging, $version, $help);
 GetOptions('issues|i'  => \$issues,
 		   'logging|l' => \$logging,
 		   'version|v' => \$version, 
-		   'help|h'    => \$help);	
+		   'help|h'    => \$help);
 			
 # Decide what to do
 usage if $help;
@@ -49,6 +50,9 @@ version if $version;
 
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
+
+# Set the root dir
+$DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
 my $conf = get_config('irc');
 

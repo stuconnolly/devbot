@@ -25,6 +25,9 @@ package DevBot::Log;
 use strict;
 use warnings;
 
+use File::Spec;
+use DevBot::Utils;
+
 use base 'Exporter';
 
 use vars qw($LOGGING);
@@ -52,7 +55,7 @@ sub log_m
 	
 	my $message = shift;
 	
-	my $log = sprintf('../logs/%s', _log_filename());
+	my $log = File::Spec->catfile(($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename());
 	
 	open(LOG, '>>', $log) || die $!;
 	

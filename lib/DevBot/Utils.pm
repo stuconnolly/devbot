@@ -27,11 +27,18 @@ use warnings;
 
 use base 'Exporter';
 
+use vars qw($ROOT_DIR);
+
 our @EXPORT = qw(usage version);
 
 our $VERSION = '1.0';
 
 use constant VERSION => '1.0';
+
+#
+# devbot rootdir
+#
+our $ROOT_DIR = '';
 
 #
 # Prints devbot's usage

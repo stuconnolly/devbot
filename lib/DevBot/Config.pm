@@ -25,6 +25,7 @@ package DevBot::Config;
 use strict;
 use warnings;
 
+use File::Spec;
 use Config::File;
 
 use base 'Exporter';
@@ -41,7 +42,9 @@ sub get_config
 	my $config_file;
 	my $filename = shift;
 	
-	opendir(CONFIG_DIR, '../conf');
+	my $conf_path = File::Spec->catdir(($DevBot::Utils::ROOT_DIR, 'conf'));
+	
+	opendir(CONFIG_DIR, $conf_path);
 	
 	my @files = grep(/${filename}.*\.conf$/, readdir(CONFIG_DIR));
 	
@@ -61,8 +64,8 @@ sub get_config
 			}
 		}
 	}
-		
-	return Config::File::read_config_file("../conf/${config_file}");
+			
+	return Config::File::read_config_file(File::Spec->catfile(($conf_path), $config_file));
 }
 
 1;
