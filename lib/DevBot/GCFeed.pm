@@ -59,16 +59,14 @@ sub get_updated_issues
 	
 	# If the datetimes are the same (ignoring seconds) then we've just been started so 
 	# don't bother checking for updates.
-	if (substr($min_datetime, -3) eq substr($max_datetime, -3)) {
-		return;
-	}
+	return undef if (substr($min_datetime, -3) eq substr($max_datetime, -3));
 	
 	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000";
-			
+					
 	log_m("Requesting: $url");
 										
-	my $xml = get($url);		
-		
+	my $xml = get($url);
+			
 	my $rss = new XML::RSS;
 	
 	$rss->parse($xml);
@@ -84,7 +82,7 @@ sub get_updated_issues
 					 'author' => $item->{author},
 					 'url'    => _create_issue_url($project, $issue_url, $issue_id)
 					);
-				
+						
 		push(@issues, {%issue});
 	}	
 					

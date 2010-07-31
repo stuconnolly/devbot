@@ -51,6 +51,7 @@ Usage: perl $0 [options]
 Possible options are:
   
   --issues  (-i)      Enable the annoucement of issue updates
+  --logging (-l)      Enable logging
   --version (-v)      Print devbot version
   --help    (-h)      Print this help message
 
