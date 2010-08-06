@@ -26,14 +26,17 @@ use strict;
 use warnings;
 
 use XML::RSS;
+use XML::FeedPP;
 use LWP::Simple;
 use DevBot::Log;
 use DevBot::Time;
 use DevBot::Config;
+use DateTime;
+use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_updated_issues);
+our @EXPORT = qw(get_updated_issues_api get_updated_issues_feed);
 
 our $VERSION = '1.0';
 
@@ -43,10 +46,11 @@ our $VERSION = '1.0';
 our $GC_HOSTING_DOMAIN = 'code.google.com';
  
 #
-# Returns an array of updated issues.
+# Returns an array of updated issues via Google's project hosting API.
 #
-sub get_updated_issues
+sub get_updated_issues_api
 {
+	my @issues = ();
 	my $conf = get_config('gc');
 	
 	my $project = $conf->{GC_PROJECT};
@@ -71,8 +75,6 @@ sub get_updated_issues
 	
 	$rss->parse($xml);
 	
-	my @issues = ();
-	
 	for my $item (@{$rss->{items}}) 
 	{
 		my $issue_id = _extract_issue_id($item->{link});
@@ -90,6 +92,51 @@ sub get_updated_issues
 }
 
 #
+# Returns an array of updated issues via the project's issues Atom feed.
+#
+sub get_updated_issues_feed
+{
+	my @issues = ();
+	my $conf = get_config('gc');
+	
+	my $project = $conf->{GC_PROJECT};
+	my $issue_url = $conf->{GC_ISSUE_URL};
+	
+	die 'No Google Code project name provided in Google Code config.' unless $project;
+	
+	my $feed = XML::FeedPP::Atom->new("http://${GC_HOSTING_DOMAIN}/feeds/p/${project}/issueupdates/basic");
+		
+	my $w3c = DateTime::Format::W3CDTF->new;
+		
+	my $cur_datetime  = $w3c->parse_datetime(get_last_updated_datetime);
+	my $feed_datetime = $w3c->parse_datetime($feed->pubDate()); 
+	
+	# Only continue if the feed's publication date is newer than the last we check it
+	if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
+		
+		foreach my $item ($feed->get_item()) 
+		{		
+			my $item_datetime = $w3c->parse_datetime($item->pubDate());
+
+			if (DateTime->compare($item_datetime, $cur_datetime)) {
+
+				my $issue_id = _extract_issue_id($item->link());
+
+				my %issue = ('id'     => $issue_id,
+							 'title'  => $item->title(),
+							 'author' => $item->author(),
+							 'url'    => _create_issue_url($project, $issue_url, $issue_id)
+							);
+
+				push(@issues, {%issue});
+			}
+		}
+	}
+	
+	return @issues;
+}
+
+#
 # Extracts the issues ID from the supplied link.
 #
 sub _extract_issue_id
@@ -97,7 +144,7 @@ sub _extract_issue_id
 	my $issue_id  = 0; 
 	my $issue_url = shift;
 		
-	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)$/) && ($issue_id = $1);
+	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c[0-9]+)?$/) && ($issue_id = $1);
 	
 	return $issue_id;
 }

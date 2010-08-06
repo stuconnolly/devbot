@@ -159,9 +159,14 @@ sub help
 #
 sub _check_for_updated_issues
 {			
-	for my $update (get_updated_issues)
+	for my $update (get_updated_issues_feed)
 	{		
-		printf("Issue #%d (%s): '%s' updated by %s\n", $update->{id}, $update->{url}, $update->{title}, $update->{author});
+		if ($update->{id} > 0) {
+			printf("(%s): %s by %s\n", $update->{url}, $update->{title}, $update->{author});
+		}
+		else {
+			printf("%s by %s\n", $update->{title}, $update->{author});
+		}
 	}
 }
 
