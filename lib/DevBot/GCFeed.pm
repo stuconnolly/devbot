@@ -104,7 +104,11 @@ sub get_updated_issues_feed
 	
 	die 'No Google Code project name provided in Google Code config.' unless $project;
 	
-	my $feed = XML::FeedPP::Atom->new("http://${GC_HOSTING_DOMAIN}/feeds/p/${project}/issueupdates/basic");
+	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/p/${project}/issueupdates/basic";
+					
+	log_m("Requesting: $url");
+	
+	my $feed = XML::FeedPP::Atom->new($url);
 		
 	my $w3c = DateTime::Format::W3CDTF->new;
 		
