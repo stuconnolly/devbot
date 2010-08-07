@@ -115,7 +115,7 @@ sub get_updated_issues_feed
 	my $cur_datetime  = $w3c->parse_datetime(get_last_updated_datetime);
 	my $feed_datetime = $w3c->parse_datetime($feed->pubDate()); 
 	
-	# Only continue if the feed's publication date is newer than the last we check it
+	# Only continue if the feed's publication date is newer than the last time we check it
 	if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
 		
 		foreach my $item ($feed->get_item()) 
