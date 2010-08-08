@@ -67,7 +67,7 @@ sub query
 	my $query = shift;
 	my @args = @_;
 	
-	my $db = db_connection();
+	my $db = db_connection;
 
 	my $result = $db->prepare($query) || die $db->errstr;
 
