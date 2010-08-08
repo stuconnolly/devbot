@@ -87,6 +87,10 @@ sub get_updated_issues_api
 						
 		push(@issues, {%issue});
 	}	
+	
+	my $issue_count = @issues;
+	
+	log_m(sprintf('Found %d issue updates', $issue_count));
 					
 	return @issues;
 }
@@ -136,6 +140,10 @@ sub get_updated_issues_feed
 			}
 		}
 	}
+	
+	my $issue_count = @issues;
+		
+	log_m(sprintf('Found %d issue updates', $issue_count));
 	
 	return @issues;
 }
