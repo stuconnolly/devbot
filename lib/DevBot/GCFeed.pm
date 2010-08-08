@@ -122,7 +122,7 @@ sub get_updated_issues_feed
 		{		
 			my $item_datetime = $w3c->parse_datetime($item->pubDate());
 
-			if (DateTime->compare($item_datetime, $cur_datetime)) {
+			if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
 
 				my $issue_id = _extract_issue_id($item->link());
 
