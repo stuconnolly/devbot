@@ -39,12 +39,12 @@ use Getopt::Long;
 my($issues, $channel_logging, $tick, $logging, $version, $help);
 
 # Get options
-GetOptions('issues|i'           => \$issues,
-		   'channel-logging|cl' => \$channel_logging,
-		   'update-interval|t'  => \$tick,
-		   'logging|l'          => \$logging,
-		   'version|v'          => \$version, 
-		   'help|h'             => \$help);
+GetOptions('issues|i'            => \$issues,
+		   'channel-logging|cl'  => \$channel_logging,
+		   'update-interval|t=i' => \$tick,
+		   'logging|l'           => \$logging,
+		   'version|v'           => \$version, 
+		   'help|h'              => \$help);
 			
 # Decide what to do
 usage if $help;
