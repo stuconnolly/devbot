@@ -51,6 +51,13 @@ sub said
     my($self, $e) = @_;
 
     _log($e->{channel}, $e->{who}, $e->{body});
+	
+	# See if we were asked something
+	#if (length($e->{body})) {
+		#my $issue_id = 0; 
+			
+		#($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
+	#}
 
     return undef;
 }
@@ -138,7 +145,7 @@ sub tick
 	my $self = shift;
 	
 	return 0 if !$ANNOUNCE_ISSUE_UPDATES;
-			
+				
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
 	
@@ -151,18 +158,18 @@ sub tick
 #
 sub help 
 {	
-	return 'This is a non-interactive development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+	return 'I am a development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
 }
 
 #
 # Checks for any updated issues since the last check and announces them to the channel.
 #
 sub _check_for_updated_issues
-{			
+{				
 	for my $update (get_updated_issues_feed)
 	{		
 		if ($update->{id} > 0) {
-			printf("(%s): %s by %s\n", $update->{url}, $update->{title}, $update->{author});
+			printf("( %s ): %s by %s\n", $update->{url}, $update->{title}, $update->{author});
 		}
 		else {
 			printf("%s by %s\n", $update->{title}, $update->{author});
