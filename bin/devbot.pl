@@ -36,20 +36,28 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my($issues, $logging, $version, $help);
+my($issues, $channel_logging, $tick, $logging, $version, $help);
 
 # Get options
-GetOptions('issues|i'  => \$issues,
-		   'logging|l' => \$logging,
-		   'version|v' => \$version, 
-		   'help|h'    => \$help);
+GetOptions('issues|i'           => \$issues,
+		   'channel-logging|cl' => \$channel_logging,
+		   'update-interval|t'  => \$tick,
+		   'logging|l'          => \$logging,
+		   'version|v'          => \$version, 
+		   'help|h'             => \$help);
 			
 # Decide what to do
 usage if $help;
 version if $version;
 
+$DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
+$DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
+
+print "Enabling logging...\n" if $logging;
+print "Enabling issue annoucements...\n" if $issues;
+print "Disabling channel logging...\n" if $channel_logging;
 
 # Set the root dir
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
@@ -65,14 +73,14 @@ die 'No IRC channel provided in IRC config.' unless $irc_channel;
 
 # Create bot
 my $bot = DevBot::Bot->new(
-		server       => $irc_server,
-		port         => $irc_port,
-		channels     => [$irc_channel],
-		nick         => $irc_nick,
-		alt_nicks    => ['devbot_', 'devbot__'],
-		username     => 'devbot',
-		name         => 'Development Bot',
-		charset      => 'utf-8'
+		server    => $irc_server,
+		port      => $irc_port,
+		channels  => [$irc_channel],
+		nick      => $irc_nick,
+		alt_nicks => ['devbot_', 'devbot__'],
+		username  => 'devbot',
+		name      => 'Development Bot',
+		charset   => 'utf-8'
         );
 
 # Run it

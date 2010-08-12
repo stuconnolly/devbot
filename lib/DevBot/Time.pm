@@ -30,12 +30,17 @@ use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_last_updated_datetime get_current_datetime delete_datetime_log gmt_date);
+our @EXPORT = qw(
+	get_last_updated_datetime 
+	get_current_datetime 
+	write_datetime 
+	delete_datetime_log 
+	gmt_date);
 
 our $VERSION = '1.0';
 
 #
-# devbot's temporary date/time tracking file
+# devbot's temporary datetime tracking file
 #
 our $TIME_TRACKING_FILE = "/tmp/devbot.tmp.$$";
 
@@ -54,14 +59,12 @@ sub get_last_updated_datetime
 		
 		chomp($datetime = <FILE>);
 		
-		close(FILE);
-		
-		_write_datetime(get_current_datetime());
+		close(FILE);		
 	}
 	else {
 		$datetime = get_current_datetime();
 		
-		_write_datetime($datetime);
+		write_datetime($datetime);
 	}
 	
 	return $datetime;
@@ -73,12 +76,26 @@ sub get_last_updated_datetime
 sub get_current_datetime
 {
 	my $w3c = DateTime::Format::W3CDTF->new;
-
+		
 	my $time = $w3c->format_datetime(DateTime->now);
-
+	
 	$time =~ s/Z//g;
 	
 	return $time;
+}
+
+#
+# Writes the supplied datetime to the time tracking temp file.
+#
+sub write_datetime
+{
+	my $datetime = shift;
+	
+	open(FILE, '>', $TIME_TRACKING_FILE) || die $!;
+	
+	print FILE "${datetime}\n";
+
+	close(FILE);
 }
 
 #
@@ -99,20 +116,6 @@ sub gmt_date
 	my @day = gmtime(time);
     
 	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
-}
-
-#
-# Writes the supplied datetime to the time tracking temp file.
-#
-sub _write_datetime
-{
-	my $datetime = shift;
-	
-	open(FILE, '>', $TIME_TRACKING_FILE) || die $!;
-	
-	print FILE "${datetime}\n";
-
-	close(FILE);
 }
 
 1;

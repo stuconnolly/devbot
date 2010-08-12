@@ -50,10 +50,12 @@ Usage: perl $0 [options]
 
 Possible options are:
   
-  --issues  (-i)      Enable the annoucement of issue updates
-  --logging (-l)      Enable logging
-  --version (-v)      Print devbot version
-  --help    (-h)      Print this help message
+  --issues          (-i)      Enable the annoucement of issue updates
+  --channel-logging (-cl)     Disable channel logging
+  --update-interval (-t)      Specify the interval at which issue updates are checked (in seconds)
+  --logging         (-l)      Enable logging
+  --version         (-v)      Print devbot version
+  --help            (-h)      Print this help message
 
 EOF
 

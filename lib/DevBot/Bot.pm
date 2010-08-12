@@ -32,16 +32,26 @@ use DevBot::Time;
 use DevBot::GCFeed;
 use Bot::BasicBot;
 
-use vars qw($ANNOUNCE_ISSUE_UPDATES);
+use vars qw($TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
 our $VERSION = '1.0';
 
 #
+# Default tick is every 5 minutes
+#
+our $TICK = 300;
+
+#
 # By default don't announce issue changes
 #
 our $ANNOUNCE_ISSUE_UPDATES = 0;
+
+#
+# By default enable channel logging
+#
+our $CHANNEL_LOGGING = 1;
 
 #
 # Overriden said. Called whenever someone says something in the channel.
@@ -50,14 +60,21 @@ sub said
 {
     my($self, $e) = @_;
 
-    _log($e->{channel}, $e->{who}, $e->{body});
+	if ($CHANNEL_LOGGING) {
+		_log($e->{channel}, $e->{who}, $e->{body});
+	}
 	
 	# See if we were asked something
-	#if (length($e->{body})) {
-		#my $issue_id = 0; 
+	if (length($e->{body})) {
+		my $issue_id = 0; 
 			
-		#($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
-	#}
+		($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
+		
+		$self->say(who     => $e->{who},
+				   channel => $e->{channel}, 
+				   body    => $issue_id,
+				   address => 1);
+	}
 
     return undef;
 }
@@ -150,7 +167,7 @@ sub tick
 				  run     => \&_check_for_updated_issues);
 	
 	# Next tick event in 5 minutes			
-	return 300;
+	return $TICK;
 }
 
 #

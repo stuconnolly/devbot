@@ -109,23 +109,31 @@ sub get_updated_issues_feed
 	die 'No Google Code project name provided in Google Code config.' unless $project;
 	
 	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/p/${project}/issueupdates/basic";
-					
+						
 	log_m("Requesting: $url");
 	
 	my $feed = XML::FeedPP::Atom->new($url);
-		
+				
 	my $w3c = DateTime::Format::W3CDTF->new;
+	
+	my $pub_date = $feed->pubDate();
+	
+	$pub_date =~ s/Z//g;
 		
-	my $cur_datetime  = $w3c->parse_datetime(get_last_updated_datetime);
-	my $feed_datetime = $w3c->parse_datetime($feed->pubDate()); 
+	my $cur_datetime = $w3c->parse_datetime(get_last_updated_datetime);	
+	my $feed_datetime = $w3c->parse_datetime($pub_date);
+	
+	write_datetime($feed_datetime); 
 	
 	# Only continue if the feed's publication date is newer than the last time we check it
 	if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
 		
 		foreach my $item ($feed->get_item()) 
-		{		
-			my $item_datetime = $w3c->parse_datetime($item->pubDate());
-
+		{	
+			my $item_datetime = $w3c->parse_datetime($item->pubDate());	
+			
+			$item_datetime =~ s/Z//g;
+			
 			if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
 
 				my $issue_id = _extract_issue_id($item->link());
