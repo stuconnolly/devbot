@@ -59,6 +59,8 @@ print "Enabling logging...\n" if $logging;
 print "Enabling issue annoucements...\n" if $issues;
 print "Disabling channel logging...\n" if $channel_logging;
 
+printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
+
 # Set the root dir
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
