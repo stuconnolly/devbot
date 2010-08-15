@@ -98,7 +98,9 @@ sub chanjoin
 {
 	my($self, $e) = @_;
 
-	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel}));
+	if ($CHANNEL_LOGGING) {
+		_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel}));
+	}
 
 	return undef;
 }
@@ -122,7 +124,9 @@ sub topic
 {
 	my($self, $e) = @_;
 	
-	_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic}));
+	if ($CHANNEL_LOGGING) {
+		_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic}));
+	}
 
 	return undef;
 }
@@ -175,7 +179,7 @@ sub tick
 #
 sub help 
 {	
-	return 'I am a development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+	return 'I am an interactive development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
 }
 
 #
