@@ -65,15 +65,17 @@ sub said
 	}
 	
 	# See if we were asked something
-	if (length($e->{body})) {
+	if (length($e->{address})) {
 		my $issue_id = 0; 
 			
 		($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
 		
-		$self->say(who     => $e->{who},
-				   channel => $e->{channel}, 
-				   body    => $issue_id,
-				   address => 1);
+		if ($issue_id) {
+			$self->say(who     => $e->{who},
+					   channel => $e->{channel}, 
+					   body    => $issue_id,
+					   address => 1);
+		}
 	}
 
     return undef;
