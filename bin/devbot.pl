@@ -66,18 +66,18 @@ $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
 my $conf = get_config('irc');
 
-my $irc_nick    = $conf->{IRC_NICK} || 'devbot';
-my $irc_server  = $conf->{IRC_SERVER} || 'irc.freenode.net';
-my $irc_port    = $conf->{IRC_PORT} || 6667;
-my $irc_channel = $conf->{IRC_CHANNEL};
+my $irc_nick     = $conf->{IRC_NICK} || 'devbot';
+my $irc_server   = $conf->{IRC_SERVER} || 'irc.freenode.net';
+my $irc_port     = $conf->{IRC_PORT} || 6667;
+my $irc_channels = [split(m/\s+/, $conf->{IRC_CHANNEL})];
 
-die 'No IRC channel provided in IRC config.' unless $irc_channel;
+die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
 # Create bot
 my $bot = DevBot::Bot->new(
 		server    => $irc_server,
 		port      => $irc_port,
-		channels  => [$irc_channel],
+		channels  => $irc_channels,
 		nick      => $irc_nick,
 		alt_nicks => ['devbot_', 'devbot__'],
 		username  => 'devbot',
