@@ -34,7 +34,7 @@ use vars qw($LOGGING $LOG_FILE);
 
 our @EXPORT = qw(log_m);
 
-our $VERSION = '1.0';
+our $VERSION = 1.00;
 
 #
 # By default don't enable logging.

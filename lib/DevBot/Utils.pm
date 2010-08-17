@@ -31,7 +31,7 @@ use vars qw($ROOT_DIR);
 
 our @EXPORT = qw(usage version);
 
-our $VERSION = '1.0';
+our $VERSION = 1.0;
 
 use constant VERSION => '1.0';
 

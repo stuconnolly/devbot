@@ -36,7 +36,7 @@ use vars qw($TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
-our $VERSION = '1.0';
+our $VERSION = 1.00;
 
 #
 # Default tick is every 5 minutes

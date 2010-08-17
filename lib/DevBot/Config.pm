@@ -32,7 +32,7 @@ use base 'Exporter';
 
 our @EXPORT = qw(get_config);
 
-our $VERSION = '1.0';
+our $VERSION = 1.00;
 
 #
 # Returns the config hash for the supplied config filename.

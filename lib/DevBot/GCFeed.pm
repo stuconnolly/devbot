@@ -38,7 +38,7 @@ use base 'Exporter';
 
 our @EXPORT = qw(get_updated_issues_api get_updated_issues_feed);
 
-our $VERSION = '1.0';
+our $VERSION = 1.00;
 
 #
 # Google Code hosting domain

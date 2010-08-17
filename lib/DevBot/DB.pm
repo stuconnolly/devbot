@@ -32,7 +32,7 @@ use base 'Exporter';
 
 our @EXPORT = qw(db_connection query);
 
-our $VERSION = '1.0';
+our $VERSION = 1.00;
 
 our $DB;
 
