@@ -172,7 +172,6 @@ sub tick
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
 	
-	# Next tick event in 5 minutes			
 	return $TICK;
 }
 
