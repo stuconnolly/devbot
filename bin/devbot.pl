@@ -36,13 +36,14 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my($issues, $channel_logging, $tick, $logging, $version, $help);
+my($issues, $channel_logging, $tick, $logging, $log_dir, $version, $help);
 
 # Get options
 GetOptions('issues|i'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'update-interval|t=i' => \$tick,
 		   'logging|l'           => \$logging,
+		   'logdir|ld=s'         => \$log_dir,
 		   'version|v'           => \$version, 
 		   'help|h'              => \$help);
 			
@@ -52,6 +53,7 @@ version if $version;
 
 $DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
+$DevBot::Bot::LOG_PATH = $log_dir if $log_dir;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 

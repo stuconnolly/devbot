@@ -30,11 +30,16 @@ use DevBot::Utils;
 
 use base 'Exporter';
 
-use vars qw($LOGGING);
+use vars qw($LOGGING $LOG_FILE);
 
 our @EXPORT = qw(log_m);
 
 our $VERSION = '1.0';
+
+#
+# By default don't enable logging.
+#
+our $LOGGING = 0;
 
 #
 # Default log filename
@@ -42,9 +47,9 @@ our $VERSION = '1.0';
 our $LOG_FILE = 'devbot.log';
 
 #
-# By default don't announce issue changes
+# Default log path is '../logs'.
 #
-our $LOGGING = 0;
+our $LOG_PATH = '';
 
 #
 # Logs the supplied message.
@@ -55,7 +60,7 @@ sub log_m
 	
 	my $message = shift;
 	
-	my $log = File::Spec->catfile(($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename());
+	my $log =  File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename());
 	
 	open(LOG, '>>', $log) || die $!;
 	

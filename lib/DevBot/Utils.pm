@@ -54,6 +54,7 @@ Possible options are:
   --channel-logging (-cl)     Disable channel logging
   --update-interval (-t)      Specify the interval at which issue updates are checked (in seconds)
   --logging         (-l)      Enable logging
+  --logdir          (-ld)     Specify a different log directory (must be an absolute path)
   --version         (-v)      Print devbot version
   --help            (-h)      Print this help message
 
