@@ -120,7 +120,19 @@ sub chanpart
 }
 
 #
-# Override topic. Called whenever the channel's topic is changed.
+# Overriden chanquit. Called whenever someone leaves the channel. 
+#
+sub chanquit 
+{
+	my($self, $e) = @_;
+	
+	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
+
+	return undef;
+}
+
+#
+# Overriden topic. Called whenever the channel's topic is changed.
 #
 sub topic 
 {
