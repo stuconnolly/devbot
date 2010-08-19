@@ -36,7 +36,7 @@ use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_updated_issues_api get_updated_issues_feed);
+our @EXPORT = qw(get_updated_issues);
 
 our $VERSION = 1.00;
 
@@ -44,61 +44,11 @@ our $VERSION = 1.00;
 # Google Code hosting domain
 #
 our $GC_HOSTING_DOMAIN = 'code.google.com';
- 
-#
-# Returns an array of updated issues via Google's project hosting API.
-#
-sub get_updated_issues_api
-{
-	my @issues = ();
-	my $conf = get_config('gc');
-	
-	my $project = $conf->{GC_PROJECT};
-	my $issue_url = $conf->{GC_ISSUE_URL};
-	
-	die 'No Google Code project name provided in Google Code config.' unless $project;
-	
-	my $min_datetime = get_last_updated_datetime;
-	my $max_datetime = get_current_datetime;
-	
-	# If the datetimes are the same (ignoring seconds) then we've just been started so 
-	# don't bother checking for updates.
-	return undef if (substr($min_datetime, -3) eq substr($max_datetime, -3));
-	
-	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/issues/p/${project}/issues/full?updated-min=${min_datetime}&updated-max=${max_datetime}&alt=rss&max-results=100000";
-					
-	log_m("Requesting: $url");
-										
-	my $xml = get($url);
-			
-	my $rss = new XML::RSS;
-	
-	$rss->parse($xml);
-	
-	for my $item (@{$rss->{items}}) 
-	{
-		my $issue_id = _extract_issue_id($item->{link});
-			
-		my %issue = ('id'     => $issue_id,
-					 'title'  => $item->{title},
-					 'author' => $item->{author},
-					 'url'    => _create_issue_url($project, $issue_url, $issue_id)
-					);
-						
-		push(@issues, {%issue});
-	}	
-	
-	my $issue_count = @issues;
-	
-	log_m(sprintf('Found %d issue updates', $issue_count));
-					
-	return @issues;
-}
 
 #
 # Returns an array of updated issues via the project's issues Atom feed.
 #
-sub get_updated_issues_feed
+sub get_updated_issues
 {
 	my @issues = ();
 	my $conf = get_config('gc');
