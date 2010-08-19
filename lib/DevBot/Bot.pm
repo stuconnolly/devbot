@@ -29,7 +29,7 @@ use warnings;
 
 use DevBot::DB;
 use DevBot::Time;
-use DevBot::GCFeed;
+use DevBot::Profiler;
 use Bot::BasicBot;
 
 use vars qw($TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);

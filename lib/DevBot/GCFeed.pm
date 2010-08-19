@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package DevBot::GCFeed;
+package DevBot::Profiler;
 
 use strict;
 use warnings;
