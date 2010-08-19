@@ -68,6 +68,7 @@ sub get_updated_issues
 	
 	my $pub_date = $feed->pubDate();
 	
+	# Remove timezone indicator
 	$pub_date =~ s/Z//g;
 		
 	my $cur_datetime = $w3c->parse_datetime(get_last_updated_datetime);	
@@ -82,6 +83,7 @@ sub get_updated_issues
 		{	
 			my $item_datetime = $w3c->parse_datetime($item->pubDate());	
 			
+			# Remove timezone indicator
 			$item_datetime =~ s/Z//g;
 			
 			if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
@@ -98,6 +100,10 @@ sub get_updated_issues
 			}
 		}
 	}
+	
+	# Reverse the array so we report the updates in the order they occurred, 
+	# not the order we encountered them.
+	@issues = reverse(@issues);
 	
 	my $issue_count = @issues;
 		
