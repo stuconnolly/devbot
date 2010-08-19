@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package DevBot::Profiler;
+package DevBot::Issues;
 
 use strict;
 use warnings;
