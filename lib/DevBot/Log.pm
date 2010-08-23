@@ -30,7 +30,7 @@ use DevBot::Utils;
 
 use base 'Exporter';
 
-use vars qw($LOGGING $LOG_FILE);
+use vars qw($LOGGING $LOG_PATH);
 
 our @EXPORT = qw(log_m);
 

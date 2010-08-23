@@ -53,7 +53,7 @@ version if $version;
 
 $DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
-$DevBot::Bot::LOG_PATH = $log_dir if $log_dir;
+$DevBot::Log::LOG_PATH = $log_dir if $log_dir;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 
