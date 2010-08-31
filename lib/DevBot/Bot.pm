@@ -160,6 +160,18 @@ sub nick_change
 	return undef;
 }
 
+sub userquit 
+{
+	my ($self, $e) = @_;
+
+	my $nick = $e->{who};
+
+	foreach my $channel ($self->_channels_for_nick($nick)) 
+	{
+		$self->chanpart({who => $nick, channel => $channel});
+	}
+}
+
 #
 # Overriden kicked. Called whenever some is kicked from the channel.
 #
