@@ -35,6 +35,7 @@ our @EXPORT = qw(
 	get_current_datetime 
 	write_datetime 
 	delete_datetime_log 
+	delete_datetime_logs 
 	gmt_date);
 
 our $VERSION = 1.0;
@@ -104,8 +105,22 @@ sub write_datetime
 sub delete_datetime_log
 {
 	if (-e $TIME_TRACKING_FILE) {
-		unlink($TIME_TRACKING_FILE) || die $!;
+		unlink($TIME_TRACKING_FILE) || warn "Could not delete time tracking file '${TIME_TRACKING_FILE}': $!";
 	}
+}
+
+#
+# Deletes any (devbot.tmp.xx) time tracking files found in /tmp.
+#
+sub delete_datetime_logs
+{
+	opendir(TMP_DIR, '/tmp');
+	
+	my @files = grep(/devbot\.tmp\.[0-9]$/, readdir(TMP_DIR));
+	
+	closedir(TMP_DIR);
+	
+	foreach (@files) unlink || or warn "Could not delete tim tracking file '$_': $!";ls -l	
 }
 
 #

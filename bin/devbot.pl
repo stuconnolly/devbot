@@ -75,6 +75,9 @@ my $irc_channels = [split(m/\s+/, $conf->{IRC_CHANNEL})];
 
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
+# Delete any time tracking files that may already exist.
+delete_datetime_logs;
+
 # Create bot
 my $bot = DevBot::Bot->new(
 		server    => $irc_server,

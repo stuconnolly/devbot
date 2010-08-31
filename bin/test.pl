@@ -22,32 +22,13 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package DevBot::Commands;
+package DevBotTest;
 
 use strict;
 use warnings;
 
-our $VERSION = 1.00;
+use lib '../lib';
 
-sub new
-{
-	my $this = shift;
-	my $class = ref($this) || $this;
-		
-	my $self = {};
-	
-	bless($self, $class);
-	
-	return $self;
-}
+use DevBot::Command;
 
-sub AUTOLOAD;
-
-sub parse()
-{
-	my ($self, $comment) = @_;
-	
-	print $command;
-}
-
-1;
+exit 0;
