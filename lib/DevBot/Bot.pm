@@ -161,7 +161,7 @@ sub nick_change
 }
 
 #
-# Overriden userquit. Called whenever someone leaves the channel/
+# Overriden userquit. Called whenever someone leaves the channel.
 #
 sub userquit 
 {
