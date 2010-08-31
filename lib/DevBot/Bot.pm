@@ -160,6 +160,9 @@ sub nick_change
 	return undef;
 }
 
+#
+# Overriden userquit. Called whenever someone leaves the channel/
+#
 sub userquit 
 {
 	my ($self, $e) = @_;
