@@ -31,4 +31,8 @@ use lib '../lib';
 
 use DevBot::Command;
 
+my $command = DevBot::Command->new('i610');
+
+$command->parse();
+
 exit 0;

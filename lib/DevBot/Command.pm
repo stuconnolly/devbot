@@ -31,10 +31,13 @@ our $VERSION = 1.00;
 
 sub new
 {
-	my $this = shift;
+	my ($this, $command) = @_;
+	
 	my $class = ref($this) || $this;
 		
-	my $self = {};
+	my $self = {
+		_command => $command
+	};
 	
 	bless($self, $class);
 	
@@ -43,11 +46,16 @@ sub new
 
 sub AUTOLOAD;
 
+#
+#
+#
 sub parse()
 {
-	my ($self, $comment) = @_;
+	my $self = shift;
 	
-	print $command;
+	return undef if (!length($self->{_command}));
+	
+	print $self->{_command}, "\n";
 }
 
 1;
