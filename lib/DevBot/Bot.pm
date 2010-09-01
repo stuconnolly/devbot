@@ -30,6 +30,7 @@ use warnings;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;
+use DevBot::Command;
 use Bot::BasicBot;
 
 use vars qw($TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
