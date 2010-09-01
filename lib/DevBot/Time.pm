@@ -120,7 +120,7 @@ sub delete_datetime_logs
 	
 	closedir(TMP_DIR);
 	
-	foreach (@files) unlink || or warn "Could not delete tim tracking file '$_': $!";ls -l	
+	foreach (@files) { unlink ||  warn "Could not delete tim tracking file '$_': $!"; }
 }
 
 #
