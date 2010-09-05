@@ -50,11 +50,12 @@ Usage: perl $0 [options]
 
 Possible options are:
   
-  --issues          (-i)      Enable the annoucement of issue updates
+  --interactive     (-i)      Enable bot interactivity
+  --issues          (-g)      Enable the annoucement of issue updates
   --channel-logging (-cl)     Disable channel logging
   --update-interval (-t)      Specify the interval at which issue updates are checked (in seconds)
   --logging         (-l)      Enable logging
-  --logdir          (-ld)     Specify a different log directory (must be an absolute path)
+  --logdir          (-d)      Specify a different log directory (must be an absolute path)
   --version         (-v)      Print devbot version
   --help            (-h)      Print this help message
 
