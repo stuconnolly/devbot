@@ -90,13 +90,17 @@ sub get_updated_issues
 
 				my %ids = _extract_ids($item->link());
 
-				my $issue_id = %ids->{issue_id};
-				my $comment_id = %ids->{comment_id};
+				my $url;
+				my $issue_id = {%ids}->{issue_id};
+
+				if ($issue_id > 0) {
+					$url = _create_issue_url($project, $issue_url, $issue_id, {%ids}->{comment_id});
+				}
 
 				my %issue = (id     => $issue_id,
 							 title  => $item->title(),
 							 author => $item->author(),
-							 url    => _create_issue_url($project, $issue_url, $issue_id)
+							 url    => $url
 							);
 
 				push(@issues, {%issue});
@@ -135,9 +139,16 @@ sub _extract_ids
 #
 sub _create_issue_url
 {
-	my($project, $issue_tracker, $issue_id) = @_;
+	my($project, $issue_tracker, $issue_id, $comment_id) = @_;
 	
-	return ($issue_tracker) ? sprintf($issue_tracker, $issue_id) : sprintf("http://${GC_HOSTING_DOMAIN}/p/%s/issues/detail?id=%d", $project, $issue_id);
+	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
+	
+	# If there's no comment ID then remove the placeholder from the URL
+	if ($comment_id == 0) {
+		$url = substr($url, -3);
+	}
+	
+	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
 }
 
 1;
