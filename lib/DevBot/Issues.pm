@@ -131,7 +131,7 @@ sub _extract_ids
 		
 	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c([0-9]+))?$/) && ($issue_id = $1, $comment_id = $2);
 		
-	return {issue_id => $issue_id, comment_id => $comment_id};
+	return (issue_id => $issue_id, comment_id => $comment_id);
 }
 
 #
