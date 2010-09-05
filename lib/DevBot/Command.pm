@@ -34,9 +34,10 @@ sub new
 	my ($this, $command) = @_;
 	
 	my $class = ref($this) || $this;
-		
+				
 	my $self = {
-		_command => $command
+		_command  => $command,
+		_commands => _load_commands()
 	};
 	
 	bless($self, $class);
@@ -47,15 +48,21 @@ sub new
 sub AUTOLOAD;
 
 #
-#
+# 
 #
 sub parse()
 {
 	my $self = shift;
 	
-	return undef if (!length($self->{_command}));
-	
-	print $self->{_command}, "\n";
+	return undef if (!length($self->{_command}));	
+}
+
+#
+#
+#
+sub _load_commands()
+{
+	#my @commands = ({});
 }
 
 1;

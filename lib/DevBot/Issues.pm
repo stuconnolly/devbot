@@ -88,12 +88,15 @@ sub get_updated_issues
 			
 			if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
 
-				my $issue_id = _extract_issue_id($item->link());
+				my %ids = _extract_ids($item->link());
 
-				my %issue = ('id'     => $issue_id,
-							 'title'  => $item->title(),
-							 'author' => $item->author(),
-							 'url'    => _create_issue_url($project, $issue_url, $issue_id)
+				my $issue_id = %ids->{issue_id};
+				my $comment_id = %ids->{comment_id};
+
+				my %issue = (id     => $issue_id,
+							 title  => $item->title(),
+							 author => $item->author(),
+							 url    => _create_issue_url($project, $issue_url, $issue_id)
 							);
 
 				push(@issues, {%issue});
@@ -115,14 +118,16 @@ sub get_updated_issues
 #
 # Extracts the issues ID from the supplied link.
 #
-sub _extract_issue_id
+sub _extract_ids
 {
-	my $issue_id  = 0; 
+	my $issue_id   = 0;
+	my $comment_id = 0;
+	 
 	my $issue_url = shift;
 		
-	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c[0-9]+)?$/) && ($issue_id = $1);
-	
-	return $issue_id;
+	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c([0-9]+))?$/) && ($issue_id = $1, $comment_id = $2);
+		
+	return {issue_id => $issue_id, comment_id => $comment_id};
 }
 
 #
