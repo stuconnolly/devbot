@@ -70,7 +70,7 @@ sub said
 		_log($e->{channel}, $e->{who}, $e->{body});
 	}
 	
-	if ($INTERATIVE) {
+	if ($INTERACTIVE) {
 		# See if we were asked something
 		if (length($e->{address})) {
 			my $issue_id = 0; 

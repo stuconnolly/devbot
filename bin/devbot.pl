@@ -60,6 +60,7 @@ $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 
 print "Enabling logging...\n" if $logging;
+print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
 print "Disabling channel logging...\n" if $channel_logging;
 
