@@ -33,11 +33,16 @@ use DevBot::Issues;
 use DevBot::Command;
 use Bot::BasicBot;
 
-use vars qw($TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
+use vars qw($INTERACTIVE $TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
 our $VERSION = 1.00;
+
+#
+# By default the bot is not interactive
+#
+our $INTERACTIVE = 0;
 
 #
 # Default tick is every 5 minutes
@@ -65,17 +70,19 @@ sub said
 		_log($e->{channel}, $e->{who}, $e->{body});
 	}
 	
-	# See if we were asked something
-	if (length($e->{address})) {
-		my $issue_id = 0; 
-			
-		($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
-		
-		if ($issue_id) {
-			$self->say(who     => $e->{who},
-					   channel => $e->{channel}, 
-					   body    => $issue_id,
-					   address => 1);
+	if ($INTERATIVE) {
+		# See if we were asked something
+		if (length($e->{address})) {
+			my $issue_id = 0; 
+
+			($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
+
+			if ($issue_id) {
+				$self->say(who     => $e->{who},
+						   channel => $e->{channel}, 
+						   body    => $issue_id,
+						   address => 1);
+			}
 		}
 	}
 
