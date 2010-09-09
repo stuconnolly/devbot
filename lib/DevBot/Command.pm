@@ -51,7 +51,7 @@ sub new
 sub AUTOLOAD;
 
 #
-# 
+# Parses the supplied command.
 #
 sub parse()
 {
@@ -68,7 +68,7 @@ sub parse()
 }
 
 #
-# Loads the available commands.
+# Returns the available commands.
 #
 sub _load_commands()
 {
