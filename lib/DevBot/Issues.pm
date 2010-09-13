@@ -145,7 +145,7 @@ sub _create_issue_url
 	
 	# If there's no comment ID then remove the placeholder from the URL
 	if ($comment_id == 0) {
-		$url = substr($url, -3);
+		$url = substr($url, 0, -3);
 	}
 	
 	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
