@@ -59,7 +59,7 @@ sub parse
 	
 	return undef if (!length($self->{_command}));
 	
-	my $result;
+	my @result;
 	my @commands = $self->_load_commands();
 		
 	foreach (@commands)
@@ -72,12 +72,12 @@ sub parse
 			push(@args, ($self->{_command} =~ /$_->{regex}/gi));
 
 			if (@args > 1) {														
-				$result = $_->{method}->(@args);			
+				@result = $_->{method}->(@args);			
 			}
 		}
 	}
 	
-	return $result;		
+	return @result;	
 }
 
 #

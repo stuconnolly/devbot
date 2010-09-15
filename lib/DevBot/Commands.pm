@@ -42,11 +42,11 @@ sub command_history
 				
 	my $result = query($DevBot::Queries::HISTORY_QUERY, $channel, $history);
 	
-	my @messages = ();
+	my @messages = (sprintf("Last %d messages in %s:", $history, $channel));
 	
 	while (my @row = $result->fetchrow_array)
 	{
-		push(@messages, printf("[%s] <%s> %s\n", $row[0], $row[1], $row[2]));
+		push(@messages, sprintf("[%s] <%s> %s\n", $row[0], $row[1], $row[2]));
 	}
 	
 	return @messages;
@@ -57,7 +57,7 @@ sub command_history
 #
 sub command_issue
 {
- 	
+	
 }
 
 1;
