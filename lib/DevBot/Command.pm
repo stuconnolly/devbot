@@ -92,7 +92,7 @@ sub _load_commands
 				'method' => \&DevBot::Commands::command_history
 			},
 	     	{
-				'regex'  => '^i|issue\s([0-9]+)$', 
+				'regex'  => '[i|issue\s]([0-9]+)$', 
 				'method' => \&DevBot::Commands::command_issue
 			});
 }

@@ -27,6 +27,7 @@ use warnings;
 
 use DevBot::DB;
 use DevBot::Config;
+use DevBot::Issues;
 use DevBot::Queries;
 
 our $VERSION = 1.00;
@@ -39,6 +40,9 @@ sub command_history
 	my ($channel, $history) = @_;
 	
 	return undef if (!$history);
+	
+	# Cap history at 20 entries
+	$history = 20 if ($history > 20); 
 				
 	my $result = query($DevBot::Queries::HISTORY_QUERY, $channel, $history);
 	
@@ -57,7 +61,15 @@ sub command_history
 #
 sub command_issue
 {
+	my ($channel, $issue_id) = @_;
 	
+	return undef if (!$issue_id);
+	
+	my $conf = get_config('gc');
+	
+	my @messages = (sprintf("Issue %d: %s", $issue_id, DevBot::Issues::create_issue_url($conf->{GC_PROJECT}, $conf->{GC_ISSUE_URL}, $issue_id, 0)));
+	
+	return @messages;
 }
 
 1;

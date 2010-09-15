@@ -36,7 +36,7 @@ use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_updated_issues);
+our @EXPORT = qw(get_updated_issues create_isssue_url);
 
 our $VERSION = 1.00;
 
@@ -94,7 +94,7 @@ sub get_updated_issues
 				my $issue_id = {%ids}->{issue_id};
 
 				if ($issue_id > 0) {
-					$url = _create_issue_url($project, $issue_url, $issue_id, {%ids}->{comment_id});
+					$url = create_issue_url($project, $issue_url, $issue_id, {%ids}->{comment_id});
 				}
 
 				my %issue = (id     => $issue_id,
@@ -120,6 +120,23 @@ sub get_updated_issues
 }
 
 #
+# Creates the URL for the supplied issue details.
+#
+sub create_issue_url
+{
+	my($project, $issue_tracker, $issue_id, $comment_id) = @_;
+	
+	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
+	
+	# If there's no comment ID then remove the placeholder from the URL
+	if ($comment_id == 0) {
+		$url = substr($url, 0, -3);
+	}
+	
+	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
+}
+
+#
 # Extracts the issues ID from the supplied link.
 #
 sub _extract_ids
@@ -132,23 +149,6 @@ sub _extract_ids
 	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c([0-9]+))?$/) && ($issue_id = $1, $comment_id = $2);
 		
 	return (issue_id => $issue_id, comment_id => $comment_id);
-}
-
-#
-# Creates the URL for the supplied issue details.
-#
-sub _create_issue_url
-{
-	my($project, $issue_tracker, $issue_id, $comment_id) = @_;
-	
-	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
-	
-	# If there's no comment ID then remove the placeholder from the URL
-	if ($comment_id == 0) {
-		$url = substr($url, 0, -3);
-	}
-	
-	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
 }
 
 1;
