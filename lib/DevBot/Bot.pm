@@ -1,5 +1,3 @@
-#! /usr/bin/perl
-
 #
 #  $Id$
 #  
@@ -64,7 +62,7 @@ our $CHANNEL_LOGGING = 1;
 #
 sub said 
 {
-    my($self, $e) = @_;
+    my ($self, $e) = @_;
 
 	if ($CHANNEL_LOGGING) {
 		_log($e->{channel}, $e->{who}, $e->{body});
@@ -73,16 +71,10 @@ sub said
 	if ($INTERACTIVE) {
 		# See if we were asked something
 		if (length($e->{address})) {
-			my $issue_id = 0; 
-
-			($e->{body} =~ /^i([0-9]+)$/) && ($issue_id = $1);
-
-			if ($issue_id) {
-				$self->say(who     => $e->{who},
-						   channel => $e->{channel}, 
-						   body    => $issue_id,
-						   address => 1);
-			}
+			
+			my $command = DevBot::Command->new($e->{body}, $e->{channel});
+			
+			$command->parse();
 		}
 	}
 
@@ -94,7 +86,7 @@ sub said
 #
 sub emoted 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 
 	_log($e->{channel}, '* ' . $e->{who}, $e->{body});
     
@@ -106,7 +98,7 @@ sub emoted
 #
 sub chanjoin 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 
 	if ($CHANNEL_LOGGING) {
 		_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel}));
@@ -120,7 +112,7 @@ sub chanjoin
 #
 sub chanpart 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 	
 	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
 
@@ -132,7 +124,7 @@ sub chanpart
 #
 sub chanquit 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 	
 	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
 
@@ -144,7 +136,7 @@ sub chanquit
 #
 sub topic 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 	
 	if ($CHANNEL_LOGGING) {
 		_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic}));
@@ -158,7 +150,7 @@ sub topic
 #
 sub nick_change 
 {	
-	my($self, $old, $new) = @_;
+	my ($self, $old, $new) = @_;
 	
 	foreach ($self->_channels_for_nick($new)) 
 	{
@@ -188,7 +180,7 @@ sub userquit
 #
 sub kicked 
 {
-	my($self, $e) = @_;
+	my ($self, $e) = @_;
 	
 	_log($e->{channel}, '', sprintf('%s was kicked by %s: %s', $e->{nick}, $e->{who}, $e->{reason}));
 	
@@ -239,7 +231,7 @@ sub _check_for_updated_issues
 #
 sub _channels_for_nick 
 {
-    my($self, $nick) = @_;
+    my ($self, $nick) = @_;
 
     return grep {$self->{channel_data}{$_}{$nick}} keys(%{$self->{channel_data}});
 }
@@ -249,7 +241,7 @@ sub _channels_for_nick
 #
 sub _log
 {
-	my($channel, $who, $line) = @_;
+	my ($channel, $who, $line) = @_;
 	    
 	query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_date, $who, time, $line);
 }

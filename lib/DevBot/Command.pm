@@ -1,5 +1,3 @@
-#! /usr/bin/perl
-
 #
 #  $Id$
 #  
@@ -26,7 +24,8 @@ package DevBot::Command;
 
 use strict;
 use warnings;
-use diagnostics;
+
+use DevBot::Commands;
 
 our $VERSION = 1.00;
 
@@ -35,12 +34,13 @@ our $VERSION = 1.00;
 #
 sub new
 {
-	my ($this, $command) = @_;
+	my ($this, $command, $channel) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
-		_command  => $command	
+		_command => $command,
+		_channel =>	$channel
 	};
 	
 	bless($self, $class);
@@ -53,34 +53,47 @@ sub AUTOLOAD;
 #
 # Parses the supplied command.
 #
-sub parse()
+sub parse
 {
 	my $self = shift;
 	
 	return undef if (!length($self->{_command}));
 	
+	my $result;
 	my @commands = $self->_load_commands();
 		
 	foreach (@commands)
-	{
+	{				
+		my @args = ($self->{_channel});
 		
-	}	
+		if ($self->{_command} =~ /$_->{regex}/i) {
+			
+			# Capture all args
+			push(@args, ($self->{_command} =~ /$_->{regex}/gi));
+
+			if (@args > 1) {														
+				$result = $_->{method}->(@args);			
+			}
+		}
+	}
+	
+	return $result;		
 }
 
 #
 # Returns the available commands.
 #
-sub _load_commands()
+sub _load_commands
 {
 	my $self = shift;
 	
 	return ({
-				'regex'  => '/^history\s([0-9]+)$/i', 
-				'method' => 'command_history'
+				'regex'  => '^history\s([0-9]+)$', 
+				'method' => \&DevBot::Commands::command_history
 			},
 	     	{
-				'regex'  => '/^i|issue\s([0-9]+)$/i', 
-				'method' => 'command_issue'
+				'regex'  => '^i|issue\s([0-9]+)$', 
+				'method' => \&DevBot::Commands::command_issue
 			});
 }
 
