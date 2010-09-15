@@ -28,7 +28,7 @@ use warnings;
 our $VERSION = 1.00;
 
 #
-# History query
+# History query.
 #
 our $HISTORY_QUERY = 
 	"SELECT FROM_UNIXTIME(TIMESTAMP, '%H:%i:%S UTC'), nick, line 

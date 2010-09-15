@@ -33,7 +33,7 @@ use DevBot::Queries;
 our $VERSION = 1.00;
 
 #
-#
+# History command.
 #
 sub command_history
 {
@@ -57,7 +57,7 @@ sub command_history
 }
 
 #
-#
+# Issue command.
 #
 sub command_issue
 {

@@ -51,7 +51,7 @@ sub new
 sub AUTOLOAD;
 
 #
-# Parses the supplied command.
+# Parses the supplied command and returns the result of the matched rule/function.
 #
 sub parse
 {
