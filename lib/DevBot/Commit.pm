@@ -28,12 +28,12 @@ use warnings;
 use JSON;
 use HTTP::Request;
 use DevBot::Issues;
+use DevBot::Config;
 use Digest::HMAC_MD5;
 
 our $VERSION = 1.0;
 
 use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
-
 
 #
 # Constructor.
@@ -76,17 +76,19 @@ sub parse
 }
 
 #
-#
+# Formats the supplied data into a readable commit message.
 #
 sub _format
 {
 	my ($self, $data) = @_;
-	
+		
 	my @messages = ();
 		
 	foreach (@{$data->{revisions}})
-	{							
-		push(@messages, sprintf("( url ): Revision %d committed by %s\n", $_->{revision}, $_->{author}));
+	{			
+		my $url = DevBot::Project::create_revision_url($_->{revision});
+								
+		push(@messages, sprintf("( %s ): r%d committed by %s (%d file(s)/path(s) modified)\n", $url, $_->{revision}, $_->{author}, $_->{path_count}));
 	}
 	
 	return @messages;

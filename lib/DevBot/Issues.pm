@@ -28,22 +28,20 @@ use warnings;
 use XML::RSS;
 use XML::FeedPP;
 use LWP::Simple;
+
 use DevBot::Log;
 use DevBot::Time;
 use DevBot::Config;
+use DevBot::Project;
+
 use DateTime;
 use DateTime::Format::W3CDTF;
 
 use base 'Exporter';
 
-our @EXPORT = qw(get_updated_issues create_isssue_url);
+our @EXPORT = qw(get_updated_issues);
 
 our $VERSION = 1.00;
-
-#
-# Google Code hosting domain
-#
-our $GC_HOSTING_DOMAIN = 'code.google.com';
 
 #
 # Returns an array of updated issues via the project's issues Atom feed.
@@ -51,14 +49,13 @@ our $GC_HOSTING_DOMAIN = 'code.google.com';
 sub get_updated_issues
 {
 	my @issues = ();
-	my $conf = get_config('gc');
 	
-	my $project = $conf->{GC_PROJECT};
-	my $issue_url = $conf->{GC_ISSUE_URL};
+	my $project = DevBot::Project::name;
+	my $domain = $DevBot::Project::GC_HOSTING_DOMAIN;
 	
 	die 'No Google Code project name provided in Google Code config.' unless $project;
 	
-	my $url = "http://${GC_HOSTING_DOMAIN}/feeds/p/${project}/issueupdates/basic";
+	my $url = "http://${domain}/feeds/p/${project}/issueupdates/basic";
 						
 	log_m("Requesting: $url");
 	
@@ -94,7 +91,7 @@ sub get_updated_issues
 				my $issue_id = {%ids}->{issue_id};
 
 				if ($issue_id > 0) {
-					$url = create_issue_url($project, $issue_url, $issue_id, {%ids}->{comment_id});
+					$url = DevBot::Project::create_issue_url($issue_id, {%ids}->{comment_id});
 				}
 
 				my %issue = (id     => $issue_id,
@@ -120,23 +117,6 @@ sub get_updated_issues
 }
 
 #
-# Creates the URL for the supplied issue details.
-#
-sub create_issue_url
-{
-	my($project, $issue_tracker, $issue_id, $comment_id) = @_;
-	
-	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
-	
-	# If there's no comment ID then remove the placeholder from the URL
-	if ($comment_id == 0) {
-		$url = substr($url, 0, -3);
-	}
-	
-	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
-}
-
-#
 # Extracts the issues ID from the supplied link.
 #
 sub _extract_ids
@@ -145,8 +125,10 @@ sub _extract_ids
 	my $comment_id = 0;
 	 
 	my $issue_url = shift;
+	
+	my $domain = $DevBot::Project::GC_HOSTING_DOMAIN;
 		
-	($issue_url =~ /^http:\/\/${GC_HOSTING_DOMAIN}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c([0-9]+))?$/) && ($issue_id = $1, $comment_id = $2);
+	($issue_url =~ /^http:\/\/${domain}\/p\/[0-9a-z-]+\/issues\/detail\?id=([0-9]+)(?:#c([0-9]+))?$/) && ($issue_id = $1, $comment_id = $2);
 		
 	return (issue_id => $issue_id, comment_id => $comment_id);
 }

@@ -67,7 +67,7 @@ sub command_issue
 	
 	my $conf = get_config('gc');
 	
-	my @messages = (sprintf("Issue %d: %s", $issue_id, DevBot::Issues::create_issue_url($conf->{GC_PROJECT}, $conf->{GC_ISSUE_URL}, $issue_id, 0)));
+	my @messages = (sprintf("Issue %d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0)));
 	
 	return @messages;
 }
