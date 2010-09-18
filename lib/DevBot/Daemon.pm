@@ -20,27 +20,30 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package DevBot::Command;
+package DevBot::Daemon;
 
 use strict;
 use warnings;
 
-use DevBot::Commands;
+use HTTP::Daemon;
+use HTTP::Status;
 
-our $VERSION = 1.00;
+our @EXPORT = qw(run);
+
+our $VERSION = 1.0;
 
 #
 # Constructor.
 #
 sub new
 {
-	my ($this, $command, $channel) = @_;
+	my ($this, $host, $port) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
-		_command => $command,
-		_channel =>	$channel
+		_host => $host,
+		_port => $port
 	};
 	
 	bless($self, $class);
@@ -48,53 +51,44 @@ sub new
 	return $self;
 }
 
-sub AUTOLOAD;
-
 #
-# Parses the supplied command and returns the result of the matched rule/function.
+# Start listening for commit notifications.
 #
-sub parse
+sub run
 {
 	my $self = shift;
 	
-	return undef if (!length($self->{_command}));
-	
-	my @result;
-	my @commands = $self->_load_commands();
-		
-	foreach (@commands)
-	{				
-		my @args = ($self->{_channel});
-		
-		if ($self->{_command} =~ /$_->{regex}/i) {
+	my $daemon = HTTP::Daemon->new(
+					Blocing   => 0,
+					LocalAddr => $self->{_host},
+					LocalPort => $self->{_port}
+					);
 			
-			# Capture all args
-			push(@args, ($self->{_command} =~ /$_->{regex}/gi));
-
-			if (@args > 1) {														
-				@result = $_->{method}->(@args);			
+	if ($daemon) {
+		while (my $connection = $daemon->accept)
+		{
+			while (my $request = $connection->get_request) 
+			{
+				my $method = $request->method;
+				my $path   = $request->uri->path;
+				
+				if (($method eq 'GET') && ($path eq '/')) {
+					
+					# Display commit log
+					#$connection->send_file_response();
+				}
+				elsif (($method eq 'POST') && ($path eq '/commit')) {
+					
+				}
+				else {
+					$connection->send_error(RC_FORBIDDEN);
+				}
 			}
+
+			$connection->close;
+			undef($connection);
 		}
 	}
-	
-	return @result;	
-}
-
-#
-# Returns the available commands.
-#
-sub _load_commands
-{
-	my $self = shift;
-	
-	return ({
-				'regex'  => '^history\s([0-9]+)$', 
-				'method' => \&DevBot::Commands::command_history
-			},
-	     	{
-				'regex'  => '[i|issue\s]([0-9]+)$', 
-				'method' => \&DevBot::Commands::command_issue
-			});
 }
 
 1;

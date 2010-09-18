@@ -25,3 +25,5 @@ In order to run devbot, the following Perl modules are required:
 + Config::File
 + XML::RSS
 + XML::FeedPP
++ HTTP::Daemon
++ HTTP::Status

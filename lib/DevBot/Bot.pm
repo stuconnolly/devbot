@@ -31,11 +31,16 @@ use DevBot::Issues;
 use DevBot::Command;
 use Bot::BasicBot;
 
-use vars qw($INTERACTIVE $TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
+use vars qw($BOT $INTERACTIVE $TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
 our $VERSION = 1.00;
+
+#
+# Reference to ourself.
+#
+our $BOT;
 
 #
 # By default the bot is not interactive

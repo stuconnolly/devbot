@@ -93,10 +93,12 @@ my $bot = DevBot::Bot->new(
 		charset   => 'utf-8'
         );
 
+$DevBot::Bot::BOT = $bot;
+
 # Run it
-$bot->run();
+$bot->run;
 
 # Get rid of the log
 delete_datetime_log if $issues;
 
-exit 0
+exit 0;
