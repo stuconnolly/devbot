@@ -97,7 +97,7 @@ sub create_revision_url
 	my $project = DevBot::Project::name;
 	my $revision_url = DevBot::Project::revision_url;
 	
-	my $url = ($revision_url) ? $revision_url : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d";
+	my $url = ($revision_url) ? $revision_url : "http://${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
 	
 	return sprintf($url, $issue_id);
 }

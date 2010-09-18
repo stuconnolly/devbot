@@ -88,7 +88,7 @@ sub _format
 	{			
 		my $url = DevBot::Project::create_revision_url($_->{revision});
 								
-		push(@messages, sprintf("( %s ): r%d committed by %s (%d file(s)/path(s) modified)\n", $url, $_->{revision}, $_->{author}, $_->{path_count}));
+		push(@messages, sprintf("( %s ): r%d committed by %s (%d file(s) modified)\n", $url, $_->{revision}, $_->{author}, $_->{path_count}));
 	}
 	
 	return @messages;
