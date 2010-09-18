@@ -51,6 +51,7 @@ Usage: perl $0 [options]
 Possible options are:
   
   --interactive     (-i)      Enable bot interactivity
+  --notify          (-n)      Enable the annoucement of source commits
   --issues          (-g)      Enable the annoucement of issue updates
   --channel-logging (-cl)     Disable channel logging
   --update-interval (-t)      Specify the interval at which issue updates are checked (in seconds)

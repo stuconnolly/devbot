@@ -36,10 +36,19 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my($interactive, $issues, $channel_logging, $tick, $logging, $log_dir, $version, $help);
+my ($interactive, 
+	$notify, 
+	$issues, 
+	$channel_logging, 
+	$tick, 
+	$logging, 
+	$log_dir, 
+	$version, 
+	$help);
 
 # Get options
 GetOptions('interactive|i'       => \$interactive,
+		   'notify|n'            => \$notify,
 		   'issues|g'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'update-interval|t=i' => \$tick,
@@ -62,6 +71,7 @@ $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
+print "Enabling commit notifications...\n" if $notify;
 print "Disabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
