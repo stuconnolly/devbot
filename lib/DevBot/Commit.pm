@@ -27,21 +27,26 @@ use warnings;
 
 use JSON;
 use HTTP::Request;
+use DevBot::Issues;
 use Digest::HMAC_MD5;
 
 our $VERSION = 1.0;
+
+use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
+
 
 #
 # Constructor.
 #
 sub new
 {
-	my ($this, $request) = @_;
+	my ($this, $request, $key) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
 		_request => $request,
+		_key     => $key
 	};
 	
 	bless($self, $class);
@@ -56,16 +61,35 @@ sub parse
 {
 	my $self = shift;
 	
-	# Authenticate the request before proceeding
-	my $hmac = Digest::HMAC_MD5->new($DevBot::Daemon::COMMIT_KEY);
+	# If required authenticate the request before proceeding
+	if ($self->{_key}) {
+		my $hmac = Digest::HMAC_MD5->new($DevBot::Daemon::COMMIT_KEY);
 	
-	$hmac->add($self->{_request}->content);
-	
-	return undef if ($hmac->hexdigest != $self->{_request}->header('Google-Code-Project-Hosting-Hook-Hmac'));
+		$hmac->add($self->{_request}->content);
+
+		return undef if ($hmac->hexdigest != $self->{_request}->header(GC_POST_COMMIT_HMAC_HEADER));
+	}
 	
 	my $json = JSON->new->allow_nonref;
 	
-	my $data = $json->decode($self->{_request}->content);
+	return $self->_format($json->decode($self->{_request}->content));
+}
+
+#
+#
+#
+sub _format
+{
+	my ($self, $data) = @_;
+	
+	my @messages = ();
+		
+	foreach (@{$data->{revisions}})
+	{							
+		push(@messages, sprintf("( url ): Revision %d committed by %s\n", $_->{revision}, $_->{author}));
+	}
+	
+	return @messages;
 }
 
 1;
