@@ -25,34 +25,27 @@ package DevBot::Daemon;
 use strict;
 use warnings;
 
+use threads;
 use HTTP::Daemon;
 use HTTP::Status;
 use DevBot::Commit;
 
-use vars qw($COMMIT_KEY);
-
-our @EXPORT = qw(run);
-
 our $VERSION = 1.0;
-
-#
-# Google Code commit key
-#
-our $COMMIT_KEY = '';
 
 #
 # Constructor.
 #
 sub new
 {
-	my ($this, $host, $port, $channel) = @_;
+	my ($this, $host, $port, $channel, $key) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
 		_host    => $host,
 		_port    => $port,
-		_channel => $channel
+		_channel => $channel,
+		_key     => $key
 	};
 	
 	bless($self, $class);
@@ -66,47 +59,47 @@ sub new
 sub run
 {
 	my $self = shift;
-	
+			
 	my $daemon = HTTP::Daemon->new(
-					Blocing   => 0,
 					LocalAddr => $self->{_host},
 					LocalPort => $self->{_port}
-					);
-			
+					) || warn 'Failed to create HTTP daemon';
+								
 	if ($daemon) {
 		while (my $connection = $daemon->accept)
-		{
-			while (my $request = $connection->get_request) 
-			{
-				my $method = $request->method;
-				my $path   = $request->uri->path;
-				
-				if (($method eq 'GET') && ($path eq '/')) {
-					
-					# Display commit log
-					#$connection->send_file_response();
-				}
-				elsif (($method eq 'POST') && ($path eq '/commit')) {
-					my $commit = DevBot::Commit->new($request);
-					
-					my @result = $commit->parse;
-									
-					# For each result, annouce it to the channel
-					foreach (@result)
-					{
-						print;
-						#$DevBot::Bot::BOT->say(channel => $self->{_channel}, body => $_);
-					}
-				}
-				else {
-					$connection->send_error(RC_FORBIDDEN);
-				}
-			}
-
+		{			
+			# Create a new thread to handle the connection
+			my @results = threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->join;
+			
+			foreach (@results) { print; }
+			
 			$connection->close;
 			undef($connection);
 		}
 	}
+}
+
+#
+# Handles the connection in a separate thread.
+#
+sub _handle_connection
+{
+	my ($self, $connection) = @_;
+		
+	while (my $request = $connection->get_request) 
+	{
+		my $method = $request->method;
+		my $path   = $request->uri->path;
+		
+		if (($method eq 'POST') && ($path eq '/commit')) {
+			my $commit = DevBot::Commit->new($request, $self->{_key});
+			
+			return $commit->parse;
+		}
+		else {
+			$connection->send_error(RC_FORBIDDEN);
+		}
+	}	
 }
 
 1;
