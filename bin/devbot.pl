@@ -65,13 +65,14 @@ $DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Log::LOG_PATH = $log_dir if $log_dir;
 $DevBot::Bot::INTERACTIVE = 1 if $interactive;
+$DevBot::Bot::ANNOUNCE_COMMITS = 1 if $notify;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
-print "Enabling commit notifications...\n" if $notify;
+print "Enabling commit annoucements...\n" if $notify;
 print "Disabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
@@ -102,8 +103,6 @@ my $bot = DevBot::Bot->new(
 		name      => 'Development Bot',
 		charset   => 'utf-8'
         );
-
-$DevBot::Bot::BOT = $bot;
 
 # Run it
 $bot->run;
