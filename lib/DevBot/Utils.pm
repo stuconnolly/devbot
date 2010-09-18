@@ -33,7 +33,7 @@ our @EXPORT = qw(usage version);
 
 our $VERSION = 1.0;
 
-use constant VERSION => '1.0';
+use constant VERSION => 1.0;
 
 #
 # devbot rootdir
