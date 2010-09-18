@@ -28,19 +28,19 @@ use warnings;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;
+use DevBot::Daemon;
 use DevBot::Command;
 use Bot::BasicBot;
 
-use vars qw($BOT $INTERACTIVE $TICK $ANNOUNCE_ISSUE_UPDATES $CHANNEL_LOGGING);
+use vars qw($INTERACTIVE 
+			$TICK 
+			$ANNOUCE_COMMITS 
+			$ANNOUNCE_ISSUE_UPDATES 
+			$CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
 our $VERSION = 1.00;
-
-#
-# Reference to ourself.
-#
-our $BOT;
 
 #
 # By default the bot is not interactive
@@ -53,6 +53,11 @@ our $INTERACTIVE = 0;
 our $TICK = 300;
 
 #
+# By default don't annouce commits
+#
+our $ANNOUNCE_COMMITS = 0;
+
+#
 # By default don't announce issue changes
 #
 our $ANNOUNCE_ISSUE_UPDATES = 0;
@@ -61,6 +66,22 @@ our $ANNOUNCE_ISSUE_UPDATES = 0;
 # By default enable channel logging
 #
 our $CHANNEL_LOGGING = 1;
+
+#
+# Overriden connected. If required, spawn a new process to listen for source commits.
+#
+sub connected
+{
+	my $self = shift;
+		
+	if ($ANNOUNCE_COMMITS) {
+		$self->forkit(run       => \&_listen_for_commits, 
+					  channel   => $self->{channels}[0], 
+					  arguments => [$self->{channels}[0]]);
+	}
+	
+	return undef;
+}
 
 #
 # Overriden said. Called whenever someone says something in the channel.
@@ -206,7 +227,7 @@ sub tick
 {	
 	my $self = shift;
 	
-	return 0 if !$ANNOUNCE_ISSUE_UPDATES;
+	return 0 if (!$ANNOUNCE_ISSUE_UPDATES);
 				
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
@@ -236,6 +257,18 @@ sub _check_for_updated_issues
 			printf("%s by %s\n", $update->{title}, $update->{author});
 		}
 	}
+}
+
+#
+#
+#
+sub _listen_for_commits
+{	
+	my $channel = shift;
+	
+	my $daemon = DevBot::Daemon->new('localhost', 1987, $channel);
+	
+	$daemon->run();
 }
 
 #
