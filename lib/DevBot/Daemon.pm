@@ -27,23 +27,32 @@ use warnings;
 
 use HTTP::Daemon;
 use HTTP::Status;
+use DevBot::Commit;
+
+use vars qw($COMMIT_KEY);
 
 our @EXPORT = qw(run);
 
 our $VERSION = 1.0;
 
 #
+# Google Code commit key
+#
+our $COMMIT_KEY = '';
+
+#
 # Constructor.
 #
 sub new
 {
-	my ($this, $host, $port) = @_;
+	my ($this, $host, $port, $channel) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
-		_host => $host,
-		_port => $port
+		_host    => $host,
+		_port    => $port,
+		_channel => $channel
 	};
 	
 	bless($self, $class);
@@ -78,7 +87,16 @@ sub run
 					#$connection->send_file_response();
 				}
 				elsif (($method eq 'POST') && ($path eq '/commit')) {
+					my $commit = DevBot::Commit->new($request);
 					
+					my @result = $commit->parse;
+									
+					# For each result, annouce it to the channel
+					foreach (@result)
+					{
+						print;
+						#$DevBot::Bot::BOT->say(channel => $self->{_channel}, body => $_);
+					}
 				}
 				else {
 					$connection->send_error(RC_FORBIDDEN);

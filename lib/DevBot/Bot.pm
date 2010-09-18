@@ -79,7 +79,7 @@ sub said
 			
 			my $command = DevBot::Command->new($e->{body}, $e->{channel});
 			
-			my @result = $command->parse();
+			my @result = $command->parse;
 			
 			foreach (@result)
 			{

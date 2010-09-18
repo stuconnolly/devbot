@@ -20,6 +20,7 @@ bot by name using:
 In order to run devbot, the following Perl modules are required:
 
 + DBI
++ JSON
 + DateTime
 + Bot::BasicBot
 + Config::File
@@ -27,3 +28,4 @@ In order to run devbot, the following Perl modules are required:
 + XML::FeedPP
 + HTTP::Daemon
 + HTTP::Status
++ Digest::HMAC_MD5
