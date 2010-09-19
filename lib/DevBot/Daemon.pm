@@ -25,7 +25,6 @@ package DevBot::Daemon;
 use strict;
 use warnings;
 
-use threads;
 use HTTP::Daemon;
 use HTTP::Status;
 use DevBot::Commit;
@@ -71,46 +70,38 @@ sub start
 	while (my $connection = $daemon->accept)
 	{	
 		# Create a new thread to handle the connection
-		threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->detach;
-	}	
-}
+		#threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->detach;
+		
+		while (my $request = $connection->get_request) 
+		{
+			my $method = $request->method;
+			my $path   = $request->uri->path;
 
-#
-# Handles the connection in a separate thread.
-#
-sub _handle_connection
-{
-	my ($self, $connection) = @_;
-			
-	if (my $request = $connection->get_request) {
-		
-		my $method = $request->method;
-		my $path   = $request->uri->path;
-		
-		if (($method eq 'POST') && ($path eq '/commit')) {
-			my $commit = DevBot::Commit->new($request, $self->{_key});
-			
-			# Simply print the results to STDOUT and the bot will say them within the channel
-			foreach ($commit->parse) { print; }
-		}
-		elsif ($method eq 'GET') {
-			
-			my $log = DevBot::Log::log_path('r');
-			
-			if (-s $log) {
-				$connection->send_file_response($log);
+			if (($method eq 'POST') && ($path eq '/commit')) {
+				my $commit = DevBot::Commit->new($request, $self->{_key});
+
+				# Simply print the results to STDOUT and the bot will say them within the channel
+				foreach ($commit->parse) { print; }
+			}
+			elsif ($method eq 'GET') {
+
+				my $log = DevBot::Log::log_path('r');
+
+				if (-s $log) {
+					$connection->send_file_response($log);
+				}
+				else {
+					$connection->send_response(HTTP::Response->new(200, 'OK', undef, 'No revisions committed today.'));
+				}
 			}
 			else {
-				$connection->send_response(HTTP::Response->new(200, 'OK', undef, 'No revisions committed today.'));
+				$connection->send_error(RC_FORBIDDEN);
 			}
-		}
-		else {
-			$connection->send_error(RC_FORBIDDEN);
-		}
+		}	
+
+		$connection->close;
+		undef($connection);
 	}	
-	
-	$connection->close;
-	undef($connection);
 }
 
 1;

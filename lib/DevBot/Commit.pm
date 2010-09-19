@@ -96,9 +96,9 @@ sub _format
 								
 		push(@messages, "${message}\n");
 		
-		my $commit_message = Text::Wrap::wrap('', '', $_->{message});
+		$Text::Wrap::columns = 128;
 		
-		push(@messages, $commit_message);
+		push(@messages, Text::Wrap::wrap('', '', $_->{message}));
 	}
 	
 	return @messages;
