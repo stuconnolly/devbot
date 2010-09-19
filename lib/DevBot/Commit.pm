@@ -26,6 +26,7 @@ use strict;
 use warnings;
 
 use JSON;
+use Text::Wrap;
 use HTTP::Request;
 use DevBot::Log;
 use DevBot::Issues;
@@ -94,6 +95,17 @@ sub _format
 		log_m($message, 'r');
 								
 		push(@messages, "${message}\n");
+		
+		# Wrap text at 218 chars
+		$Text::Wrap::columns = 128;
+				
+		my $commit_message = Text::Wrap::wrap('', '', $_->{message});
+				
+		# Split the commit message by newline
+		foreach (split(/\n/, $commit_message))
+		{
+			push(@messages, $_);
+		}
 	}
 	
 	return @messages;
