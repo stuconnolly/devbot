@@ -96,16 +96,9 @@ sub _format
 								
 		push(@messages, "${message}\n");
 		
-		# Wrap text at 218 chars
-		$Text::Wrap::columns = 128;
-				
 		my $commit_message = Text::Wrap::wrap('', '', $_->{message});
-				
-		# Split the commit message by newline
-		foreach (split(/\n/, $commit_message))
-		{
-			push(@messages, $_);
-		}
+		
+		push(@messages, $commit_message);
 	}
 	
 	return @messages;
