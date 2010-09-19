@@ -250,7 +250,7 @@ sub help
 #
 sub _check_for_updated_issues
 {				
-	for my $update (get_updated_issues)
+	for my $update (DevBot::Issues::get_updated_issues)
 	{		
 		if (($update->{id} > 0) && ($update->{url})) {
 			printf("( %s ): %s by %s\n", $update->{url}, $update->{title}, $update->{author});

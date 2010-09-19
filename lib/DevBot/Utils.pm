@@ -25,11 +25,7 @@ package DevBot::Utils;
 use strict;
 use warnings;
 
-use base 'Exporter';
-
 use vars qw($ROOT_DIR);
-
-our @EXPORT = qw(usage version);
 
 our $VERSION = 1.0;
 

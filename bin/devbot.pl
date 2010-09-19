@@ -58,8 +58,8 @@ GetOptions('interactive|i'       => \$interactive,
 		   'help|h'              => \$help);
 			
 # Decide what to do
-usage if $help;
-version if $version;
+DevBot::Utils::usage if $help;
+DevBot::Utils::version if $version;
 
 $DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;

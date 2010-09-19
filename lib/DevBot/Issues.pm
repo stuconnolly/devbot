@@ -37,10 +37,6 @@ use DevBot::Project;
 use DateTime;
 use DateTime::Format::W3CDTF;
 
-use base 'Exporter';
-
-our @EXPORT = qw(get_updated_issues);
-
 our $VERSION = 1.00;
 
 #
