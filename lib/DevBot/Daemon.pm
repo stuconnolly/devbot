@@ -64,13 +64,15 @@ sub run
 					LocalAddr => $self->{_host},
 					LocalPort => $self->{_port}
 					) || warn 'Failed to create HTTP daemon';
-								
-	if ($daemon) {
+	
+	# Run forever until we're killed			
+	while ($daemon) {
 		while (my $connection = $daemon->accept)
 		{			
 			# Create a new thread to handle the connection
 			my @results = threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->join;
 			
+			# Simply print the results to STDOUT and the bot will say them within the channel
 			foreach (@results) { print; }
 			
 			$connection->close;

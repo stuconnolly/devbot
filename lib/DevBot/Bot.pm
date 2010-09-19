@@ -24,7 +24,9 @@ package DevBot::Bot;
 
 use strict;
 use warnings;
+use diagnostics;
 
+use threads;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;
@@ -75,9 +77,9 @@ sub connected
 	my $self = shift;
 		
 	if ($ANNOUNCE_COMMITS) {
-		$self->forkit(run       => \&_listen_for_commits, 
+		$self->forkit(run       => \&_listen_for_commits,
 					  channel   => $self->{channels}[0], 
-					  arguments => [$self->{channels}[0]]);
+					  arguments => [$self->{channels}[0]]);		
 	}
 	
 	return undef;
@@ -260,7 +262,7 @@ sub _check_for_updated_issues
 }
 
 #
-#
+# Starts listening for commits by starting the HTTP daemon in the background.
 #
 sub _listen_for_commits
 {	
