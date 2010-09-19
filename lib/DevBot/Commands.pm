@@ -64,9 +64,7 @@ sub command_issue
 	my ($channel, $issue_id) = @_;
 	
 	return undef if (!$issue_id);
-	
-	my $conf = get_config('gc');
-	
+		
 	my @messages = (sprintf("Issue %d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0)));
 	
 	return @messages;

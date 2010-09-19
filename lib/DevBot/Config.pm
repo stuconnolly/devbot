@@ -28,10 +28,6 @@ use warnings;
 use File::Spec;
 use Config::File;
 
-use base 'Exporter';
-
-our @EXPORT = qw(get_config);
-
 our $VERSION = 1.00;
 
 #

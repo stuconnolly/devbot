@@ -43,7 +43,7 @@ sub db_connection
 {
 	return $DB if $DB;
 	
-	my $conf = get_config('db');
+	my $conf = DevBot:::Config::get_config('db');
 	
 	my $dbs = $conf->{DSN} || 'mysql';
 	my $db_name = $conf->{DATABASE} || 'devbot';
