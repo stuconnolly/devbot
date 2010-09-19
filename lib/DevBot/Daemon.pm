@@ -54,31 +54,29 @@ sub new
 }
 
 #
-# Start listening for commit notifications.
+# Starts listening for commit notifications by initialising and starting the HTTP daemon.
 #
-sub run
+sub start
 {
 	my $self = shift;
-			
+	
 	my $daemon = HTTP::Daemon->new(
+					Blocking  => 0,
+					ReuseAddr => 1,
+					Listen    => 20,
+					Proto     => 'tcp',
 					LocalAddr => $self->{_host},
 					LocalPort => $self->{_port}
 					) || warn 'Failed to create HTTP daemon';
 	
 	# Run forever until we're killed			
-	while ($daemon) {
+	while (1) {
 		while (my $connection = $daemon->accept)
 		{			
 			# Create a new thread to handle the connection
-			my @results = threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->join;
-			
-			# Simply print the results to STDOUT and the bot will say them within the channel
-			foreach (@results) { print; }
-			
-			$connection->close;
-			undef($connection);
+			threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->detach;
 		}
-	}
+	}	
 }
 
 #
@@ -88,20 +86,37 @@ sub _handle_connection
 {
 	my ($self, $connection) = @_;
 		
-	while (my $request = $connection->get_request) 
-	{
+	my $request = $connection->get_request;
+	
+	if ($request) {
+		
 		my $method = $request->method;
 		my $path   = $request->uri->path;
 		
 		if (($method eq 'POST') && ($path eq '/commit')) {
 			my $commit = DevBot::Commit->new($request, $self->{_key});
 			
-			return $commit->parse;
+			# Simply print the results to STDOUT and the bot will say them within the channel
+			foreach ($commit->parse) { print; }
+		}
+		elsif ($method eq 'GET') {
+			
+			my $log = DevBot::Log::log_path('r');
+			
+			if (-s $log) {
+				$connection->send_file_response($log);
+			}
+			else {
+				$connection->send_response(HTTP::Response->new(200, 'OK', undef, 'No revisions committed today.'));
+			}
 		}
 		else {
 			$connection->send_error(RC_FORBIDDEN);
 		}
 	}	
+	
+	$connection->close;
+	undef($connection);
 }
 
 1;

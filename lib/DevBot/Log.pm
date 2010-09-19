@@ -42,9 +42,10 @@ our $VERSION = 1.00;
 our $LOGGING = 0;
 
 #
-# Default log filename
+# Log files
 #
-our $LOG_FILE = 'devbot.log';
+use constant ISSUE_LOG_FILE    => 'devbot-issues.log';
+use constant REVISION_LOG_FILE => 'devbot-revisions.log';
 
 #
 # Default log path is '../logs'.
@@ -52,17 +53,16 @@ our $LOG_FILE = 'devbot.log';
 our $LOG_PATH = '';
 
 #
-# Logs the supplied message.
+# Logs the supplied message. The second argument should be either 'i' or 'r' to indicate which log, 
+# issues or revisions.
 #
 sub log_m
 {
 	return undef unless $LOGGING;
 	
-	my $message = shift;
-	
-	my $log =  File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename());
-	
-	open(LOG, '>>', $log) || die $!;
+	my ($message, $log) = @_;
+			
+	open(LOG, '>>', log_path($log)) || die $!;
 	
 	my @day = localtime(time);
 
@@ -74,13 +74,25 @@ sub log_m
 }
 
 #
+# Returns the path of the supplied log file.
+#
+sub log_path
+{
+	my $log = shift;
+	
+	File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename($log));
+}
+
+#
 # Returns the current log filename.
 #
 sub _log_filename
 {
+	my $log = shift;
+	
 	my @day = localtime(time);
 	
-	return sprintf('%02d-%02d-%04d-%s', $day[3], $day[4] + 1, $day[5] + 1900, $LOG_FILE);
+	return sprintf('%02d-%02d-%04d-%s', $day[3], $day[4] + 1, $day[5] + 1900, ($log eq 'i') ? ISSUE_LOG_FILE : REVISION_LOG_FILE);
 }
 
 1;

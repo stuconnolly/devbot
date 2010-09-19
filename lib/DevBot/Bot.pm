@@ -24,7 +24,6 @@ package DevBot::Bot;
 
 use strict;
 use warnings;
-use diagnostics;
 
 use threads;
 use DevBot::DB;
@@ -270,7 +269,7 @@ sub _listen_for_commits
 	
 	my $daemon = DevBot::Daemon->new('localhost', 1987, $channel);
 	
-	$daemon->run();
+	$daemon->start();
 }
 
 #

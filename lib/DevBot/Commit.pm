@@ -27,6 +27,7 @@ use warnings;
 
 use JSON;
 use HTTP::Request;
+use DevBot::Log;
 use DevBot::Issues;
 use DevBot::Config;
 use Digest::HMAC_MD5;
@@ -87,8 +88,12 @@ sub _format
 	foreach (@{$data->{revisions}})
 	{			
 		my $url = DevBot::Project::create_revision_url($_->{revision});
+		
+		my $message = sprintf("( %s ): r%d committed by %s (%d file(s) modified)", $url, $_->{revision}, $_->{author}, $_->{path_count});
+		
+		log_m($message, 'r');
 								
-		push(@messages, sprintf("( %s ): r%d committed by %s (%d file(s) modified)\n", $url, $_->{revision}, $_->{author}, $_->{path_count}));
+		push(@messages, "${message}\n");
 	}
 	
 	return @messages;

@@ -53,7 +53,7 @@ sub get_updated_issues
 	
 	my $url = "http://${domain}/feeds/p/${project}/issueupdates/basic";
 						
-	log_m("Requesting: $url");
+	log_m("Requesting: $url", 'i');
 	
 	my $feed = XML::FeedPP::Atom->new($url);
 				
@@ -107,7 +107,7 @@ sub get_updated_issues
 	
 	my $issue_count = @issues;
 		
-	log_m(sprintf('Found %d issue updates', $issue_count));
+	log_m(sprintf('Found %d issue updates', $issue_count), 'i');
 	
 	return @issues;
 }
