@@ -82,6 +82,8 @@ sub start
 
 				# Simply print the results to STDOUT and the bot will say them within the channel
 				foreach ($commit->parse) { print; }
+				
+				$connection->send_response(HTTP::Response->new(RC_OK));
 			}
 			elsif ($method eq 'GET') {
 
@@ -91,7 +93,7 @@ sub start
 					$connection->send_file_response($log);
 				}
 				else {
-					$connection->send_response(HTTP::Response->new(200, 'OK', undef, 'No revisions committed today.'));
+					$connection->send_response(HTTP::Response->new(RC_OK, 'OK', undef, 'No revisions committed today.'));
 				}
 			}
 			else {
