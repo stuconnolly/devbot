@@ -44,7 +44,7 @@ sub command_history
 	# Cap history at 20 entries
 	$history = 20 if ($history > 20); 
 				
-	my $result = query($DevBot::Queries::HISTORY_QUERY, $channel, $history);
+	my $result = DevBot::DB::query($DevBot::Queries::HISTORY_QUERY, $channel, $history);
 	
 	my @messages = (sprintf("Last %d messages in %s:", $history, $channel));
 	

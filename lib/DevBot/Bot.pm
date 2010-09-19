@@ -290,7 +290,7 @@ sub _log
 {
 	my ($channel, $who, $line) = @_;
 	    
-	query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_date, $who, time, $line);
+	DevBot::DB::query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_date, $who, time, $line);
 }
 
 1;

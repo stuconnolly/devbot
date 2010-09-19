@@ -28,10 +28,6 @@ use warnings;
 use DBI;
 use DevBot::Config;
 
-use base 'Exporter';
-
-our @EXPORT = qw(db_connection query);
-
 our $VERSION = 1.00;
 
 our $DB;
