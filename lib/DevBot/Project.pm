@@ -73,8 +73,8 @@ sub create_issue_url
 {
 	my ($issue_id, $comment_id) = @_;
 	
-	my $project = DevBot::Project::name;
-	my $issue_tracker = DevBot::Project::issue_url;
+	my $project = name;
+	my $issue_tracker = issue_url;
 	
 	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
 	
@@ -94,8 +94,8 @@ sub create_revision_url
 {
 	my $issue_id = shift;
 	
-	my $project = DevBot::Project::name;
-	my $revision_url = DevBot::Project::revision_url;
+	my $project = name;
+	my $revision_url = revision_url;
 	
 	my $url = ($revision_url) ? $revision_url : "http://${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
 	
