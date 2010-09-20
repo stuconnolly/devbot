@@ -60,7 +60,7 @@ sub parse
 	return undef if (!length($self->{_command}));
 	
 	my @result;
-	my @commands = $self->_load_commands();
+	my @commands = DevBot::Commands::command_list();
 		
 	foreach (@commands)
 	{				
@@ -78,23 +78,6 @@ sub parse
 	}
 	
 	return @result;	
-}
-
-#
-# Returns the available commands.
-#
-sub _load_commands
-{
-	my $self = shift;
-	
-	return ({
-				'regex'  => '^history\s([0-9]+)$', 
-				'method' => \&DevBot::Commands::command_history
-			},
-	     	{
-				'regex'  => '[i|issue\s]([0-9]+)$', 
-				'method' => \&DevBot::Commands::command_issue
-			});
 }
 
 1;

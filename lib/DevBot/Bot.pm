@@ -241,7 +241,7 @@ sub tick
 #
 sub help 
 {	
-	return 'I am an interactive development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README';
+	return "I am an interactive development bot. See http://dev.stuconnolly.com/svn/devbot/trunk/README or ask 'commands'";
 }
 
 #
