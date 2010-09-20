@@ -33,7 +33,7 @@ use DevBot::Issues;
 use DevBot::Config;
 use Digest::HMAC_MD5;
 
-our $VERSION = 1.0;
+our $VERSION = '1.0';
 
 use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
 

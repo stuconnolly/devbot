@@ -28,7 +28,7 @@ use warnings;
 use File::Spec;
 use Config::File;
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # Returns the config hash for the supplied config filename.

@@ -29,7 +29,7 @@ use DevBot::Config;
 
 use vars qw($GC_HOSTING_DOMAIN);
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # Google Code hosting domain

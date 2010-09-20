@@ -30,7 +30,7 @@ use DevBot::Config;
 use DevBot::Issues;
 use DevBot::Queries;
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # Commands command.

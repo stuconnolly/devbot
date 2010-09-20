@@ -27,9 +27,12 @@ use warnings;
 
 use vars qw($ROOT_DIR);
 
-our $VERSION = 1.0;
+our $VERSION = '1.00';
 
-use constant VERSION => 1.0;
+#
+# devbot version.
+#
+use constant DEVBOT_VERSION => 1.0;
 
 #
 # devbot rootdir
@@ -66,7 +69,7 @@ EOF
 #
 sub version
 {
-	printf("devbot version %0.1f\n", VERSION);
+	printf("devbot version %0.1f\n", DEVBOT_VERSION);
 	
 	exit 0
 }

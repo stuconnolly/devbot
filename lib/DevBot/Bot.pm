@@ -33,14 +33,14 @@ use DevBot::Command;
 use Bot::BasicBot;
 
 use vars qw($INTERACTIVE 
-			$TICK 
+			$TICK
 			$ANNOUCE_COMMITS 
 			$ANNOUNCE_ISSUE_UPDATES 
 			$CHANNEL_LOGGING);
 
 use base 'Bot::BasicBot';
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # By default the bot is not interactive
@@ -90,9 +90,7 @@ sub said
 {
     my ($self, $e) = @_;
 
-	if ($CHANNEL_LOGGING) {
-		_log($e->{channel}, $e->{who}, $e->{body});
-	}
+	_log($e->{channel}, $e->{who}, $e->{body}) if $CHANNEL_LOGGING;
 	
 	if ($INTERACTIVE) {
 		# See if we were asked something
@@ -133,9 +131,7 @@ sub chanjoin
 {
 	my ($self, $e) = @_;
 
-	if ($CHANNEL_LOGGING) {
-		_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel}));
-	}
+	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel})) if $CHANNEL_LOGGING;
 
 	return undef;
 }

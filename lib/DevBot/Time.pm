@@ -38,7 +38,7 @@ our @EXPORT = qw(
 	delete_datetime_logs 
 	gmt_date);
 
-our $VERSION = 1.0;
+our $VERSION = '1.00';
 
 #
 # devbot's temporary datetime tracking file

@@ -25,7 +25,7 @@ package DevBot::Queries;
 use strict;
 use warnings;
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # History query.

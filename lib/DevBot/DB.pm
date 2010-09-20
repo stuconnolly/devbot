@@ -28,8 +28,11 @@ use warnings;
 use DBI;
 use DevBot::Config;
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
+#
+# Single DB reference.
+#
 our $DB;
 
 #

@@ -37,7 +37,7 @@ use DevBot::Project;
 use DateTime;
 use DateTime::Format::W3CDTF;
 
-our $VERSION = 1.00;
+our $VERSION = '1.00';
 
 #
 # Returns an array of updated issues via the project's issues Atom feed.
