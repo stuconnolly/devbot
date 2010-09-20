@@ -25,7 +25,6 @@ package DevBot::Bot;
 use strict;
 use warnings;
 
-use threads;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;

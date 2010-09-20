@@ -68,10 +68,7 @@ sub start
 					) || warn 'Failed to create HTTP daemon';
 	
 	while (my $connection = $daemon->accept)
-	{	
-		# Create a new thread to handle the connection
-		#threads->create({'context' => 'list'}, \&_handle_connection, $self, $connection)->detach;
-		
+	{			
 		while (my $request = $connection->get_request) 
 		{
 			my $method = $request->method;
