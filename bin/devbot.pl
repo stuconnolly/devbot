@@ -80,7 +80,7 @@ printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
 # Set the root dir
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
-my $conf = DevBot::Config::get_config('irc');
+my $conf = DevBot::Config::get('irc');
 
 my $irc_nick     = $conf->{IRC_NICK} || 'devbot';
 my $irc_server   = $conf->{IRC_SERVER} || 'irc.freenode.net';

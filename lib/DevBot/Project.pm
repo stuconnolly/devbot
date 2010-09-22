@@ -41,7 +41,7 @@ our $GC_HOSTING_DOMAIN = 'code.google.com';
 #
 sub name
 {
-	my $conf = DevBot::Config::get_config('gc');
+	my $conf = DevBot::Config::get('gc');
 	
 	return $conf->{GC_PROJECT};
 }
@@ -51,7 +51,7 @@ sub name
 #
 sub issue_url
 {
-	my $conf = DevBot::Config::get_config('gc');
+	my $conf = DevBot::Config::get('gc');
 	
 	return $conf->{GC_ISSUE_URL};
 }
@@ -61,7 +61,7 @@ sub issue_url
 #
 sub revision_url
 {
-	my $conf = DevBot::Config::get_config('gc');
+	my $conf = DevBot::Config::get('gc');
 	
 	return $conf->{GC_REVISION_URL};
 }

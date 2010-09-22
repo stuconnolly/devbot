@@ -33,7 +33,7 @@ our $VERSION = '1.00';
 #
 # Returns the config hash for the supplied config filename.
 #
-sub get_config
+sub get
 {
 	my $config_file;
 	my $filename = shift;
