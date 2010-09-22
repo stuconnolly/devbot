@@ -45,6 +45,8 @@ sub new
 	
 	$args{interactive} ||= 0;
 	$args{tick}        ||= 300;
+	$args{daemon_host} ||= 'localhost';
+	$args{daemon_port} ||= 1987;
 	$args{commits}     ||= 0;
 	$args{issues}      ||= 0;
 	$args{logging}     ||= 1; 
@@ -247,7 +249,7 @@ sub _listen_for_commits
 {	
 	my $channel = shift;
 	
-	my $daemon = DevBot::Daemon->new('localhost', 1987, $channel);
+	my $daemon = DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, $channel);
 	
 	$daemon->start();
 }

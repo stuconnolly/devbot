@@ -40,7 +40,9 @@ my ($interactive,
 	$commits, 
 	$issues, 
 	$channel_logging, 
-	$tick, 
+	$tick,
+	$host,
+	$port,
 	$logging, 
 	$log_dir, 
 	$version, 
@@ -52,6 +54,8 @@ GetOptions('interactive|i'       => \$interactive,
 		   'issues|g'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'update-interval|t=i' => \$tick,
+		   'daemon-host|dh=i'    => \$host,
+		   'daemon-port|dp=s'    => \$port,
 		   'logging|l'           => \$logging,
 		   'logdir|d=s'          => \$log_dir,
 		   'version|v'           => \$version, 
@@ -61,13 +65,8 @@ GetOptions('interactive|i'       => \$interactive,
 DevBot::Utils::usage if $help;
 DevBot::Utils::version if $version;
 
-$DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Log::LOG_PATH = $log_dir if $log_dir;
-$DevBot::Bot::INTERACTIVE = 1 if $interactive;
-$DevBot::Bot::ANNOUNCE_COMMITS = 1 if $commits;
-$DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
-$DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
@@ -82,9 +81,9 @@ $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
 my $conf = DevBot::Config::get('irc');
 
-my $irc_nick     = $conf->{IRC_NICK} || 'devbot';
+my $irc_nick     = $conf->{IRC_NICK}   || 'devbot';
 my $irc_server   = $conf->{IRC_SERVER} || 'irc.freenode.net';
-my $irc_port     = $conf->{IRC_PORT} || 6667;
+my $irc_port     = $conf->{IRC_PORT}   || 6667;
 my $irc_channels = [split(m/\s+/, $conf->{IRC_CHANNEL})];
 
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
@@ -105,12 +104,13 @@ my $bot = DevBot::Bot->new(
 		
 		interactive => $interactive,
 		tick        => $tick,
+		daemon_host => $host,
+		daemon_port => $port,
 		commits     => $commits,
 		issues      => $issues,
-		logging     => ($channel_logging) ? 0 : 1
-        );
+		logging     => ($channel_logging) ? 0 : 1);
 
-# Run it
+# Run the bot
 $bot->run;
 
 # Get rid of the log
