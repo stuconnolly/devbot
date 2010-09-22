@@ -32,40 +32,25 @@ use DevBot::Daemon;
 use DevBot::Command;
 use Bot::BasicBot;
 
-use vars qw($INTERACTIVE 
-			$TICK
-			$ANNOUCE_COMMITS 
-			$ANNOUNCE_ISSUE_UPDATES 
-			$CHANNEL_LOGGING);
-
 use base 'Bot::BasicBot';
 
 our $VERSION = '1.00';
 
 #
-# By default the bot is not interactive
+# Constructor.
 #
-our $INTERACTIVE = 0;
-
-#
-# Default tick is every 5 minutes
-#
-our $TICK = 300;
-
-#
-# By default don't annouce commits
-#
-our $ANNOUNCE_COMMITS = 0;
-
-#
-# By default don't announce issue changes
-#
-our $ANNOUNCE_ISSUE_UPDATES = 0;
-
-#
-# By default enable channel logging
-#
-our $CHANNEL_LOGGING = 1;
+sub new
+{
+	my ($this, %args) = @_;
+	
+	$args{interactive} ||= 0;
+	$args{tick}        ||= 300;
+	$args{commits}     ||= 0;
+	$args{issues}      ||= 0;
+	$args{logging}     ||= 1; 
+	
+	return $this->SUPER::new(%args);
+}
 
 #
 # Overriden connected. If required, spawn a new process to listen for source commits.
@@ -73,8 +58,10 @@ our $CHANNEL_LOGGING = 1;
 sub connected
 {
 	my $self = shift;
+	
+	print $self->{interactive};
 		
-	if ($ANNOUNCE_COMMITS) {
+	if ($self->{commits}) {
 		$self->forkit(run       => \&_listen_for_commits,
 					  channel   => $self->{channels}[0], 
 					  arguments => [$self->{channels}[0]]);		
@@ -90,9 +77,9 @@ sub said
 {
     my ($self, $e) = @_;
 
-	_log($e->{channel}, $e->{who}, $e->{body}) if $CHANNEL_LOGGING;
+	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging};
 	
-	if ($INTERACTIVE) {
+	if ($self->{interactive}) {
 		# See if we were asked something
 		if (length($e->{address})) {
 			
@@ -119,7 +106,7 @@ sub emoted
 {
 	my ($self, $e) = @_;
 
-	_log($e->{channel}, '* ' . $e->{who}, $e->{body});
+	_log($e->{channel}, '* ' . $e->{who}, $e->{body}) if $self->{logging};
     
 	return undef;
 }
@@ -131,7 +118,7 @@ sub chanjoin
 {
 	my ($self, $e) = @_;
 
-	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel})) if $CHANNEL_LOGGING;
+	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel})) if $self->{logging};
 
 	return undef;
 }
@@ -143,7 +130,7 @@ sub chanpart
 {
 	my ($self, $e) = @_;
 	
-	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
+	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel})) if $self->{logging};
 
 	return undef;
 }
@@ -155,7 +142,7 @@ sub chanquit
 {
 	my ($self, $e) = @_;
 	
-	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel}));
+	_log($e->{channel}, '', sprintf('%s left %s', $e->{who}, $e->{channel})) if $self->{logging};
 
 	return undef;
 }
@@ -167,9 +154,7 @@ sub topic
 {
 	my ($self, $e) = @_;
 	
-	if ($CHANNEL_LOGGING) {
-		_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic}));
-	}
+	_log($e->{channel}, '', sprintf('Topic for %s is now %s', $e->{channel}, $e->{topic})) if $self->{logging};
 
 	return undef;
 }
@@ -183,7 +168,7 @@ sub nick_change
 	
 	foreach ($self->_channels_for_nick($new)) 
 	{
-		_log($_, '', sprintf('%s is now known as %s', $old, $new));
+		_log($_, '', sprintf('%s is now known as %s', $old, $new)) if $self->{logging};
 	}
 
 	return undef;
@@ -200,7 +185,7 @@ sub userquit
 
 	foreach my $channel ($self->_channels_for_nick($nick)) 
 	{
-		$self->chanpart({who => $nick, channel => $channel});
+		$self->chanpart({who => $nick, channel => $channel}) if $self->{logging};
 	}
 }
 
@@ -211,7 +196,7 @@ sub kicked
 {
 	my ($self, $e) = @_;
 	
-	_log($e->{channel}, '', sprintf('%s was kicked by %s: %s', $e->{nick}, $e->{who}, $e->{reason}));
+	_log($e->{channel}, '', sprintf('%s was kicked by %s: %s', $e->{nick}, $e->{who}, $e->{reason})) if $self->{logging};
 	
 	return undef;
 }
@@ -223,12 +208,12 @@ sub tick
 {	
 	my $self = shift;
 	
-	return 0 if (!$ANNOUNCE_ISSUE_UPDATES);
+	return 0 if (!$self->{issues});
 				
 	$self->forkit(channel => $self->{channels}[0], 
 				  run     => \&_check_for_updated_issues);
 	
-	return $TICK;
+	return $self->{tick};
 }
 
 #

@@ -37,7 +37,7 @@ use DevBot::Config;
 use Getopt::Long;
 
 my ($interactive, 
-	$notify, 
+	$commits, 
 	$issues, 
 	$channel_logging, 
 	$tick, 
@@ -48,7 +48,7 @@ my ($interactive,
 
 # Get options
 GetOptions('interactive|i'       => \$interactive,
-		   'notify|n'            => \$notify,
+		   'commits|c'           => \$commits,
 		   'issues|g'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'update-interval|t=i' => \$tick,
@@ -65,14 +65,14 @@ $DevBot::Bot::TICK = $tick if $tick;
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Log::LOG_PATH = $log_dir if $log_dir;
 $DevBot::Bot::INTERACTIVE = 1 if $interactive;
-$DevBot::Bot::ANNOUNCE_COMMITS = 1 if $notify;
+$DevBot::Bot::ANNOUNCE_COMMITS = 1 if $commits;
 $DevBot::Bot::ANNOUNCE_ISSUE_UPDATES = 1 if $issues;
 $DevBot::Bot::CHANNEL_LOGGING = 0 if $channel_logging;
 
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
-print "Enabling commit annoucements...\n" if $notify;
+print "Enabling commit annoucements...\n" if $commits;
 print "Disabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
@@ -94,14 +94,20 @@ delete_datetime_logs;
 
 # Create bot
 my $bot = DevBot::Bot->new(
-		server    => $irc_server,
-		port      => $irc_port,
-		channels  => $irc_channels,
-		nick      => $irc_nick,
-		alt_nicks => ['devbot_', 'devbot__'],
-		username  => 'devbot',
-		name      => 'Development Bot',
-		charset   => 'utf-8'
+		server      => $irc_server,
+		port        => $irc_port,
+		channels    => $irc_channels,
+		nick        => $irc_nick,
+		alt_nicks   => ['devbot_', 'devbot__'],
+		username    => 'devbot',
+		name        => 'Development Bot',
+		charset     => 'utf-8',
+		
+		interactive => $interactive,
+		tick        => $tick,
+		commits     => $commits,
+		issues      => $issues,
+		logging     => ($channel_logging) ? 0 : 1
         );
 
 # Run it
