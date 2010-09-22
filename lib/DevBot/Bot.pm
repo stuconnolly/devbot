@@ -66,7 +66,7 @@ sub connected
 	if ($self->{commits}) {
 		$self->forkit(run       => \&_listen_for_commits,
 					  channel   => $self->{channels}[0], 
-					  arguments => [$self->{channels}[0]]);		
+					  arguments => [$self]);		
 	}
 	
 	return undef;
@@ -247,9 +247,9 @@ sub _check_for_updated_issues
 #
 sub _listen_for_commits
 {	
-	my $channel = shift;
+	my $self = shift;
 	
-	my $daemon = DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, $channel);
+	my $daemon = DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, $self->{channels}[0]);
 	
 	$daemon->start();
 }
