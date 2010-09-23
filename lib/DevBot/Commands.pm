@@ -43,7 +43,8 @@ sub commands
 	
 	foreach (command_list())
 	{
-		push(@messages, sprintf("%s %s", $_->{usage}, $_->{description}));
+		push(@messages, $_->{usage});
+		push(@messages, sprintf("\t%s", $_->{description}));
 	}
 	
 	return @messages;

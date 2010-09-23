@@ -245,7 +245,7 @@ sub _check_for_updated_issues
 }
 
 #
-#
+# Handles the parsing of the supplied command.
 #
 sub _dispatch_command
 {
