@@ -25,6 +25,7 @@ package DevBot::Bot;
 use strict;
 use warnings;
 
+use threads;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;
@@ -63,6 +64,7 @@ sub connected
 	
 	print $self->{interactive};
 		
+	# If we're listening for commits, start the HTTP daemon in another process to listen for connections
 	if ($self->{commits}) {
 		$self->forkit(run       => \&_listen_for_commits,
 					  channel   => $self->{channels}[0], 
@@ -82,12 +84,12 @@ sub said
 	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging};
 	
 	if ($self->{interactive}) {
+		
 		# See if we were asked something
 		if (length($e->{address})) {
 			
-			my $command = DevBot::Command->new($e->{body}, $e->{channel});
-			
-			my @result = $command->parse;
+			# Dispatch processing of the command to another thread
+			my @result = threads->create({'context' => 'list'}, \&_dispatch_command, $self, $e->{body}, $e->{channel})->join; 
 			
 			foreach (@result)
 			{
@@ -240,6 +242,18 @@ sub _check_for_updated_issues
 			printf("%s by %s\n", $update->{title}, $update->{author});
 		}
 	}
+}
+
+#
+#
+#
+sub _dispatch_command
+{
+	my ($self, $command, $channel) = @_;
+	
+	my $c = DevBot::Command->new($command, $channel);
+	
+	return $c->parse;
 }
 
 #
