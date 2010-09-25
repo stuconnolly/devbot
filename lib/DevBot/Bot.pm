@@ -61,11 +61,11 @@ sub new
 sub connected
 {
 	my $self = shift;
-	
-	print $self->{interactive};
-		
+			
 	# If we're listening for commits, start the HTTP daemon in another process to listen for connections
 	if ($self->{commits}) {
+		printf("Starting commit HTTP daemon listening on %s:%d\n", $self->{daemon_host}, $self->{daemon_port});
+		
 		$self->forkit(run       => \&_listen_for_commits,
 					  channel   => $self->{channels}[0], 
 					  arguments => [$self]);		
