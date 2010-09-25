@@ -40,7 +40,6 @@ my ($interactive,
 	$commits, 
 	$issues, 
 	$channel_logging, 
-	$tick,
 	$logging, 
 	$log_dir, 
 	$version, 
@@ -51,7 +50,6 @@ GetOptions('interactive|i'       => \$interactive,
 		   'commits|c'           => \$commits,
 		   'issues|g'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
-		   'update-interval|t=i' => \$tick,
 		   'logging|l'           => \$logging,
 		   'logdir|d=s'          => \$log_dir,
 		   'version|v'           => \$version, 
@@ -64,26 +62,21 @@ DevBot::Utils::version if $version;
 $DevBot::Log::LOGGING = 1 if $logging;
 $DevBot::Log::LOG_PATH = $log_dir if $log_dir;
 
-print "Enabling logging...\n" if $logging;
-print "Enabling interactivity...\n" if $interactive;
-print "Enabling issue annoucements...\n" if $issues;
-print "Enabling commit annoucements...\n" if $commits;
-print "Disabling channel logging...\n" if $channel_logging;
-
-printf("Setting issue update check interval to %d seconds\n", $tick) if $tick;
-
 # Set the root dir
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
-my $conf = DevBot::Config::get('irc');
+my $irc_conf = DevBot::Config::get('irc');
+my $gc_conf  = DevBot::Config::get('gc');
 
-my $irc_nick     = $conf->{IRC_NICK}   || 'devbot';
-my $irc_server   = $conf->{IRC_SERVER} || 'irc.freenode.net';
-my $irc_port     = $conf->{IRC_PORT}   || 6667;
-my $irc_channels = [split(m/\s+/, $conf->{IRC_CHANNEL})];
+my $irc_nick     = $irc_conf->{IRC_NICK}   || 'devbot';
+my $irc_server   = $irc_conf->{IRC_SERVER} || 'irc.freenode.net';
+my $irc_port     = $irc_conf->{IRC_PORT}   || 6667;
+my $irc_channels = [split(m/\s+/, $irc_conf->{IRC_CHANNEL})];
 
-my $irc_daemon_host = $conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
-my $irc_daemon_port = $conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
+my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
+my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
+
+my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
 
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
@@ -102,12 +95,20 @@ my $bot = DevBot::Bot->new(
 		charset     => 'utf-8',
 		
 		interactive => $interactive,
-		tick        => $tick,
+		tick        => $gc_issue_update_tick,
 		daemon_host => $irc_daemon_host,
 		daemon_port => $irc_daemon_port,
 		commits     => $commits,
 		issues      => $issues,
 		logging     => ($channel_logging) ? 0 : 1);
+
+print "Enabling logging...\n" if $logging;
+print "Enabling interactivity...\n" if $interactive;
+print "Enabling issue annoucements...\n" if $issues;
+print "Enabling commit annoucements...\n" if $commits;
+print "Disabling channel logging...\n" if $channel_logging;
+
+printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $gc_issue_update_tick;
 
 # Run the bot
 $bot->run;
