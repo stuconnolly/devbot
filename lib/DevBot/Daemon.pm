@@ -36,14 +36,13 @@ our $VERSION = '1.00';
 #
 sub new
 {
-	my ($this, $host, $port, $channel, $key) = @_;
+	my ($this, $host, $port, $key) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
 		_host    => $host,
 		_port    => $port,
-		_channel => $channel,
 		_key     => $key
 	};
 	

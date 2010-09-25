@@ -108,7 +108,7 @@ print "Enabling issue annoucements...\n" if $issues;
 print "Enabling commit annoucements...\n" if $commits;
 print "Disabling channel logging...\n" if $channel_logging;
 
-printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $gc_issue_update_tick;
+printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $issues;
 
 # Run the bot
 $bot->run;
