@@ -88,10 +88,9 @@ sub said
 		# See if we were asked something
 		if (length($e->{address})) {
 			
-			# Dispatch processing of the command to another thread
-			my @result = threads->create({'context' => 'list'}, \&_dispatch_command, $self, $e->{body}, $e->{channel})->join; 
+			my $command = DevBot::Command->new($e->{body}, $e->{channel});
 			
-			foreach (@result)
+			foreach ($command->parse)
 			{
 				$self->say(who     => $e->{who},
 						   channel => 'msg', 
@@ -242,18 +241,6 @@ sub _check_for_updated_issues
 			printf("%s by %s\n", $update->{title}, $update->{author});
 		}
 	}
-}
-
-#
-# Handles the parsing of the supplied command.
-#
-sub _dispatch_command
-{
-	my ($self, $command, $channel) = @_;
-	
-	my $c = DevBot::Command->new($command, $channel);
-	
-	return $c->parse;
 }
 
 #
