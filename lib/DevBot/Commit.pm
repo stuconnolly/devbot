@@ -62,7 +62,7 @@ sub new
 sub parse
 {
 	my $self = shift;
-	
+		
 	# If required authenticate the request before proceeding
 	if ($self->{_key}) {
 		my $hmac = Digest::HMAC_MD5->new($DevBot::Daemon::COMMIT_KEY);
@@ -90,7 +90,9 @@ sub _format
 	{			
 		my $url = DevBot::Project::create_revision_url($_->{revision});
 		
-		my $message = sprintf("( %s ): r%d committed by %s (%d file(s) modified)", $url, $_->{revision}, $_->{author}, $_->{path_count});
+		my $word = ($_->{path_count} > 1) ? 'files' : 'file';
+		
+		my $message = sprintf("( %s ): r%d committed by %s (%d %s modified)", $url, $_->{revision}, $_->{author}, $_->{path_count}, $word);
 		
 		log_m($message, 'r');
 								
