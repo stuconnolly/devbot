@@ -54,8 +54,6 @@ Possible options are:
   --issues          (-g)      Enable the annoucement of issue updates
   --channel-logging (-cl)     Disable channel logging
   --update-interval (-t)      Specify the interval at which issue updates are checked (in seconds)
-  --daemon-host     (-dh)     Specify the host on which the commit daemon should listen (only valid with --commits)  
-  --daemon-port     (-dp)     Specify the port on which the commit daemon should listen (only valid with --commits)
   --logging         (-l)      Enable logging
   --logdir          (-d)      Specify a different log directory (must be an absolute path)
   --version         (-v)      Print devbot version
