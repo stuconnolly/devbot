@@ -41,8 +41,6 @@ my ($interactive,
 	$issues, 
 	$channel_logging, 
 	$tick,
-	$host,
-	$port,
 	$logging, 
 	$log_dir, 
 	$version, 
@@ -54,8 +52,6 @@ GetOptions('interactive|i'       => \$interactive,
 		   'issues|g'            => \$issues,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'update-interval|t=i' => \$tick,
-		   'daemon-host|dh=i'    => \$host,
-		   'daemon-port|dp=s'    => \$port,
 		   'logging|l'           => \$logging,
 		   'logdir|d=s'          => \$log_dir,
 		   'version|v'           => \$version, 
@@ -86,6 +82,9 @@ my $irc_server   = $conf->{IRC_SERVER} || 'irc.freenode.net';
 my $irc_port     = $conf->{IRC_PORT}   || 6667;
 my $irc_channels = [split(m/\s+/, $conf->{IRC_CHANNEL})];
 
+my $irc_daemon_host = $conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
+my $irc_daemon_port = $conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
+
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
 # Delete any time tracking files that may already exist.
@@ -104,8 +103,8 @@ my $bot = DevBot::Bot->new(
 		
 		interactive => $interactive,
 		tick        => $tick,
-		daemon_host => $host,
-		daemon_port => $port,
+		daemon_host => $irc_daemon_host,
+		daemon_port => $irc_daemon_port,
 		commits     => $commits,
 		issues      => $issues,
 		logging     => ($channel_logging) ? 0 : 1);
