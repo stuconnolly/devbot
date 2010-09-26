@@ -42,15 +42,15 @@ our $VERSION = '1.00';
 our $LOGGING = 0;
 
 #
+# Default log path is '../logs'.
+#
+our $LOG_PATH = '';
+
+#
 # Log files
 #
 use constant ISSUE_LOG_FILE    => 'devbot-issues.log';
 use constant REVISION_LOG_FILE => 'devbot-revisions.log';
-
-#
-# Default log path is '../logs'.
-#
-our $LOG_PATH = '';
 
 #
 # Logs the supplied message. The second argument should be either 'i' or 'r' to indicate which log, 
@@ -80,7 +80,7 @@ sub log_path
 {
 	my $log = shift;
 	
-	File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename($log));
+	return File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename($log));
 }
 
 #
