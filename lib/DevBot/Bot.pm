@@ -87,10 +87,8 @@ sub said
 		
 		# See if we were asked something
 		if (length($e->{address})) {
-			
-			my $command = DevBot::Command->new($e->{body}, $e->{channel});
-			
-			foreach ($command->parse)
+						
+			foreach (DevBot::Command->new($e->{body}, $e->{channel})->parse)
 			{
 				$self->say(who     => $e->{who},
 						   channel => 'msg', 
@@ -247,12 +245,8 @@ sub _check_for_updated_issues
 # Starts listening for commits by starting the HTTP daemon in the background.
 #
 sub _listen_for_commits
-{	
-	my ($host, $port) = @_;
-	
-	my $daemon = DevBot::Daemon->new($host, $port);
-	
-	$daemon->start();
+{		
+	DevBot::Daemon->new($_[0], $_[1])->run();
 }
 
 #
