@@ -54,7 +54,7 @@ sub new
 #
 # Starts listening for commit notifications by initialising and starting the HTTP daemon.
 #
-sub start
+sub run
 {
 	my $self = shift;
 	
@@ -65,7 +65,7 @@ sub start
 					LocalAddr => $self->{_host},
 					LocalPort => $self->{_port}
 					) || warn 'Failed to create HTTP daemon';
-	
+		
 	while (my $connection = $daemon->accept)
 	{			
 		while (my $request = $connection->get_request) 
@@ -74,12 +74,11 @@ sub start
 			my $path   = $request->uri->path;
 
 			if (($method eq 'POST') && ($path eq '/commit')) {
-				my $commit = DevBot::Commit->new($request, $self->{_key});
-
-				# Simply print the results to STDOUT and the bot will say them within the channel
-				foreach ($commit->parse) { print; }
 				
 				$connection->send_response(HTTP::Response->new(RC_OK));
+				
+				# Simply print the results to STDOUT and the bot will say them within the channel
+				foreach (DevBot::Commit->new($request, $self->{_key})->parse) { print; }
 			}
 			elsif ($method eq 'GET') {
 
