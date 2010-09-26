@@ -83,25 +83,6 @@ die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 # Delete any time tracking files that may already exist.
 delete_datetime_logs;
 
-# Create bot
-my $bot = DevBot::Bot->new(
-		server      => $irc_server,
-		port        => $irc_port,
-		channels    => $irc_channels,
-		nick        => $irc_nick,
-		alt_nicks   => ['devbot_', 'devbot__'],
-		username    => 'devbot',
-		name        => 'Development Bot',
-		charset     => 'utf-8',
-		
-		interactive => $interactive,
-		tick        => $gc_issue_update_tick,
-		daemon_host => $irc_daemon_host,
-		daemon_port => $irc_daemon_port,
-		commits     => $commits,
-		issues      => $issues,
-		logging     => ($channel_logging) ? 0 : 1);
-
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
@@ -110,8 +91,25 @@ print "Disabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $issues;
 
-# Run the bot
-$bot->run;
+# Create the bot and run it
+DevBot::Bot->new(
+	server      => $irc_server,
+	port        => $irc_port,
+	channels    => $irc_channels,
+	nick        => $irc_nick,
+	alt_nicks   => ['devbot_', 'devbot__'],
+	username    => 'devbot',
+	name        => 'Development Bot',
+	charset     => 'utf-8',
+		
+	interactive => $interactive,
+	tick        => $gc_issue_update_tick,
+	daemon_host => $irc_daemon_host,
+	daemon_port => $irc_daemon_port,
+	commits     => $commits,
+	issues      => $issues,
+	logging     => ($channel_logging) ? 0 : 1
+)->run();
 
 # Get rid of the log
 delete_datetime_log if $issues;
