@@ -26,7 +26,6 @@ use strict;
 use warnings;
 
 use JSON;
-use Text::Wrap;
 use HTTP::Request;
 use DevBot::Log;
 use DevBot::Issues;
@@ -97,10 +96,6 @@ sub _format
 		log_m($message, 'r');
 								
 		push(@messages, "${message}\n");
-		
-		$Text::Wrap::columns = 128;
-		
-		push(@messages, Text::Wrap::wrap('', '', $_->{message}));
 	}
 	
 	return @messages;
