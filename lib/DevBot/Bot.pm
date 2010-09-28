@@ -66,9 +66,8 @@ sub connected
 	if ($self->{commits}) {
 		printf("Starting commit HTTP daemon listening on %s:%d\n", $self->{daemon_host}, $self->{daemon_port});
 		
-		$self->forkit(run       => \&_listen_for_commits,
-					  channel   => $self->{channels}[0], 
-					  arguments => [$self->{daemon_host}, $self->{daemon_port}]);		
+		$self->forkit(run     => \&_listen_for_commits($self->{daemon_host}, $self->{daemon_port}),
+					  channel => $self->{channels}[0]);		
 	}
 	
 	return undef;
@@ -245,7 +244,7 @@ sub _check_for_updated_issues
 # Starts listening for commits by starting the HTTP daemon in the background.
 #
 sub _listen_for_commits
-{		
+{			
 	DevBot::Daemon->new($_[0], $_[1])->run();
 }
 
