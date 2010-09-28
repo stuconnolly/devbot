@@ -83,7 +83,7 @@ sub command_issue
 	
 	return undef if (!$issue_id);
 		
-	my @messages = (sprintf("Issue %d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0)));
+	my @messages = (sprintf("Issue #%d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0)));
 	
 	return @messages;
 }
