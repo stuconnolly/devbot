@@ -108,7 +108,7 @@ sub command_list
 	     	{
 				'usage'       => 'issue <num> (i<num>)',
 				'description' => 'Return the URL for issue <num>',
-				'regex'       => '[i|issue\s]([0-9]+)$', 
+				'regex'       => '[#|i|issue\s]([0-9]+)$', 
 				'method'      => \&DevBot::Commands::command_issue
 			});
 }
