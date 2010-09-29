@@ -66,8 +66,9 @@ sub connected
 	if ($self->{commits}) {
 		printf("Starting commit HTTP daemon listening on %s:%d\n", $self->{daemon_host}, $self->{daemon_port});
 		
-		$self->forkit(run     => \&_listen_for_commits($self->{daemon_host}, $self->{daemon_port}),
-					  channel => $self->{channels}[0]);		
+		$self->forkit(run       => \&_listen_for_commits,
+					  channel   => $self->{channels}[0],
+					  arguments => [\$self->{daemon_host}, \$self->{daemon_port}]);		
 	}
 	
 	return undef;
@@ -117,7 +118,7 @@ sub emoted
 sub chanjoin 
 {
 	my ($self, $e) = @_;
-
+	
 	_log($e->{channel}, '', sprintf('%s joined %s', $e->{who}, $e->{channel})) if $self->{logging};
 
 	return undef;

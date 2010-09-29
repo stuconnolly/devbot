@@ -72,7 +72,8 @@ sub parse
 			push(@args, ($self->{_command} =~ /$_->{regex}/gi));
 
 			if (@args > 1) {														
-				@result = $_->{method}->(@args);			
+				@result = $_->{method}->(@args);
+				last;			
 			}
 		}
 	}

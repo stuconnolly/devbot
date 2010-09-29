@@ -56,7 +56,7 @@ sub commands
 sub command_history
 {
 	my ($channel, $history) = @_;
-	
+		
 	return undef if (!$history);
 	
 	# Cap history at 20 entries
@@ -96,19 +96,19 @@ sub command_list
 	return ({
 				'usage'       => 'commands',
 				'description' => 'List available commands (this message)',
-				'regex'       => '^commands$',
+				'regex'       => '^c|commands$',
 				'method'      => \&DevBot::Commands::commands
 			},
 			{
-				'usage'       => 'history <num>',
+				'usage'       => 'history <num> (h<num>)',
 				'description' => 'Display the <num> most recent messages',
-				'regex'       => '^history\s([0-9]+)$', 
+				'regex'       => '^(?:h|history\s)([0-9]+)$', 
 				'method'      => \&DevBot::Commands::command_history
 			},
 	     	{
-				'usage'       => 'issue <num> (i<num>)',
+				'usage'       => 'issue <num> (#<num> | i<num>)',
 				'description' => 'Return the URL for issue <num>',
-				'regex'       => '[#|i|issue\s]([0-9]+)$', 
+				'regex'       => '^(?:#|i|issue\s)([0-9]+)$', 
 				'method'      => \&DevBot::Commands::command_issue
 			});
 }
