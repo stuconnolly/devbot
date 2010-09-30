@@ -79,7 +79,7 @@ sub command_history
 #
 sub command_issue
 {
-	my ($channel, $issue_id) = @_;
+	my ($channel, $issue_id, $public) = @_;
 	
 	return undef if (!$issue_id);
 		
@@ -107,8 +107,8 @@ sub command_list
 			},
 	     	{
 				'usage'       => 'issue <num> (#<num> | i<num>)',
-				'description' => 'Return the URL for issue <num>',
-				'regex'       => '^(?:#|i|issue\s)([0-9]+)$', 
+				'description' => "Return the URL for issue <num>. The optional trailing 'p' or 'public' indicates that the returned URL be announced to the channel.",
+				'regex'       => '^(?:#|i|issue\s)([0-9]+)(?:[\s]*)(p|public)$', 
 				'method'      => \&DevBot::Commands::command_issue
 			});
 }
