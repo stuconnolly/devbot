@@ -106,7 +106,7 @@ sub command_list
 				'method'      => \&DevBot::Commands::command_history
 			},
 	     	{
-				'usage'       => 'issue <num> (#<num> | i<num>)',
+				'usage'       => 'issue <num> (#<num> | i<num>) [p | public]',
 				'description' => "Return the URL for issue <num>. The optional trailing 'p' or 'public' indicates that the returned URL be announced to the channel.",
 				'regex'       => '^(?:#|i|issue\s)([0-9]+)(?:[\s]*)(p|public)$', 
 				'method'      => \&DevBot::Commands::command_issue
