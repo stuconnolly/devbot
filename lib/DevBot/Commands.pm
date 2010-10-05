@@ -64,7 +64,9 @@ sub command_history
 				
 	my $result = DevBot::DB::query($DevBot::Queries::HISTORY_QUERY, $channel, $history);
 	
-	my @messages = (sprintf("Last %d messages in %s:", $history, $channel));
+	my $word = ($history > 1) ? 'messages' : 'message';
+	
+	my @messages = (sprintf("Last %d %s in %s:", $history, $word, $channel));
 	
 	while (my @row = $result->fetchrow_array)
 	{
@@ -96,7 +98,7 @@ sub command_list
 	return ({
 				'usage'       => 'commands',
 				'description' => 'List available commands (this message)',
-				'regex'       => '^c|commands$',
+				'regex'       => '^(?:c|commands)$',
 				'method'      => \&DevBot::Commands::commands
 			},
 			{
@@ -108,7 +110,7 @@ sub command_list
 	     	{
 				'usage'       => 'issue <num> (#<num> | i<num>) [p | public]',
 				'description' => "Return the URL for issue <num>. The optional trailing 'p' or 'public' indicates that the returned URL be announced to the channel.",
-				'regex'       => '^(?:#|i|issue\s)([0-9]+)(?:[\s]*)(p|public)$', 
+				'regex'       => '^(?:\#|i|issue\s)([0-9]+)(?:[\s])*(p|public)*$', 
 				'method'      => \&DevBot::Commands::command_issue
 			});
 }

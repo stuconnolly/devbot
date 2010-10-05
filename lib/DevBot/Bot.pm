@@ -86,7 +86,7 @@ sub said
 	if ($self->{interactive}) {
 		
 		# See if we were asked something
-		if (length($e->{address})) {
+		if ($e->{address} && length($e->{address})) {
 						
 			foreach (DevBot::Command->new($e->{body}, $e->{channel})->parse)
 			{
