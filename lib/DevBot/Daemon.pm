@@ -41,9 +41,9 @@ sub new
 	my $class = ref($this) || $this;
 				
 	my $self = {
-		_host    => $host,
-		_port    => $port,
-		_key     => $key
+		_host => $host,
+		_port => $port,
+		_key  => $key
 	};
 	
 	bless($self, $class);
