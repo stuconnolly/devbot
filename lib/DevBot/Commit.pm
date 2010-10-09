@@ -26,6 +26,7 @@ use strict;
 use warnings;
 
 use JSON;
+use Text::Wrap;
 use HTTP::Request;
 use DevBot::Log;
 use DevBot::Issues;
@@ -33,6 +34,8 @@ use DevBot::Config;
 use Digest::HMAC_MD5;
 
 our $VERSION = '1.0';
+
+use constant MESSAGE_TRUNCATE => 4;
 
 use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
 
@@ -84,6 +87,8 @@ sub _format
 	my ($self, $data) = @_;
 		
 	my @messages = ();
+	my @new_lines = ();
+	my @final_lines = ();
 		
 	foreach (@{$data->{revisions}})
 	{			
@@ -94,8 +99,45 @@ sub _format
 		my $message = sprintf("( %s ): r%d committed by %s (%d %s modified)", $url, $_->{revision}, $_->{author}, $_->{path_count}, $word);
 		
 		log_m($message, 'r');
-								
-		push(@messages, "${message}\n");
+		
+		push(@messages, "${message}:\n");
+		
+		my @lines = split('\n', $_->{message});
+
+		# Trim and ignore blank lines
+		foreach (@lines)
+		{	
+			$_ =~ s/^\s+//;
+			$_ =~ s/\s+$//;
+
+			push(@new_lines, $_) if (length($_));
+		}
+		
+		# Wrap lines at 128 chars
+		$Text::Wrap::columns = 128;
+				
+		foreach (@new_lines)
+		{
+			my @lines = split('\n', wrap('', '', $_));
+
+			push(@final_lines, $_) foreach (@lines);
+		}
+			
+		# Truncate commit messages	
+		if (@final_lines > MESSAGE_TRUNCATE) {
+			
+			for (my $i = 0; $i < MESSAGE_TRUNCATE; $i++)
+			{
+				my $line = $final_lines[$i];
+
+				$line .= ' ...[truncated]' if ($i == (MESSAGE_TRUNCATE - 1));
+
+				push(@messages, $line);
+			}
+		}
+		else {
+			push(@messages, @final_lines);
+		}
 	}
 	
 	return @messages;

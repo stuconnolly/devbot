@@ -77,8 +77,17 @@ sub run
 				
 				$connection->send_response(HTTP::Response->new(RC_OK));
 				
-				# Simply print the results to STDOUT and the bot will say them within the channel
-				foreach (DevBot::Commit->new($request, $self->{_key})->parse) { print; }
+				# Announce the results to the channel
+				foreach (DevBot::Commit->new($request, $self->{_key})->parse) 
+				{
+					DevBot::Bot::say($_) if (length);
+				}
+			}
+			elsif (($method eq 'POST') && ($path eq 'message')) {
+				
+				$connection->send_response(HTTP::Response->new(RC_OK));
+				
+				
 			}
 			elsif ($method eq 'GET') {
 
