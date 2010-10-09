@@ -35,8 +35,14 @@ use Digest::HMAC_MD5;
 
 our $VERSION = '1.0';
 
+#
+# Truncate commit messages at x lines
+#
 use constant MESSAGE_TRUNCATE => 4;
 
+#
+# Google Code HMAC header
+#
 use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
 
 #
