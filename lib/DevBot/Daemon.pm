@@ -36,14 +36,15 @@ our $VERSION = '1.00';
 #
 sub new
 {
-	my ($this, $host, $port, $key) = @_;
+	my ($this, $host, $port, $key, $message) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
-		_host => $host,
-		_port => $port,
-		_key  => $key
+		_host    => $host,
+		_port    => $port,
+		_key     => $key,
+		_message => $message
 	};
 	
 	bless($self, $class);
@@ -83,12 +84,18 @@ sub run
 					DevBot::Bot::say($_) if (length);
 				}
 			}
-			elsif (($method eq 'POST') && ($path eq 'message')) {
+			elsif (($method eq 'POST') && ($path eq '/message') && $self->{_message}) {
 				
 				$connection->send_response(HTTP::Response->new(RC_OK));
 				
+				my $message = $request->content;
+				
+				# Strip leading and trailing whitespace
+				$message =~ s/^\s+//;
+				$message =~ s/\s+$//;
+				
 				# Simply print the message to STDOUT and the bot will announce it to the channel
-				print $request->content;
+				print $message;
 			}
 			elsif ($method eq 'GET') {
 

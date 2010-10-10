@@ -38,7 +38,8 @@ use Getopt::Long;
 
 my ($interactive, 
 	$commits, 
-	$issues, 
+	$issues,
+	$message,
 	$channel_logging, 
 	$logging, 
 	$log_dir, 
@@ -49,6 +50,7 @@ my ($interactive,
 GetOptions('interactive|i'       => \$interactive,
 		   'commits|c'           => \$commits,
 		   'issues|g'            => \$issues,
+		   'message|m'           => \$message,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'logging|l'           => \$logging,
 		   'logdir|d=s'          => \$log_dir,
@@ -76,6 +78,7 @@ my $irc_channels = [split(m/\s+/, $irc_conf->{IRC_CHANNEL})];
 my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
 my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 
+my $gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
 my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
 
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
@@ -87,6 +90,7 @@ print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
 print "Enabling commit annoucements...\n" if $commits;
+print "Enabling the acceptance of incoming messages...\n" if $message;
 print "Disabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $issues;
@@ -108,7 +112,9 @@ DevBot::Bot->new(
 	daemon_port => $irc_daemon_port,
 	commits     => $commits,
 	issues      => $issues,
-	logging     => ($channel_logging) ? 0 : 1
+	message     => $message,
+	logging     => ($channel_logging) ? 0 : 1,
+	commit_key  => $gc_commit_key
 )->run();
 
 # Get rid of the log
