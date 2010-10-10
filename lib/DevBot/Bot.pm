@@ -248,7 +248,7 @@ sub _check_for_updated_issues
 #
 sub _listen_for_commits
 {			
-	my $self = shift;
+	my $self = $_[1];
 		
 	DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, undef, $self->{message})->run();
 }

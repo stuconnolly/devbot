@@ -95,7 +95,7 @@ sub run
 				$message =~ s/\s+$//;
 				
 				# Simply print the message to STDOUT and the bot will announce it to the channel
-				print $message;
+				DevBot::Bot::say($message);
 			}
 			elsif ($method eq 'GET') {
 
