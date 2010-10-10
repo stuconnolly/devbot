@@ -75,6 +75,7 @@ my $irc_server   = $irc_conf->{IRC_SERVER} || 'irc.freenode.net';
 my $irc_port     = $irc_conf->{IRC_PORT}   || 6667;
 my $irc_channels = [split(m/\s+/, $irc_conf->{IRC_CHANNEL})];
 
+my $irc_message_key = $irc_conf->{IRC_MESSAGE_KEY};
 my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
 my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 
@@ -114,7 +115,8 @@ DevBot::Bot->new(
 	issues      => $issues,
 	message     => $message,
 	logging     => ($channel_logging) ? 0 : 1,
-	commit_key  => $gc_commit_key
+	commit_key  => $gc_commit_key,
+	message_key => $irc_message_key
 )->run();
 
 # Get rid of the log

@@ -32,18 +32,24 @@ use DevBot::Commit;
 our $VERSION = '1.00';
 
 #
+# DevBot message key
+#
+use constant DEVBOT_MESSAGE_KEY => 'DevBot-Message-Key';
+
+#
 # Constructor.
 #
 sub new
 {
-	my ($this, $host, $port, $key, $message) = @_;
+	my ($this, $host, $port, $gc_key, $m_key, $message) = @_;
 	
 	my $class = ref($this) || $this;
 				
 	my $self = {
 		_host    => $host,
 		_port    => $port,
-		_key     => $key,
+		_gc_key  => $gc_key,
+		_m_key   => $m_key,
 		_message => $message
 	};
 	
@@ -79,23 +85,29 @@ sub run
 				$connection->send_response(HTTP::Response->new(RC_OK));
 				
 				# Announce the results to the channel
-				foreach (DevBot::Commit->new($request, $self->{_key})->parse) 
+				foreach (DevBot::Commit->new($request, $self->{_gc_key})->parse) 
 				{
 					DevBot::Bot::say($_) if (length);
 				}
 			}
 			elsif (($method eq 'POST') && ($path eq '/message') && $self->{_message}) {
 				
-				$connection->send_response(HTTP::Response->new(RC_OK));
-				
-				my $message = $request->content;
-				
-				# Strip leading and trailing whitespace
-				$message =~ s/^\s+//;
-				$message =~ s/\s+$//;
-				
-				# Simply print the message to STDOUT and the bot will announce it to the channel
-				DevBot::Bot::say($message);
+				if (defined($request->header(DEVBOT_MESSAGE_KEY)) && ($request->header(DEVBOT_MESSAGE_KEY) eq $self->{m_key})) {
+					
+					$connection->send_response(HTTP::Response->new(RC_OK));
+
+					my $message = $request->content;
+
+					# Strip leading and trailing whitespace
+					$message =~ s/^\s+//;
+					$message =~ s/\s+$//;
+
+					# Simply print the message to STDOUT and the bot will announce it to the channel
+					DevBot::Bot::say($message) if (length($message));
+				}
+				else {
+					$connection->send_response(HTTP::Response->new(RC_UNAUTHORIZED));
+				}
 			}
 			elsif ($method eq 'GET') {
 

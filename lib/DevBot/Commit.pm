@@ -77,7 +77,7 @@ sub parse
 	
 		$hmac->add($self->{_request}->content);
 
-		return undef if ($hmac->hexdigest != $self->{_request}->header(GC_POST_COMMIT_HMAC_HEADER));
+		return undef if ($hmac->hexdigest ne $self->{_request}->header(GC_POST_COMMIT_HMAC_HEADER));
 	}
 	
 	my $json = JSON->new->allow_nonref;

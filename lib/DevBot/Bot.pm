@@ -53,6 +53,7 @@ sub new
 	$args{logging}     ||= 1; 
 	$args{message}     ||= 0;
 	$args{commit_key}  ||= undef;
+	$args{message_key} ||= undef;
 		
 	return $this->SUPER::new(%args);
 }
@@ -250,7 +251,7 @@ sub _listen_for_commits
 {			
 	my $self = $_[1];
 		
-	DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, undef, $self->{message})->run();
+	DevBot::Daemon->new($self->{daemon_host}, $self->{daemon_port}, $self->{commit_key}, $self->{message_key}, $self->{message})->run();
 }
 
 #
