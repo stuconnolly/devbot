@@ -87,7 +87,8 @@ sub run
 				
 				$connection->send_response(HTTP::Response->new(RC_OK));
 				
-				
+				# Simply print the message to STDOUT and the bot will announce it to the channel
+				print $request->content;
 			}
 			elsif ($method eq 'GET') {
 
