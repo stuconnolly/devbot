@@ -90,12 +90,17 @@ sub said
 		
 		# See if we were asked something
 		if ($e->{address} && length($e->{address})) {
+					
+			my $result = DevBot::Command->new($e->{body}, $e->{channel})->parse;
 						
-			foreach (DevBot::Command->new($e->{body}, $e->{channel})->parse)
+			foreach (@{$result->{data}})
 			{
-				$self->say(who     => $e->{who},
-						   channel => 'msg', 
-						   body    => $_);
+				if (defined($result->{public}) && $result->{public} == 1) {
+					$self->say(channel => $self->{channels}[0], body => $_);
+				}
+				else {
+					$self->say(who => $e->{who}, channel => 'msg', body => $_);
+				}
 			}
 		}
 	}

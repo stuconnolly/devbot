@@ -47,7 +47,7 @@ sub commands
 		push(@messages, sprintf("\t%s", $_->{description}));
 	}
 	
-	return @messages;
+	return {data => \@messages};
 }
 
 #
@@ -73,7 +73,7 @@ sub command_history
 		push(@messages, sprintf("[%s] <%s> %s\n", $row[0], $row[1], $row[2]));
 	}
 	
-	return @messages;
+	return {data => \@messages};
 }
 
 #
@@ -85,9 +85,13 @@ sub command_issue
 	
 	return undef if (!$issue_id);
 		
-	my @messages = (sprintf("Issue #%d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0)));
+	my $message = sprintf("Issue #%d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0));
 	
-	return @messages;
+	my %data = (data => [$message]);
+	
+	$data{public} = 1 if $public;
+	
+	return {%data};
 }
 
 #

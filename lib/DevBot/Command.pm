@@ -59,7 +59,7 @@ sub parse
 	
 	return undef if (!length($self->{_command}));
 	
-	my @result;
+	my $result;
 	my @commands = DevBot::Commands::command_list();
 		
 	foreach (@commands)
@@ -72,13 +72,13 @@ sub parse
 			push(@args, ($self->{_command} =~ /$_->{regex}/gi));
 
 			if (@args > 1) {														
-				@result = $_->{method}->(@args);
-				last;			
+				$result = $_->{method}->(@args);
+				last;		
 			}
 		}
 	}
 	
-	return @result;	
+	return $result;	
 }
 
 1;

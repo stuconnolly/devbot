@@ -110,12 +110,13 @@ sub _format
 		
 		my @lines = split('\n', $_->{message});
 
-		# Trim and ignore blank lines
 		foreach (@lines)
-		{	
-			$_ =~ s/^\s+//;
-			$_ =~ s/\s+$//;
+		{
+			# Trim leading and trailing whitespace	
+			s/^\s+//;
+			s/\s+$//;
 
+			# Only include non-blank lines
 			push(@new_lines, $_) if (length($_));
 		}
 		
