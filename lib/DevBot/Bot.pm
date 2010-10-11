@@ -25,7 +25,6 @@ package DevBot::Bot;
 use strict;
 use warnings;
 
-use threads;
 use DevBot::DB;
 use DevBot::Time;
 use DevBot::Issues;
@@ -92,7 +91,7 @@ sub said
 		if ($e->{address} && length($e->{address})) {
 					
 			my $result = DevBot::Command->new($e->{body}, $e->{channel})->parse;
-						
+
 			foreach (@{$result->{data}})
 			{
 				if (defined($result->{public}) && $result->{public} == 1) {
