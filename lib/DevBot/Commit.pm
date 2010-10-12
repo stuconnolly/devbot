@@ -31,6 +31,7 @@ use HTTP::Request;
 use DevBot::Log;
 use DevBot::Issues;
 use DevBot::Config;
+use DevBot::Project;
 use Digest::HMAC_MD5;
 
 our $VERSION = '1.0';
@@ -107,6 +108,12 @@ sub _format
 		log_m($message, 'r');
 		
 		push(@messages, "${message}:\n");
+		
+		# Replace occurrences of #XXX with a URL to the issue
+		$_->{message} =~ s/#([0-9]+)/DevBot::Project::create_issue_url($1)/gie;
+		
+		# Replace occurrences of rXXXX with a URL to the revision
+		$_->{message} =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
 		
 		my @lines = split('\n', $_->{message});
 
