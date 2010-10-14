@@ -27,15 +27,11 @@ use warnings;
 
 use HTTP::Daemon;
 use HTTP::Status;
+use DevBot::Auth;
 use DevBot::Commit;
 use DevBot::Project;
 
 our $VERSION = '1.00';
-
-#
-# DevBot message key
-#
-use constant DEVBOT_MESSAGE_KEY => 'DevBot-Message-Key';
 
 #
 # Constructor.
@@ -93,7 +89,7 @@ sub run
 			}
 			elsif (($method eq 'POST') && ($path eq '/message') && $self->{_message}) {
 				
-				if (defined($request->header(DEVBOT_MESSAGE_KEY)) && ($request->header(DEVBOT_MESSAGE_KEY) eq $self->{m_key})) {
+				if (DevBot::Auth::authenticate_message_request($request, $self->{_m_key})) {
 					
 					$connection->send_response(HTTP::Response->new(RC_OK));
 

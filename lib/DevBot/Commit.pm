@@ -29,10 +29,10 @@ use JSON;
 use Text::Wrap;
 use HTTP::Request;
 use DevBot::Log;
+use DevBot::Auth;
 use DevBot::Issues;
 use DevBot::Config;
 use DevBot::Project;
-use Digest::HMAC_MD5;
 
 our $VERSION = '1.0';
 
@@ -40,11 +40,6 @@ our $VERSION = '1.0';
 # Truncate commit messages at x lines
 #
 use constant MESSAGE_TRUNCATE => 4;
-
-#
-# Google Code HMAC header
-#
-use constant GC_POST_COMMIT_HMAC_HEADER => 'Google-Code-Project-Hosting-Hook-Hmac';
 
 #
 # Constructor.
@@ -74,12 +69,8 @@ sub parse
 		
 	# If required authenticate the request before proceeding
 	if ($self->{_key}) {
-		my $hmac = Digest::HMAC_MD5->new($DevBot::Daemon::COMMIT_KEY);
-	
-		$hmac->add($self->{_request}->content);
-
-		return undef if ($hmac->hexdigest ne $self->{_request}->header(GC_POST_COMMIT_HMAC_HEADER));
-	}
+		return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
+	}	
 	
 	my $json = JSON->new->allow_nonref;
 	
@@ -107,10 +98,13 @@ sub _format
 		
 		log_m($message, 'r');
 		
-		push(@messages, "${message}:\n");
+		push(@messages, "${message}:");
 		
 		# Replace occurrences of #XXX with a URL to the issue
 		$_->{message} =~ s/#([0-9]+)/DevBot::Project::create_issue_url($1)/gie;
+		
+		# Replace occurrences of issue [#] with a URL to the issue
+		$_->{message} =~ s/issue[\s+#]([0-9]+s)/DevBot::Project::create_issue_url($1)/gie;
 		
 		# Replace occurrences of rXXXX with a URL to the revision
 		$_->{message} =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
@@ -124,7 +118,7 @@ sub _format
 			s/\s+$//;
 
 			# Only include non-blank lines
-			push(@new_lines, $_) if (length($_));
+			push(@new_lines, " $_") if (length($_));
 		}
 		
 		# Wrap lines at 128 chars
