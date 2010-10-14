@@ -218,8 +218,7 @@ sub tick
 	
 	return 0 if (!$self->{issues});
 				
-	$self->forkit(channel => $self->{channels}[0], 
-				  run     => \&_check_for_updated_issues);
+	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues);
 	
 	return $self->{tick};
 }
