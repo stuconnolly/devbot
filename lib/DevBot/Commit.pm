@@ -68,9 +68,9 @@ sub parse
 	my $self = shift;
 		
 	# If required authenticate the request before proceeding
-	if ($self->{_key}) {
-		return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
-	}	
+	#if ($self->{_key}) {
+	#	return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
+	#}	
 	
 	my $json = JSON->new->allow_nonref;
 	
@@ -101,15 +101,15 @@ sub _format
 		push(@messages, "${message}:");
 		
 		# Replace occurrences of #XXX with a URL to the issue
-		$_->{message} =~ s/#([0-9]+)/DevBot::Project::create_issue_url($1)/gie;
+		$_->{message} =~ s/#([0-9]+)/DevBot::Project::create_issue_url($1) . ' '/gie;
 		
 		# Replace occurrences of issue [#] with a URL to the issue
-		$_->{message} =~ s/issue[\s+#]([0-9]+s)/DevBot::Project::create_issue_url($1)/gie;
+		$_->{message} =~ s/issue[\s+#]([0-9]+s)/DevBot::Project::create_issue_url($1) . ' '/gie;
 		
 		# Replace occurrences of rXXXX with a URL to the revision
-		$_->{message} =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
+		$_->{message} =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1) . ' '/gie;
 		
-		my @lines = split('\n', $_->{message});
+		my @lines = split(/\n+/, $_->{message});
 
 		foreach (@lines)
 		{
@@ -118,7 +118,7 @@ sub _format
 			s/\s+$//;
 
 			# Only include non-blank lines
-			push(@new_lines, " $_") if (length($_));
+			push(@new_lines, $_) if (length($_));
 		}
 		
 		# Wrap lines at 128 chars
@@ -146,6 +146,8 @@ sub _format
 		else {
 			push(@messages, @final_lines);
 		}
+		
+		$_ =~ s/(?<=(?<!\d(?=[.,]\d))\.\:)(?!\s)/ /g foreach (@messages);
 	}
 	
 	return @messages;
