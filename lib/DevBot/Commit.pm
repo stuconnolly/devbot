@@ -145,9 +145,7 @@ sub _format
 		}
 		else {
 			push(@messages, @final_lines);
-		}
-		
-		$_ =~ s/(?<=(?<!\d(?=[.,]\d))\.\:)(?!\s)/ /g foreach (@messages);
+		}		
 	}
 	
 	return @messages;
