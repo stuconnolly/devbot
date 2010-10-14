@@ -46,7 +46,7 @@ sub authenticate_message_request
 {
 	my ($request, $key) = @_;
 	
-	if (defined($request->header(DEVBOT_MESSAGE_HASH_KEY))) {
+	if (defined($request->header(DEVBOT_MESSAGE_HASH_HEADER))) {
 		return _authenticate_string($request->content, $key, $request->header(DEVBOT_MESSAGE_HASH_HEADER));
 	}
 }
@@ -58,7 +58,7 @@ sub authenticate_commit_request
 {
 	my ($request, $key) = @_;
 	
-	if (defined($request->header(DEVBOT_MESSAGE_HASH_KEY))) {
+	if (defined($request->header(GC_POST_COMMIT_HMAC_HEADER))) {
 		return _authenticate_string($request->content, $key, $request->header(GC_POST_COMMIT_HMAC_HEADER));
 	}
 }
