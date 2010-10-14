@@ -28,6 +28,7 @@ use warnings;
 use HTTP::Daemon;
 use HTTP::Status;
 use DevBot::Commit;
+use DevBot::Project;
 
 our $VERSION = '1.00';
 
@@ -101,6 +102,8 @@ sub run
 					# Strip leading and trailing whitespace
 					$message =~ s/^\s+//;
 					$message =~ s/\s+$//;
+					
+					$message =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
 
 					# Simply print the message to STDOUT and the bot will announce it to the channel
 					DevBot::Bot::say($message) if (length($message));
