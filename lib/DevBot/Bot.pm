@@ -83,12 +83,14 @@ sub said
 {
     my ($self, $e) = @_;
 
-	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging};
+	$addressed = $e->{address} && length($e->{address});
+
+	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging} if (!$addressed);
 	
 	if ($self->{interactive}) {
 		
 		# See if we were asked something
-		if ($e->{address} && length($e->{address})) {
+		if ($addressed) {
 					
 			my $result = DevBot::Command->new($e->{body}, $e->{channel})->parse;
 
