@@ -25,9 +25,7 @@ package DevBot::Issues;
 use strict;
 use warnings;
 
-use XML::RSS;
 use XML::FeedPP;
-use LWP::Simple;
 
 use DevBot::Log;
 use DevBot::Time;
