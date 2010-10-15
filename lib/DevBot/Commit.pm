@@ -68,9 +68,9 @@ sub parse
 	my $self = shift;
 		
 	# If required authenticate the request before proceeding
-	#if ($self->{_key}) {
-	#	return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
-	#}	
+	if ($self->{_key}) {
+		return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
+	}	
 	
 	my $json = JSON->new->allow_nonref;
 	
