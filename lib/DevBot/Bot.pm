@@ -83,7 +83,7 @@ sub said
 {
     my ($self, $e) = @_;
 
-	$addressed = $e->{address} && length($e->{address});
+	my $addressed = $e->{address} && length($e->{address});
 
 	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging} if (!$addressed);
 	
