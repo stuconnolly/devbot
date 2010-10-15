@@ -85,7 +85,7 @@ sub said
 
 	my $addressed = $e->{address} && length($e->{address});
 
-	_log($e->{channel}, $e->{who}, $e->{body}) if $self->{logging} if (!$addressed);
+	_log($e->{channel}, $e->{who}, $e->{body}) if (!$addressed && $self->{logging});
 	
 	if ($self->{interactive}) {
 		
