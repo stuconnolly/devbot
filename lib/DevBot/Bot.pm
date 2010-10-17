@@ -53,6 +53,9 @@ sub new
 	$args{message}     ||= 0;
 	$args{commit_key}  ||= undef;
 	$args{message_key} ||= undef;
+	
+	# Keep track of running ticks
+	$args{tick_running} = 0;
 		
 	return $this->SUPER::new(%args);
 }
@@ -220,7 +223,9 @@ sub tick
 	
 	return 0 if (!$self->{issues});
 				
-	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues);
+	return $self->{tick} if $self->{tick_running};
+				
+	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues, arguments => [$self]);
 	
 	return $self->{tick};
 }
@@ -237,16 +242,22 @@ sub help
 # Checks for any updated issues since the last check and announces them to the channel.
 #
 sub _check_for_updated_issues
-{				
-	for my $update (DevBot::Issues::get_updated_issues)
+{	
+	my $self = $_[1];
+			
+	$self->{tick_running} = 1;
+				
+	foreach (DevBot::Issues::get_updated_issues)
 	{		
-		if (($update->{id} > 0) && ($update->{url})) {
-			printf("( %s ): %s by %s\n", $update->{url}, $update->{title}, $update->{author});
+		if (($_->{id} > 0) && ($_->{url})) {
+			printf("( %s ): %s by %s\n", $_->{url}, $_->{title}, $_->{author});
 		}
 		else {
-			printf("%s by %s\n", $update->{title}, $update->{author});
+			printf("%s by %s\n", $_->{title}, $_->{author});
 		}
 	}
+	
+	$self->{tick_running} = 0;
 }
 
 #
