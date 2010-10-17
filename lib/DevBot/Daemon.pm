@@ -108,17 +108,6 @@ sub run
 					$connection->send_response(HTTP::Response->new(RC_UNAUTHORIZED));
 				}
 			}
-			elsif ($method eq 'GET') {
-
-				my $log = DevBot::Log::log_path('r');
-
-				if (-s $log) {
-					$connection->send_file_response($log);
-				}
-				else {
-					$connection->send_response(HTTP::Response->new(RC_OK, 'OK', undef, 'No revisions committed today.'));
-				}
-			}
 			else {
 				$connection->send_error(RC_FORBIDDEN);
 			}
