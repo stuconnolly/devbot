@@ -42,6 +42,7 @@ our $VERSION = '1.00';
 #
 sub get_updated_issues
 {
+	my $feed;
 	my @issues = ();
 	
 	my $project = DevBot::Project::name;
@@ -53,59 +54,67 @@ sub get_updated_issues
 						
 	log_m("Requesting: $url", 'i');
 	
-	my $feed = XML::FeedPP::Atom->new($url);
-				
-	my $w3c = DateTime::Format::W3CDTF->new;
+	eval {
+		$feed = XML::FeedPP::Atom->new($url);
+	};
 	
-	my $pub_date = $feed->pubDate();
-	
-	# Remove timezone indicator
-	$pub_date =~ s/Z//g;
-		
-	my $cur_datetime = $w3c->parse_datetime(get_last_updated_datetime);	
-	my $feed_datetime = $w3c->parse_datetime($pub_date);
-	
-	write_datetime($feed_datetime); 
-	
-	# Only continue if the feed's publication date is newer than the last time we check it
-	if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
-		
-		foreach my $item ($feed->get_item()) 
-		{	
-			my $item_datetime = $w3c->parse_datetime($item->pubDate());	
-			
-			# Remove timezone indicator
-			$item_datetime =~ s/Z//g;
-			
-			if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
+	if ($@) {
+		chomp($@);
+		log_m("Error retrieving feed: $@", 'i');
+	}
+	else {
+		my $w3c = DateTime::Format::W3CDTF->new;
 
-				my %ids = _extract_ids($item->link());
+		my $pub_date = $feed->pubDate();
 
-				my $url;
-				my $issue_id = {%ids}->{issue_id};
+		# Remove timezone indicator
+		$pub_date =~ s/Z//g;
 
-				if ($issue_id > 0) {
-					$url = DevBot::Project::create_issue_url($issue_id, {%ids}->{comment_id});
+		my $cur_datetime = $w3c->parse_datetime(get_last_updated_datetime);	
+		my $feed_datetime = $w3c->parse_datetime($pub_date);
+
+		write_datetime($feed_datetime); 
+
+		# Only continue if the feed's publication date is newer than the last time we check it
+		if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
+
+			foreach my $item ($feed->get_item()) 
+			{	
+				my $item_datetime = $w3c->parse_datetime($item->pubDate());	
+
+				# Remove timezone indicator
+				$item_datetime =~ s/Z//g;
+
+				if (DateTime->compare($item_datetime, $cur_datetime) > 0) {
+
+					my %ids = _extract_ids($item->link());
+
+					my $url;
+					my $issue_id = {%ids}->{issue_id};
+
+					if ($issue_id > 0) {
+						$url = DevBot::Project::create_issue_url($issue_id, {%ids}->{comment_id});
+					}
+
+					my %issue = (id     => $issue_id,
+								 title  => $item->title(),
+								 author => $item->author(),
+								 url    => $url
+								);
+
+					push(@issues, {%issue});
 				}
-
-				my %issue = (id     => $issue_id,
-							 title  => $item->title(),
-							 author => $item->author(),
-							 url    => $url
-							);
-
-				push(@issues, {%issue});
 			}
 		}
+
+		# Reverse the array so we report the updates in the order they occurred, 
+		# not the order we encountered them.
+		@issues = reverse(@issues);
+
+		my $issue_count = @issues;
+
+		log_m(sprintf('Found %d issue updates', $issue_count), 'i');
 	}
-	
-	# Reverse the array so we report the updates in the order they occurred, 
-	# not the order we encountered them.
-	@issues = reverse(@issues);
-	
-	my $issue_count = @issues;
-		
-	log_m(sprintf('Found %d issue updates', $issue_count), 'i');
 	
 	return @issues;
 }
