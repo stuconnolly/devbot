@@ -44,18 +44,15 @@ sub new
 	my ($this, %args) = @_;
 	
 	$args{interactive} ||= 0;
-	$args{tick}        ||= 300;
+	$args{event_tick}  ||= 300;
 	$args{daemon_host} ||= 'localhost';
 	$args{daemon_port} ||= 1987;
 	$args{commits}     ||= 0;
 	$args{issues}      ||= 0;
-	$args{logging}     ||= 1; 
+	$args{logging}     ||= 0; 
 	$args{message}     ||= 0;
 	$args{commit_key}  ||= undef;
 	$args{message_key} ||= undef;
-	
-	# Keep track of running ticks
-	$args{tick_running} = 0;
 		
 	return $this->SUPER::new(%args);
 }
@@ -222,12 +219,10 @@ sub tick
 	my $self = shift;
 	
 	return 0 unless $self->{issues};
-				
-	return $self->{tick} if $self->{tick_running};
-				
-	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues, arguments => [$self]);
+								
+	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues); 
 	
-	return $self->{tick};
+	return $self->{event_tick};
 }
 
 #
@@ -242,11 +237,7 @@ sub help
 # Checks for any updated issues since the last check and announces them to the channel.
 #
 sub _check_for_updated_issues
-{	
-	my $self = $_[1];
-			
-	$self->{tick_running} = 1;
-				
+{								
 	foreach (DevBot::Issues::get_updated_issues)
 	{		
 		if (($_->{id} > 0) && ($_->{url})) {
@@ -256,8 +247,6 @@ sub _check_for_updated_issues
 			printf("%s by %s\n", $_->{title}, $_->{author});
 		}
 	}
-	
-	$self->{tick_running} = 0;
 }
 
 #

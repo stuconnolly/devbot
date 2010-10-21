@@ -75,7 +75,7 @@ sub get_updated_issues
 
 		write_datetime($feed_datetime); 
 
-		# Only continue if the feed's publication date is newer than the last time we check it
+		# Only continue if the feed's publication date is newer than the last time we checked it
 		if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
 
 			foreach my $item ($feed->get_item()) 

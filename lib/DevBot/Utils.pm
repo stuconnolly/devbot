@@ -53,7 +53,7 @@ Possible options are:
   --commits         (-c)      Enable the annoucement of source commits
   --issues          (-g)      Enable the annoucement of issue updates
   --message         (-m)      Accept incoming messages
-  --channel-logging (-cl)     Disable channel logging
+  --channel-logging (-cl)     Enable channel logging
   --logging         (-l)      Enable logging
   --logdir          (-d)      Specify a different log directory (must be an absolute path)
   --version         (-v)      Print devbot version

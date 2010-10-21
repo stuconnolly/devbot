@@ -105,13 +105,13 @@ DevBot::Bot->new(
 	charset     => 'utf-8',
 		
 	interactive => $interactive,
-	tick        => $gc_issue_update_tick,
+	event_tick  => $gc_issue_update_tick,
 	daemon_host => $irc_daemon_host,
 	daemon_port => $irc_daemon_port,
 	commits     => $commits,
 	issues      => $issues,
 	message     => $message,
-	logging     => ($channel_logging) ? 0 : 1,
+	logging     => $channel_logging,
 	commit_key  => $gc_commit_key,
 	message_key => $irc_message_key
 )->run();
