@@ -84,9 +84,6 @@ my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
 
 die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
-# Delete any time tracking files that may already exist.
-delete_datetime_logs;
-
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;

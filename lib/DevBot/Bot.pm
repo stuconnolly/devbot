@@ -221,7 +221,7 @@ sub tick
 {	
 	my $self = shift;
 	
-	return 0 if (!$self->{issues});
+	return 0 unless $self->{issues};
 				
 	return $self->{tick} if $self->{tick_running};
 				
