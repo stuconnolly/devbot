@@ -105,7 +105,7 @@ DevBot::Bot->new(
 	charset     => 'utf-8',
 		
 	interactive => $interactive,
-	event_tick  => $gc_issue_update_tick,
+	tick_int    => $gc_issue_update_tick,
 	daemon_host => $irc_daemon_host,
 	daemon_port => $irc_daemon_port,
 	commits     => $commits,

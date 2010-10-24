@@ -44,7 +44,7 @@ sub new
 	my ($this, %args) = @_;
 	
 	$args{interactive} ||= 0;
-	$args{event_tick}  ||= 300;
+	$args{tick_int}    ||= 300;
 	$args{daemon_host} ||= 'localhost';
 	$args{daemon_port} ||= 1987;
 	$args{commits}     ||= 0;
@@ -222,7 +222,7 @@ sub tick
 								
 	$self->forkit(channel => $self->{channels}[0], run => \&_check_for_updated_issues); 
 	
-	return $self->{event_tick};
+	return $self->{tick_int};
 }
 
 #
