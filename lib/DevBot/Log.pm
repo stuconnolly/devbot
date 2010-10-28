@@ -62,15 +62,15 @@ sub log_m
 	
 	my ($message, $log) = @_;
 			
-	open(LOG, '>>', log_path($log)) || die $!;
+	open(my $log, '>>', log_path($log)) || die $!;
 	
 	my @day = localtime(time);
 
 	$message = sprintf("[%02d-%02d-%04d %02d:%02d:%02d] %s\n", $day[3], $day[4] + 1, $day[5] + 1900, $day[2], $day[1], $day[0], $message);
 	
-	print LOG $message;
+	print $log $message;
 	
-	close(LOG);
+	close($log);
 }
 
 #
