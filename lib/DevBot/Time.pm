@@ -56,11 +56,11 @@ sub get_last_updated_datetime
 	# If the tracking file doesn't exist use the current datetime
 	if (-s $TIME_TRACKING_FILE) {
 		
-		open(FILE, $TIME_TRACKING_FILE) || die $!;
+		open(my $file, $TIME_TRACKING_FILE) || die $!;
 		
-		chomp($datetime = <FILE>);
+		chomp($datetime = <$file>);
 		
-		close(FILE);		
+		close($file);		
 	}
 	else {
 		$datetime = get_current_datetime();
@@ -92,11 +92,11 @@ sub write_datetime
 {
 	my $datetime = shift;
 	
-	open(FILE, '>', $TIME_TRACKING_FILE) || die $!;
+	open(my $file, '>', $TIME_TRACKING_FILE) || die $!;
 	
-	print FILE "${datetime}\n";
+	print $file "${datetime}\n";
 
-	close(FILE);
+	close($file);
 }
 
 #
@@ -114,13 +114,13 @@ sub delete_datetime_log
 #
 sub delete_datetime_logs
 {
-	opendir(TMP_DIR, '/tmp');
+	opendir(my $tmp_dir, '/tmp') || die "Could not open dir /tmp: $!";
 	
-	my @files = grep(/devbot\.tmp\.[0-9]$/, readdir(TMP_DIR));
+	my @files = grep(/devbot\.tmp\.[0-9]$/, readdir($tmp_dir));
 	
-	closedir(TMP_DIR);
+	closedir($tmp_dir);
 	
-	foreach (@files) { unlink ||  warn "Could not delete tim tracking file '$_': $!"; }
+	foreach (@files) { unlink ||  warn "Could not delete time tracking file '$_': $!"; }
 }
 
 #
