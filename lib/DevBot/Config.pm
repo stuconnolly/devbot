@@ -25,6 +25,7 @@ package DevBot::Config;
 use strict;
 use warnings;
 
+use Carp;
 use File::Spec;
 use Config::File;
 
@@ -46,7 +47,7 @@ sub get
 	
 	closedir(CONFIG_DIR);
 	
-	die 'No config files found' unless (@files > 0);
+	croak 'No config files found' unless (@files > 0);
 	
 	if (@files == 1) {
 		$config_file = $files[0];

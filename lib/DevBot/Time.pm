@@ -25,6 +25,7 @@ package DevBot::Time;
 use strict;
 use warnings;
 
+use Carp;
 use DateTime;
 use DateTime::Format::W3CDTF;
 
@@ -56,7 +57,7 @@ sub get_last_updated_datetime
 	# If the tracking file doesn't exist use the current datetime
 	if (-s $TIME_TRACKING_FILE) {
 		
-		open(my $file, $TIME_TRACKING_FILE) || die $!;
+		open(my $file, $TIME_TRACKING_FILE) || croak $!;
 		
 		chomp($datetime = <$file>);
 		
@@ -92,7 +93,7 @@ sub write_datetime
 {
 	my $datetime = shift;
 	
-	open(my $file, '>', $TIME_TRACKING_FILE) || die $!;
+	open(my $file, '>', $TIME_TRACKING_FILE) || croak $!;
 	
 	print $file "${datetime}\n";
 

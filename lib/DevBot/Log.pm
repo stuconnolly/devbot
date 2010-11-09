@@ -25,6 +25,7 @@ package DevBot::Log;
 use strict;
 use warnings;
 
+use Carp;
 use File::Spec;
 use DevBot::Utils;
 
@@ -62,15 +63,15 @@ sub log_m
 	
 	my ($message, $log) = @_;
 			
-	open(my $log, '>>', log_path($log)) || die $!;
+	open(my $log_file, '>>', log_path($log)) || croak $!;
 	
 	my @day = localtime(time);
 
 	$message = sprintf("[%02d-%02d-%04d %02d:%02d:%02d] %s\n", $day[3], $day[4] + 1, $day[5] + 1900, $day[2], $day[1], $day[0], $message);
 	
-	print $log $message;
+	print $log_file $message;
 	
-	close($log);
+	close($log_file);
 }
 
 #

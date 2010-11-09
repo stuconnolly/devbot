@@ -25,6 +25,7 @@ package DevBot::Daemon;
 use strict;
 use warnings;
 
+use Carp;
 use HTTP::Daemon;
 use HTTP::Status;
 use DevBot::Auth;
@@ -68,7 +69,7 @@ sub run
 					Proto     => 'tcp',
 					LocalAddr => $self->{_host},
 					LocalPort => $self->{_port}
-					) || warn 'Failed to create HTTP daemon';
+					) || carp 'Failed to create HTTP daemon';
 		
 	while (my $connection = $daemon->accept)
 	{			
