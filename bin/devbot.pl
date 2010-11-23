@@ -89,7 +89,7 @@ print "Enabling interactivity...\n" if $interactive;
 print "Enabling issue annoucements...\n" if $issues;
 print "Enabling commit annoucements...\n" if $commits;
 print "Enabling the acceptance of incoming messages...\n" if $message;
-print "Disabling channel logging...\n" if $channel_logging;
+print "Enabling channel logging...\n" if $channel_logging;
 
 printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $issues;
 
