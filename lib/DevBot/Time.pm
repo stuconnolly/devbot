@@ -115,7 +115,7 @@ sub delete_datetime_log
 #
 sub delete_datetime_logs
 {
-	opendir(my $tmp_dir, '/tmp') || die "Could not open dir /tmp: $!";
+	opendir(my $tmp_dir, '/tmp') || croak "Could not open dir /tmp: $!";
 	
 	my @files = grep(/devbot\.tmp\.[0-9]$/, readdir($tmp_dir));
 	

@@ -25,6 +25,7 @@ package DevBot::Issues;
 use strict;
 use warnings;
 
+use Carp;
 use XML::FeedPP;
 
 use DevBot::Log;
@@ -48,7 +49,7 @@ sub get_updated_issues
 	my $project = DevBot::Project::name;
 	my $domain = $DevBot::Project::GC_HOSTING_DOMAIN;
 	
-	die 'No Google Code project name provided in Google Code config.' unless $project;
+	croak 'No Google Code project name provided in Google Code config.' unless $project;
 	
 	my $url = "http://${domain}/feeds/p/${project}/issueupdates/basic";
 						
