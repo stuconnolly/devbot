@@ -26,6 +26,7 @@ use strict;
 use warnings;
 
 use DBI;
+use Carp;
 use DevBot::Config;
 
 our $VERSION = '1.00';
@@ -51,10 +52,12 @@ sub db_connection
 	my $db_user = $conf->{USER} || 'root';
 	my $db_password = $conf->{PASSWORD} || '';
 
-	my $db_dsn = "DBI:${dbs}:database=${db_name};host=${db_host};port=${db_port}" || die $DBI::errstr;
+	my $db_dsn = "DBI:${dbs}:database=${db_name};host=${db_host};port=${db_port}" || croak $DBI::errstr;
 	
 	$DB = DBI->connect($db_dsn, $db_user, $db_password, {RaiseError => 1, AutoCommit => 1});
     
+	$DB->{mysql_auto_reconnect} = 1;
+
 	return $DB;
 }
 
@@ -68,9 +71,9 @@ sub query
 	
 	my $db = db_connection;
 
-	my $result = $db->prepare($query) || die $db->errstr;
+	my $result = $db->prepare($query) || carp 'Failed to prepare query: ' . $db->errstr;
 
-	$result->execute(@args) || die $result->errstr;
+	$result->execute(@args) || carp 'Failed to execute query: ' . $result->errstr if $result;
 
 	return $result;
 }
