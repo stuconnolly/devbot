@@ -27,6 +27,7 @@ use warnings;
 
 use DBI;
 use Carp;
+use DevBot::Log;
 use DevBot::Config;
 
 our $VERSION = '1.00';
@@ -73,9 +74,17 @@ sub query
 
 	my $result = $db->prepare($query) || carp 'Failed to prepare query: ' . $db->errstr;
 
-	$result->execute(@args) || carp 'Failed to execute query: ' . $result->errstr if $result;
-
-	return $result;
+	eval {
+		$result->execute(@args) || carp 'Failed to execute query: ' . $result->errstr if $result;
+	};
+	
+	if ($@) {
+		chomp($@);
+		log_m("Error executing query: $@");
+	}
+	else {
+		return $result;
+	}
 }
 
 1;
