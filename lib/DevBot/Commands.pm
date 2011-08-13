@@ -29,6 +29,7 @@ use DevBot::DB;
 use DevBot::Config;
 use DevBot::Issues;
 use DevBot::Queries;
+use DevBot::Project;
 
 our $VERSION = '1.00';
 
@@ -84,10 +85,21 @@ sub command_issue
 	my ($channel, $issue_id, $public) = @_;
 	
 	return undef if (!$issue_id);
-		
-	my $message = sprintf("Issue #%d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0));
+			
+	my %data = (data => [sprintf("Issue #%d: %s", $issue_id, DevBot::Project::create_issue_url($issue_id, 0))]);
 	
-	my %data = (data => [$message]);
+	$data{public} = 1 if $public;
+	
+	return {%data};
+}
+
+sub command_revision
+{
+	my ($channel, $revision, $public) = @_;
+	
+	return undef if (!$revision);
+	
+	my %data = (data => [sprintf("Revision %d: %s", $revision, DevBot::Project::create_revision_url($revision))]);
 	
 	$data{public} = 1 if $public;
 	
@@ -108,14 +120,20 @@ sub command_list
 			{
 				'usage'       => 'history <num> (h<num>)',
 				'description' => 'Display the <num> most recent messages',
-				'regex'       => '^(?:h|history\s)([0-9]+)$', 
+				'regex'       => '^(?:h|history)(?:\s)*([0-9]+)$', 
 				'method'      => \&DevBot::Commands::command_history
 			},
 	     	{
 				'usage'       => 'issue <num> (#<num> | i<num>) [p | public]',
 				'description' => "Return the URL for issue <num>. The optional trailing 'p' or 'public' indicates that the returned URL be announced to the channel.",
-				'regex'       => '^(?:\#|i|issue\s)([0-9]+)(?:[\s])*(p|public)*$', 
+				'regex'       => '^(?:\#|i|issue)(?:[\s])*([0-9]+)(?:[\s])*(p|public)*$', 
 				'method'      => \&DevBot::Commands::command_issue
+			},
+			{
+				'usage'       => 'revision <rev> (rev <rev> | r<rev>) [p | public]',
+				'description' => "Return the URL for revision <rev>. The optional trailing 'p' or 'public' indicates that the returned URL be announced to the channel.",
+				'regex'       => '^(?:revision|rev|r)(?:[\s])*([0-9]+)(?:[\s])*(p|public)*$',
+				'method'      => \&DevBot::Commands::command_revision
 			});
 }
 
