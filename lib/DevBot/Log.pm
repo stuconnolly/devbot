@@ -1,11 +1,11 @@
 #
 #  $Id$
-#  
+#
 #  devbot
 #  http://dev.stuconnolly.com/svn/serveadmin/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
-# 
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -54,23 +54,23 @@ use constant ISSUE_LOG_FILE    => 'devbot-issues.log';
 use constant REVISION_LOG_FILE => 'devbot-revisions.log';
 
 #
-# Logs the supplied message. The second argument should be either 'i' or 'r' to indicate which log, 
+# Logs the supplied message. The second argument should be either 'i' or 'r' to indicate which log,
 # issues or revisions.
 #
 sub log_m
 {
 	return undef unless $LOGGING;
-	
+
 	my ($message, $log) = @_;
-			
+
 	open(my $log_file, '>>', log_path($log)) || croak $!;
-	
+
 	my @day = localtime(time);
 
 	$message = sprintf("[%02d-%02d-%04d %02d:%02d:%02d] %s\n", $day[3], $day[4] + 1, $day[5] + 1900, $day[2], $day[1], $day[0], $message);
-	
+
 	print $log_file $message;
-	
+
 	close($log_file);
 }
 
@@ -80,8 +80,8 @@ sub log_m
 sub log_path
 {
 	my $log = shift;
-	
-	return File::Spec->catfile((length($LOG_PATH)) ? ($LOG_PATH) : ($DevBot::Utils::ROOT_DIR, 'logs'), _log_filename($log));
+
+	return File::Spec->catfile(length($LOG_PATH) ? $LOG_PATH : $DevBot::Utils::ROOT_DIR, 'logs', _log_filename($log));
 }
 
 #
@@ -90,9 +90,9 @@ sub log_path
 sub _log_filename
 {
 	my $log = shift;
-	
+
 	my @day = localtime(time);
-	
+
 	return sprintf('%02d-%02d-%04d-%s', $day[3], $day[4] + 1, $day[5] + 1900, ($log eq 'i') ? ISSUE_LOG_FILE : REVISION_LOG_FILE);
 }
 
