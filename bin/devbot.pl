@@ -2,12 +2,12 @@
 
 #
 #  $Id$
-#  
+#
 #  devbot
 #  http://dev.stuconnolly.com/svn/devbot/
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
-# 
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -36,14 +36,14 @@ use DevBot::Utils;
 use DevBot::Config;
 use Getopt::Long;
 
-my ($interactive, 
-	$commits, 
+my ($interactive,
+	$commits,
 	$issues,
 	$message,
-	$channel_logging, 
-	$logging, 
-	$log_dir, 
-	$version, 
+	$channel_logging,
+	$logging,
+	$log_dir,
+	$version,
 	$help);
 
 # Get options
@@ -54,9 +54,9 @@ GetOptions('interactive|i'       => \$interactive,
 		   'channel-logging|cl'  => \$channel_logging,
 		   'logging|l'           => \$logging,
 		   'logdir|d=s'          => \$log_dir,
-		   'version|v'           => \$version, 
+		   'version|v'           => \$version,
 		   'help|h'              => \$help);
-			
+
 # Decide what to do
 DevBot::Utils::usage if $help;
 DevBot::Utils::version if $version;
@@ -86,8 +86,8 @@ die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;
-print "Enabling issue annoucements...\n" if $issues;
-print "Enabling commit annoucements...\n" if $commits;
+print "Enabling issue announcements...\n" if $issues;
+print "Enabling commit announcements...\n" if $commits;
 print "Enabling the acceptance of incoming messages...\n" if $message;
 print "Enabling channel logging...\n" if $channel_logging;
 
@@ -103,7 +103,7 @@ DevBot::Bot->new(
 	username    => 'devbot',
 	name        => 'Development Bot',
 	charset     => 'utf-8',
-		
+
 	interactive => $interactive,
 	tick_int    => $gc_issue_update_tick,
 	daemon_host => $irc_daemon_host,
