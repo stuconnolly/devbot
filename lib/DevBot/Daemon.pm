@@ -99,7 +99,7 @@ sub run
 #
 sub _handle_commit
 {
-	my ($self, $connection, $reuqest) = $_;
+	my ($self, $connection, $request) = $_;
 
 	$connection->send_response(HTTP::Response->new(RC_OK));
 
@@ -115,7 +115,7 @@ sub _handle_commit
 #
 sub _handle_message
 {
-	my ($self, $onnection, $request) = $_;
+	my ($self, $connection, $request) = $_;
 
 	if (DevBot::Auth::authenticate_message_request($request, $self->{_m_key})) {
 		$connection->send_response(HTTP::Response->new(RC_OK));
