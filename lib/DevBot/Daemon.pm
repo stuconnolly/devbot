@@ -75,14 +75,19 @@ sub run
 	{
 		while (my $request = $connection->get_request)
 		{
-			my $method = $request->method;
-			my $path   = $request->uri->path;
+			my $path = $request->uri->path;
 
-			if (($method eq 'POST') && ($path eq '/commit')) {
-				_handle_commit($connection, $request);
-			}
-			elsif (($method eq 'POST') && ($path eq '/message') && $self->{_message}) {
-				_handle_message($connection, $request);
+			if ($request->method eq 'POST') {
+
+				if ($path eq '/commit') {
+					_handle_commit($connection, $request);
+				}
+				elsif (($path eq '/message') && $self->{_message}) {
+					_handle_message($connection, $request);
+				}
+				else {
+					$connection->send_error(RC_FORBIDDEN);
+				}
 			}
 			else {
 				$connection->send_error(RC_FORBIDDEN);
