@@ -36,9 +36,6 @@ use base 'Bot::BasicBot';
 
 our $VERSION = '1.00';
 
-#
-# Constructor.
-#
 sub new
 {
 	my ($this, %args) = @_;

@@ -29,9 +29,6 @@ use DevBot::Commands;
 
 our $VERSION = '1.00';
 
-#
-# Constructor.
-#
 sub new
 {
 	my ($this, $command, $channel) = @_;

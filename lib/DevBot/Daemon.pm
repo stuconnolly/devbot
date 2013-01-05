@@ -34,9 +34,6 @@ use DevBot::Project;
 
 our $VERSION = '1.00';
 
-#
-# Constructor.
-#
 sub new
 {
 	my ($this, $host, $port, $gc_key, $m_key, $message) = @_;

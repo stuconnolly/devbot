@@ -41,9 +41,6 @@ our $VERSION = '1.0';
 #
 use constant MESSAGE_TRUNCATE => 4;
 
-#
-# Constructor.
-#
 sub new
 {
 	my ($this, $request, $key) = @_;
