@@ -37,7 +37,7 @@ use DevBot::Project;
 our $VERSION = '1.0';
 
 #
-# Truncate commit messages at x lines
+# Truncate commit messages at x lines.
 #
 use constant MESSAGE_TRUNCATE => 4;
 
@@ -58,7 +58,7 @@ sub new
 }
 
 #
-# Parses this instances JSON data.
+# Parses this instance's JSON data.
 #
 sub parse
 {
@@ -66,7 +66,7 @@ sub parse
 
 	# If required authenticate the request before proceeding
 	if ($self->{_key}) {
-		return undef if (!DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key}));
+		return undef if !DevBot::Auth::authenticate_commit_request($self->{_request}, $self->{_key});
 	}
 
 	my $json = JSON->new->allow_nonref;

@@ -77,10 +77,32 @@ sub run
 			if ($request->method eq 'POST') {
 
 				if ($path eq '/commit') {
-					_handle_commit($connection, $request);
+					$connection->send_response(HTTP::Response->new(RC_OK));
+
+					# Announce the results to the channel
+					foreach (DevBot::Commit->new($request, $self->{_gc_key})->parse)
+					{
+						DevBot::Bot::say($_) if length;
+					}
 				}
 				elsif (($path eq '/message') && $self->{_message}) {
-					_handle_message($connection, $request);
+					if (DevBot::Auth::authenticate_message_request($request, $self->{_m_key})) {
+						$connection->send_response(HTTP::Response->new(RC_OK));
+
+						my $message = $request->content;
+
+						# Strip leading and trailing whitespace
+						$message =~ s/^\s+//;
+						$message =~ s/\s+$//;
+
+						$message =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
+
+						# Simply print the message to STDOUT and the bot will announce it to the channel
+						DevBot::Bot::say($message) if length($message);
+					}
+					else {
+						$connection->send_response(HTTP::Response->new(RC_UNAUTHORIZED));
+					}
 				}
 				else {
 					$connection->send_error(RC_FORBIDDEN);
@@ -93,48 +115,6 @@ sub run
 
 		$connection->close;
 		undef($connection);
-	}
-}
-
-#
-# Handle a commit via the supplied request and connection.
-#
-sub _handle_commit
-{
-	my ($self, $connection, $request) = $_;
-
-	$connection->send_response(HTTP::Response->new(RC_OK));
-
-	# Announce the results to the channel
-	foreach (DevBot::Commit->new($request, $self->{_gc_key})->parse)
-	{
-		DevBot::Bot::say($_) if (length);
-	}
-}
-
-#
-# Handle a message via the supplied request and connection.
-#
-sub _handle_message
-{
-	my ($self, $connection, $request) = $_;
-
-	if (DevBot::Auth::authenticate_message_request($request, $self->{_m_key})) {
-		$connection->send_response(HTTP::Response->new(RC_OK));
-
-		my $message = $request->content;
-
-		# Strip leading and trailing whitespace
-		$message =~ s/^\s+//;
-		$message =~ s/\s+$//;
-
-		$message =~ s/r([0-9]+)/DevBot::Project::create_revision_url($1)/gie;
-
-		# Simply print the message to STDOUT and the bot will announce it to the channel
-		DevBot::Bot::say($message) if (length($message));
-	}
-	else {
-		$connection->send_response(HTTP::Response->new(RC_UNAUTHORIZED));
 	}
 }
 
