@@ -106,7 +106,7 @@ sub write_datetime
 sub delete_datetime_log
 {
 	if (-e $TIME_TRACKING_FILE) {
-		unlink($TIME_TRACKING_FILE) || warn "Could not delete time tracking file '${TIME_TRACKING_FILE}': $!";
+		unlink($TIME_TRACKING_FILE) || carp "Could not delete time tracking file '${TIME_TRACKING_FILE}': $!";
 	}
 }
 
@@ -121,7 +121,7 @@ sub delete_datetime_logs
 	
 	closedir($tmp_dir);
 	
-	foreach (@files) { unlink ||  warn "Could not delete time tracking file '$_': $!"; }
+	foreach (@files) { unlink || carp "Could not delete time tracking file '$_': $!"; }
 }
 
 #

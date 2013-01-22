@@ -30,6 +30,7 @@ use warnings;
 use lib '../lib';
 
 use Cwd;
+use Carp;
 use DevBot::Bot;
 use DevBot::Time;
 use DevBot::Utils;
@@ -82,7 +83,7 @@ my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 my $gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
 my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
 
-die 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
+croak 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
 print "Enabling logging...\n" if $logging;
 print "Enabling interactivity...\n" if $interactive;

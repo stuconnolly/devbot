@@ -80,7 +80,7 @@ sub query
 	
 	if ($@) {
 		chomp($@);
-		log_m("Error executing query: $@", 'i');
+		carp "Error executing query: $@";
 	}
 	else {
 		return $result;
