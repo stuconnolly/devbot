@@ -82,6 +82,7 @@ my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
 my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 
 croak 'Issue or commit announcements enabled, but no Google Code or GitHub integration was enabled' if ($issues || $commits) && (!$google && !$github);
+croak 'Both Google Code and GitHub integration cannot be enabled at the same time' if $google && $github;
 
 my $gc_conf  = DevBot::Config::get('gc');
 
