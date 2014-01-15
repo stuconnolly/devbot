@@ -23,12 +23,12 @@ package DevBot::Bot;
 use strict;
 use warnings;
 
+use Bot::BasicBot;
 use DevBot::DB;
 use DevBot::Time;
-use DevBot::Issues;
 use DevBot::Daemon;
 use DevBot::Command;
-use Bot::BasicBot;
+use DevBot::Google::Issues;
 
 use base 'Bot::BasicBot';
 
@@ -235,7 +235,7 @@ sub help
 #
 sub _check_for_updated_issues
 {
-	foreach (DevBot::Issues::get_updated_issues)
+	foreach (DevBot::Issues::get_updated_issues(DevBot::Time::get_last_updated_datetime()))
 	{
 		if (($_->{id} > 0) && ($_->{url})) {
 			printf("( %s ): %s by %s\n", $_->{url}, $_->{title}, $_->{author});
@@ -273,7 +273,7 @@ sub _log
 {
 	my ($channel, $who, $line) = @_;
 
-	DevBot::DB::query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, gmt_date, $who, time, $line);
+	DevBot::DB::query('INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)', $channel, DevBot::Time::gmt_date(), $who, time, $line);
 }
 
 1;

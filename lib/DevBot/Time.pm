@@ -27,16 +27,6 @@ use Carp;
 use DateTime;
 use DateTime::Format::W3CDTF;
 
-use base 'Exporter';
-
-our @EXPORT = qw(
-	get_last_updated_datetime 
-	get_current_datetime 
-	write_datetime 
-	delete_datetime_log 
-	delete_datetime_logs 
-	gmt_date);
-
 our $VERSION = '1.00';
 
 #
@@ -62,26 +52,12 @@ sub get_last_updated_datetime
 		close($file);		
 	}
 	else {
-		$datetime = get_current_datetime();
+		$datetime = _get_current_datetime();
 		
 		write_datetime($datetime);
 	}
 	
 	return $datetime;
-}
-
-#
-# Returns the current datetime in W3C format.
-#
-sub get_current_datetime
-{
-	my $w3c = DateTime::Format::W3CDTF->new;
-		
-	my $time = $w3c->format_datetime(DateTime->now);
-	
-	$time =~ s/Z//g;
-	
-	return $time;
 }
 
 #
@@ -109,9 +85,33 @@ sub delete_datetime_log
 }
 
 #
+# Returns the current GMT date in format YYYY-MM-DD.
+#
+sub gmt_date 
+{
+	my @day = gmtime(time);
+    
+	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
+}
+
+#
+# Returns the current datetime in W3C format.
+#
+sub _get_current_datetime
+{
+	my $w3c = DateTime::Format::W3CDTF->new;
+		
+	my $time = $w3c->format_datetime(DateTime->now);
+	
+	$time =~ s/Z//g;
+	
+	return $time;
+}
+
+#
 # Deletes any (devbot.tmp.xx) time tracking files found in /tmp.
 #
-sub delete_datetime_logs
+sub _delete_datetime_logs
 {
 	opendir(my $tmp_dir, '/tmp') || croak "Could not open dir /tmp: $!";
 	
@@ -120,16 +120,6 @@ sub delete_datetime_logs
 	closedir($tmp_dir);
 	
 	foreach (@files) { unlink || carp "Could not delete time tracking file '$_': $!"; }
-}
-
-#
-# Returns the current GMT date in format YYYY-MM-DD.
-#
-sub gmt_date 
-{
-	my @day = gmtime(time);
-    
-	return sprintf('%04d-%02d-%02d', $day[5] + 1900, $day[4] + 1, $day[3]);
 }
 
 1;

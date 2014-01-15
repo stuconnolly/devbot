@@ -84,7 +84,7 @@ my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 croak 'Issue or commit announcements enabled, but no Google Code or GitHub integration was enabled' if ($issues || $commits) && (!$google && !$github);
 croak 'Both Google Code and GitHub integration cannot be enabled at the same time' if $google && $github;
 
-my $gc_commit_key = undef;
+my $gc_commit_key;
 my $issue_update_tick = 300;
 
 if ($google) {
@@ -129,6 +129,6 @@ DevBot::Bot->new(
 )->run();
 
 # Get rid of the log
-delete_datetime_log if $issues;
+DevBot::Time::delete_datetime_log if $issues;
 
 exit 0;

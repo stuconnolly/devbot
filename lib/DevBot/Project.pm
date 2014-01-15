@@ -84,7 +84,6 @@ sub create_issue_url
 	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
 } 
 
-
 #
 # Creates the URL for the supplied revision details.
 #

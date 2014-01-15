@@ -18,7 +18,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package DevBot::Issues;
+package DevBot::Google::Issues;
 
 use strict;
 use warnings;
@@ -43,6 +43,8 @@ sub get_updated_issues
 {
 	my $feed;
 	my @issues = ();
+
+	my $since_datetime = shift;
 	
 	my $project = DevBot::Project::name;
 	my $domain = $DevBot::Project::GC_HOSTING_DOMAIN;
@@ -69,10 +71,10 @@ sub get_updated_issues
 		# Remove timezone indicator
 		$pub_date =~ s/Z//g;
 
-		my $cur_datetime = $w3c->parse_datetime(get_last_updated_datetime);	
+		my $cur_datetime = $w3c->parse_datetime($since_date_time);	
 		my $feed_datetime = $w3c->parse_datetime($pub_date);
 
-		write_datetime($feed_datetime); 
+		DevBot::Time::write_datetime($feed_datetime); 
 
 		# Only continue if the feed's publication date is newer than the last time we checked it
 		if (DateTime->compare($feed_datetime, $cur_datetime) > 0) {
