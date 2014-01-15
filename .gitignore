@@ -1,0 +1,4 @@
+conf/db.*.conf
+conf/irc.*.conf
+conf/gc.*.conf
+conf/gh.*.conf
