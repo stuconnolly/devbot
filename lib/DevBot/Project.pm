@@ -25,23 +25,28 @@ use warnings;
 
 use DevBot::Config;
 
-use vars qw($GC_HOSTING_DOMAIN);
+use vars qw($GC_HOSTING_DOMAIN $GH_HOSTING_DOMAIN);
 
 our $VERSION = '1.00';
 
 #
 # Google Code hosting domain
 #
-our $GC_HOSTING_DOMAIN = 'code.google.com';
+our $GC_HOSTING_DOMAIN = 'http://code.google.com';
+
+#
+# GitHub hosting domain
+#
+our $GH_HOSTING_DOMAIN = 'https://github.com';
 
 #
 # Returns the project's name.
 #
 sub name
 {
-	my $conf = DevBot::Config::get('gc');
+	my $conf = DevBot::Config::get('proj');
 	
-	return $conf->{GC_PROJECT};
+	return $conf->{REPO};
 }
 
 #
@@ -49,9 +54,9 @@ sub name
 #
 sub issue_url
 {
-	my $conf = DevBot::Config::get('gc');
+	my $conf = DevBot::Config::get('proj');
 	
-	return $conf->{GC_ISSUE_URL};
+	return $conf->{ISSUE_URL};
 }
 
 #
@@ -59,9 +64,9 @@ sub issue_url
 #
 sub revision_url
 {
-	my $conf = DevBot::Config::get('gc');
+	my $conf = DevBot::Config::get('proj');
 	
-	return $conf->{GC_REVISION_URL};
+	return $conf->{REVISION_URL};
 }
 
 #
@@ -71,10 +76,10 @@ sub create_issue_url
 {
 	my ($issue_id, $comment_id) = @_;
 	
-	my $project = name;
-	my $issue_tracker = issue_url;
+	my $project = name();
+	my $issue_tracker = issue_url();
 	
-	my $url = ($issue_tracker) ? $issue_tracker : "http://${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
+	my $url = $issue_tracker ? $issue_tracker : "${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
 	
 	# If there's no comment ID then remove the placeholder from the URL
 	if ($comment_id == 0) {
@@ -91,10 +96,10 @@ sub create_revision_url
 {
 	my $issue_id = shift;
 	
-	my $project = name;
-	my $revision_url = revision_url;
+	my $project = name();
+	my $revision_url = revision_url();
 	
-	my $url = ($revision_url) ? $revision_url : "http://${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
+	my $url = $revision_url ? $revision_url : "${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
 	
 	return sprintf($url, $issue_id);
 }
