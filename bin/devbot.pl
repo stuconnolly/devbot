@@ -38,6 +38,8 @@ use DevBot::Config;
 use Getopt::Long;
 
 my ($interactive,
+	$google,
+	$github,
 	$commits,
 	$issues,
 	$message,
@@ -49,6 +51,8 @@ my ($interactive,
 
 # Get options
 GetOptions('interactive|i'       => \$interactive,
+		   'google|gc'           => \$google,
+		   'github|gh'           => \$github,  	
 		   'commits|c'           => \$commits,
 		   'issues|g'            => \$issues,
 		   'message|m'           => \$message,
@@ -69,7 +73,6 @@ $DevBot::Log::LOG_PATH = $log_dir if $log_dir;
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
 my $irc_conf = DevBot::Config::get('irc');
-my $gc_conf  = DevBot::Config::get('gc');
 
 my $irc_nick     = $irc_conf->{IRC_NICK}   || 'devbot';
 my $irc_server   = $irc_conf->{IRC_SERVER} || 'irc.freenode.net';
@@ -79,6 +82,10 @@ my $irc_channels = [split(m/\s+/, $irc_conf->{IRC_CHANNEL})];
 my $irc_message_key = $irc_conf->{IRC_MESSAGE_KEY};
 my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
 my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
+
+croak 'Issue or commit announcements enabled, but no Google Code or GitHub integration was enabled' if ($issues || $commits) && (!$google && !$github);
+
+my $gc_conf  = DevBot::Config::get('gc');
 
 my $gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
 my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
