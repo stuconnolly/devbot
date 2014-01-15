@@ -1,8 +1,6 @@
-#
-#  $Id$
 #  
 #  devbot
-#  http://dev.stuconnolly.com/svn/serveadmin/
+#  https://github.com/stuconnolly/devbot
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 # 

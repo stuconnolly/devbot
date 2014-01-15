@@ -1,10 +1,8 @@
 #! /usr/bin/perl
 
 #
-#  $Id$
-#
 #  devbot
-#  http://dev.stuconnolly.com/svn/devbot/
+#  https://github.com/stuconnolly/devbot
 #
 #  Copyright (c) 2010 Stuart Connolly. All rights reserved.
 #
