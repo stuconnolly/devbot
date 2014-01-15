@@ -33,3 +33,4 @@ In order to run devbot, the following Perl modules are required:
 + HTTP::Daemon
 + HTTP::Status
 + Digest::HMAC_MD5
++ Net::GitHub
