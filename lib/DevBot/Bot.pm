@@ -48,6 +48,8 @@ sub new
 	$args{message}     ||= 0;
 	$args{commit_key}  ||= undef;
 	$args{message_key} ||= undef;
+	$args{google}      ||= undef;
+	$args(github}      ||= undef;
 
 	return $this->SUPER::new(%args);
 }

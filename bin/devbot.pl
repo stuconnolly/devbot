@@ -84,10 +84,15 @@ my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 croak 'Issue or commit announcements enabled, but no Google Code or GitHub integration was enabled' if ($issues || $commits) && (!$google && !$github);
 croak 'Both Google Code and GitHub integration cannot be enabled at the same time' if $google && $github;
 
-my $gc_conf  = DevBot::Config::get('gc');
+my $gc_commit_key = undef;
+my $issue_update_tick = 300;
 
-my $gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
-my $gc_issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
+if ($google) {
+	my $gc_conf  = DevBot::Config::get('gc');
+
+	$gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
+	$issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
+}
 
 croak 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
@@ -112,7 +117,7 @@ DevBot::Bot->new(
 	charset     => 'utf-8',
 
 	interactive => $interactive,
-	tick_int    => $gc_issue_update_tick,
+	tick_int    => $issue_update_tick,
 	daemon_host => $irc_daemon_host,
 	daemon_port => $irc_daemon_port,
 	commits     => $commits,
