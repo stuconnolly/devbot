@@ -25,28 +25,52 @@ use warnings;
 
 use DevBot::Config;
 
-use vars qw($GC_HOSTING_DOMAIN $GH_HOSTING_DOMAIN);
+#use vars qw($GC_HOSTING_DOMAIN $GH_HOSTING_DOMAIN);
 
 our $VERSION = '1.00';
 
 #
-# Google Code hosting domain
+# Project system constants
 #
-our $GC_HOSTING_DOMAIN = 'http://code.google.com';
+our $GC_SYSTEM = 'google';
+our $GH_SYSTEM = 'github';
 
 #
-# GitHub hosting domain
+# Default project URLs
 #
-our $GH_HOSTING_DOMAIN = 'https://github.com';
+our $GC_ISSUE_URL = "http://code.google.com/p/$s/issues/detail?id=%d#c%d";
+our $GH_ISSUE_URL = "https://github.com/%s/%s/issues/%d";
+
+#
+# The system we are integrating with.
+#
+sub system
+{
+	return _get_config()->{SYSTEM};
+}
 
 #
 # Returns the project's name.
 #
 sub name
+{	
+	return _get_config()->{REPO};
+}
+
+#
+# The username to access the project system (if any).
+#
+sub username
 {
-	my $conf = DevBot::Config::get('proj');
-	
-	return $conf->{REPO};
+	return _get_config()->{USERNAME};
+}
+
+#
+# The password to access the project system (if any).
+#
+sub password
+{
+	return _get_config()->{PASSWORD};
 }
 
 #
@@ -54,19 +78,15 @@ sub name
 #
 sub issue_url
 {
-	my $conf = DevBot::Config::get('proj');
-	
-	return $conf->{ISSUE_URL};
+	return _get_config()->{ISSUE_URL};
 }
 
 #
 # Returns the project's revision URL.
 #
 sub revision_url
-{
-	my $conf = DevBot::Config::get('proj');
-	
-	return $conf->{REVISION_URL};
+{	
+	return _get_config()->{REVISION_URL};
 }
 
 #
@@ -86,7 +106,7 @@ sub create_issue_url
 		$url = substr($url, 0, -3);
 	}
 	
-	return sprintf($url, $issue_id, ($comment_id) ? $comment_id : '');
+	return sprintf($url, $issue_id, $comment_id ? $comment_id : '');
 } 
 
 #
@@ -102,6 +122,11 @@ sub create_revision_url
 	my $url = $revision_url ? $revision_url : "${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
 	
 	return sprintf($url, $issue_id);
+}
+
+sub _get_config
+{
+	return DevBot::Config::get('proj');
 }
 
 1;
