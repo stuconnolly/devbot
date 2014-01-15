@@ -1,3 +1,4 @@
+bin/test.pl
 conf/db.*.conf
 conf/irc.*.conf
 conf/gc.*.conf
