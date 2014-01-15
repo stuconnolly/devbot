@@ -1,49 +1,49 @@
 OVERVIEW
 
-	devbot is a simple IRC project development bot. It provides:
+    devbot is a simple IRC project development bot. It provides:
 
-	+ Channel logging to a MySQL database
-	+ Integration with Google Code's project hosting or GitHub
-	+ The announcement of source revision and issue updates via the above 
-	  project integration  
+    + Channel logging to a MySQL database
+    + Integration with Google Code's project hosting or GitHub
+    + The announcement of source revision and issue updates via the above 
+      project integration  
 
-	devbot was initially based on ilbot (http://moritz.faui2k3.org/en/ilbot), 
-	but has been adapted to be interactive in terms of reporting information 
-	on the Google Code project it is integrated with.
+    devbot was initially based on ilbot (http://moritz.faui2k3.org/en/ilbot), 
+    but has been adapted to be interactive in terms of reporting information 
+    on the Google Code project it is integrated with.
 
-	For a full list of command line options available when starting devbot, run:
+    For a full list of command line options available when starting devbot, run:
 
-	./devbot --help
+    ./devbot --help
 
-	For help using devbot or for a full list of available interactive commands 
-	while devbot is running, address the bot by name using:
+    For help using devbot or for a full list of available interactive commands 
+    while devbot is running, address the bot by name using:
 
-	<bot_name>: help
-	<bot_name>: commands 
+    <bot_name>: help
+    <bot_name>: commands 
 
-	In order to run devbot, the following Perl modules are required:
+    In order to run devbot, the following Perl modules are required:
 
-	+ DBI
-	+ JSON
-	+ DateTime
-	+ Bot::BasicBot
-	+ Config::File
-	+ XML::FeedPP
-	+ HTTP::Daemon
-	+ HTTP::Status
-	+ Digest::HMAC_MD5
-	+ Net::GitHub
+    + DBI
+    + JSON
+    + DateTime
+    + Bot::BasicBot
+    + Config::File
+    + XML::FeedPP
+    + HTTP::Daemon
+    + HTTP::Status
+    + Digest::HMAC_MD5
+    + Net::GitHub
 
 GIT
-	<https://github.com/stuconnolly/devbot>
+    <https://github.com/stuconnolly/devbot>
 
 AUTHOR
 
-	Stuart Connolly <stuart02 [at] gmail [dot] com>
+    Stuart Connolly <stuart02 [at] gmail [dot] com>
 
 COPYRIGHT & LICENSE
-	
-	Copyright (c) 2010-2014 Stuart Connolly. All rights reserved.
+    
+    Copyright (c) 2010-2014 Stuart Connolly. All rights reserved.
 
-	This program is free software, licensed under GPL version 3. 
-	See LICENSE for full details.
+    This program is free software, licensed under GPL version 3. 
+    See LICENSE for full details.
