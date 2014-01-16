@@ -122,6 +122,9 @@ sub create_revision_url
 	return sprintf($url, $issue_id);
 }
 
+#
+# Load the project configuration file.
+#
 sub _get_config
 {
 	return DevBot::Config::get('proj');
