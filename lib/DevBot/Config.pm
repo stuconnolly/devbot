@@ -39,7 +39,7 @@ sub get
 	
 	my $conf_path = File::Spec->catdir($DevBot::Utils::ROOT_DIR, 'conf');
 	
-	# Check if we supplied an actual filename
+	# Check if we were supplied an actual filename
 	return _read_config_file($conf_path, $filename) if -e File::Spec->catfile($conf_path, $filename);
 
 	opendir(CONFIG_DIR, $conf_path);
