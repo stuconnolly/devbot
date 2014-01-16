@@ -36,8 +36,6 @@ use DevBot::Config;
 use Getopt::Long;
 
 my ($interactive,
-	$google,
-	$github,
 	$commits,
 	$issues,
 	$message,
@@ -49,8 +47,6 @@ my ($interactive,
 
 # Get options
 GetOptions('interactive|i'       => \$interactive,
-		   'google|gc'           => \$google,
-		   'github|gh'           => \$github,  	
 		   'commits|c'           => \$commits,
 		   'issues|g'            => \$issues,
 		   'message|m'           => \$message,
@@ -81,19 +77,12 @@ my $irc_message_key = $irc_conf->{IRC_MESSAGE_KEY};
 my $irc_daemon_host = $irc_conf->{IRC_COMMIT_DAEMON_HOST} || 'localhost';
 my $irc_daemon_port = $irc_conf->{IRC_COMMIT_DAEMON_PORT} || 1987;
 
-croak 'Issue or commit announcements enabled, but no Google Code or GitHub integration was enabled' if ($issues || $commits) && (!$google && !$github);
-croak 'Both Google Code and GitHub integration cannot be enabled at the same time' if $google && $github;
+my $proj_conf  = DevBot::Config::get('proj');
 
-my $gc_commit_key;
-my $issue_update_tick = 300;
+my $commit_key = $proj_conf->{COMMIT_KEY} || undef;
+my $issue_update_tick = $proj_conf->{ISSUE_UPDATE_INTERVAL} || 300;
 
-if ($google) {
-	my $gc_conf  = DevBot::Config::get('gc');
-
-	$gc_commit_key = $gc_conf->{GC_COMMIT_KEY};
-	$issue_update_tick = $gc_conf->{GC_ISSUE_UPDATE_INTERVAL} || 300;
-}
-
+croak 'Issue or commit announcements enabled, but no project system specified in config (SYSTEM).' if (($issues || $commits) && !$proj_conf->{SYSTEM});
 croak 'No IRC channel(s) provided in IRC config.' unless $irc_channels;
 
 print "Enabling logging...\n" if $logging;
@@ -103,7 +92,7 @@ print "Enabling commit announcements...\n" if $commits;
 print "Enabling the acceptance of incoming messages...\n" if $message;
 print "Enabling channel logging...\n" if $channel_logging;
 
-printf("Setting issue update check interval to %d seconds\n", $gc_issue_update_tick) if $issues;
+printf("Setting issue update check interval to %d seconds\n", $issue_update_tick) if $issues;
 
 # Create the bot and run it
 DevBot::Bot->new(
@@ -124,7 +113,7 @@ DevBot::Bot->new(
 	issues      => $issues,
 	message     => $message,
 	logging     => $channel_logging,
-	commit_key  => $gc_commit_key,
+	commit_key  => $commit_key,
 	message_key => $irc_message_key
 )->run();
 

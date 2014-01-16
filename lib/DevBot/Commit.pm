@@ -28,7 +28,7 @@ use Text::Wrap;
 use HTTP::Request;
 use DevBot::Log;
 use DevBot::Auth;
-use DevBot::Issues;
+use DevBot::Google::Issues;
 use DevBot::Config;
 use DevBot::Project;
 

@@ -48,8 +48,6 @@ Usage: perl $0 [options]
 Possible options are:
   
   --interactive     (-i)      Enable bot interactivity
-  --google          (-gc)     Enable Google Code integration
-  --github          (-gh)     Enable GitHub integration
   --commits         (-c)      Enable the annoucement of source commits
   --issues          (-g)      Enable the annoucement of issue updates
   --message         (-m)      Accept incoming messages

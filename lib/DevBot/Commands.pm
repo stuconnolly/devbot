@@ -25,7 +25,7 @@ use warnings;
 
 use DevBot::DB;
 use DevBot::Config;
-use DevBot::Issues;
+use DevBot::Google::Issues;
 use DevBot::Queries;
 use DevBot::Project;
 

@@ -71,7 +71,7 @@ sub get_updated_issues
 		# Remove timezone indicator
 		$pub_date =~ s/Z//g;
 
-		my $cur_datetime = $w3c->parse_datetime($since_date_time);	
+		my $cur_datetime = $w3c->parse_datetime($since_datetime);	
 		my $feed_datetime = $w3c->parse_datetime($pub_date);
 
 		DevBot::Time::write_datetime($feed_datetime); 
