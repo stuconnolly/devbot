@@ -33,6 +33,7 @@ OVERVIEW
     + HTTP::Status
     + Digest::HMAC_MD5
     + Net::GitHub
+    + Test::Class
 
 GIT
     <https://github.com/stuconnolly/devbot>
