@@ -118,6 +118,6 @@ DevBot::Bot->new(
 )->run();
 
 # Get rid of the log
-DevBot::Time::delete_datetime_log if $issues;
+DevBot::Time::delete_datetime_log() if $issues;
 
 exit 0;
