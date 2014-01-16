@@ -24,7 +24,7 @@ use strict;
 use warnings;
 
 use Cwd;
-use Test::More tests => 2;
+use Test::More;
 
 use base 'Test::Class';
 

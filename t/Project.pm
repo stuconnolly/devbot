@@ -24,7 +24,7 @@ use strict;
 use warnings;
 
 use Cwd;
-use Test::More tests => 2;
+use Test::More;
 
 use base 'Test::Class';
 
@@ -36,6 +36,31 @@ BEGIN
 sub test_system_is_correct : Test
 {
 	is(DevBot::Project::system(), 'github', 'System name is correct');
+}
+
+sub test_repo_is_correct : Test
+{
+	is(DevBot::Project::name(), 'test_repo', 'Repo name is correct');
+}
+
+sub test_username_is_correct : Test
+{
+	is(DevBot::Project::username(), 'test_username', 'Username is correct');
+}
+
+sub test_passowrd_is_correct : Test
+{
+	is(DevBot::Project::password(), 'test_password', 'Password is correct');
+}
+
+sub test_issue_url_is_correct : Test
+{
+	is(DevBot::Project::issue_url(), 'http://example.com/issues/%d', 'Issue URL is correct');
+}
+
+sub test_revision_url_is_correct : Test
+{
+	is(DevBot::Project::revision_url(), 'http://example.com/commits/%d', 'Revision URL is correct');
 }
 
 1;

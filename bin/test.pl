@@ -26,13 +26,8 @@ use warnings;
 use lib '../lib';
 
 use Cwd;
-use Test::More;
+use Test::More tests => 7;
 use Test::Class::Load '../t';
-
-BEGIN
-{
-	use_ok('DevBot::Utils');
-}
 
 $DevBot::Utils::ROOT_DIR = substr(getcwd, 0, rindex(getcwd, '/'));
 
