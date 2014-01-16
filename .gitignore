@@ -1,3 +1,4 @@
 conf/db.*.conf
 conf/irc.*.conf
 conf/proj.*.conf
+logs
