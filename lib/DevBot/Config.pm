@@ -54,7 +54,7 @@ sub get
 		$config_file = $files[0];
 	}
 	else {
-		foreach (reverse(sort(@files))) 
+		foreach (@files) 
 		{
 			if ($_ ne "${filename}.conf") {
 				$config_file = $_;
