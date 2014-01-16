@@ -34,10 +34,16 @@ our $GC_SYSTEM = 'google';
 our $GH_SYSTEM = 'github';
 
 #
-# Default project URLs
+# Default project issues URLs
 #
 our $GC_ISSUE_URL = "http://code.google.com/p/%s/issues/detail?id=%d#c%d";
 our $GH_ISSUE_URL = "https://github.com/%s/%s/issues/%d";
+
+#
+# Default project revision URLs
+#
+our $GC_REVISION_URL = "http://code.google.com/p/%s/source/detail?r=%d";
+our $GH_REVISION_URL = "https://github.com/%s/%s/commit/%s";
 
 #
 # The system we are integrating with.
@@ -94,15 +100,12 @@ sub create_issue_url
 {
 	my ($issue_id, $comment_id) = @_;
 	
-	my $project = name();
-	my $issue_tracker = issue_url();
+	my $issue_url = issue_url();
 	
-	my $url = $issue_tracker ? $issue_tracker : "${GC_ISSUE_URL}/p/${project}/issues/detail?id=%d#c%d";
+	my $url = $issue_url ? $issue_url : _default_issue_url();
 	
 	# If there's no comment ID then remove the placeholder from the URL
-	if ($comment_id == 0) {
-		$url = substr($url, 0, -3);
-	}
+	$url = substr($url, 0, -3) if $comment_id == 0;
 	
 	return sprintf($url, $issue_id, $comment_id ? $comment_id : '');
 } 
@@ -111,15 +114,12 @@ sub create_issue_url
 # Creates the URL for the supplied revision details.
 #
 sub create_revision_url
-{
-	my $issue_id = shift;
-	
-	my $project = name();
+{	
 	my $revision_url = revision_url();
 	
-	my $url = $revision_url ? $revision_url : "${GC_ISSUE_URL}/p/${project}/source/detail?r=%d";
+	my $url = $revision_url ? $revision_url : _default_revision_url();
 	
-	return sprintf($url, $issue_id);
+	return sprintf($url, shift);
 }
 
 #
@@ -128,6 +128,22 @@ sub create_revision_url
 sub _get_config
 {
 	return DevBot::Config::get('proj');
+}
+
+#
+# Returns the default issue URL depending on the project system.
+#
+sub _default_issue_url
+{
+	return &system() eq $GC_SYSTEM ? sprintf($GC_ISSUE_URL, name()) : sprintf($GH_ISSUE_URL, username(), name());
+}
+
+#
+# Returns the default revision URL depending on the project system.
+#
+sub _default_revision_url
+{
+	return &system() eq $GC_SYSTEM ? sprintf($GC_REVISION_URL, name()) : sprintf($GH_REVISION_URL, username(), name());
 }
 
 1;

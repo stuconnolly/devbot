@@ -48,7 +48,7 @@ sub get
 	
 	closedir(CONFIG_DIR);
 	
-	croak 'No config files found' unless @files > 0;
+	croak 'No config files found.' unless @files > 0;
 	
 	if (@files == 1) {
 		$config_file = $files[0];
