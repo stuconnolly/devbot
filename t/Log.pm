@@ -51,7 +51,7 @@ sub startup : Test(startup)
 
 		mkdir($log_path);
 
-		diag('Created log directory = ' . $log_path);
+		diag('Creating log directory = ' . $log_path);
 	}
 }
 
@@ -95,7 +95,7 @@ sub shutdown : Test(shutdown)
 	if (-e $log_path) {
 		File::Path::remove_tree($log_path);
 
-		diag('Removed log directory = ' . $log_path);
+		diag('Removing log directory = ' . $log_path);
 	}
 }
 
