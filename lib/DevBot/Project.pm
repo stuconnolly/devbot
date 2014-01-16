@@ -25,8 +25,6 @@ use warnings;
 
 use DevBot::Config;
 
-#use vars qw($GC_HOSTING_DOMAIN $GH_HOSTING_DOMAIN);
-
 our $VERSION = '1.00';
 
 #
@@ -38,7 +36,7 @@ our $GH_SYSTEM = 'github';
 #
 # Default project URLs
 #
-our $GC_ISSUE_URL = "http://code.google.com/p/$s/issues/detail?id=%d#c%d";
+our $GC_ISSUE_URL = "http://code.google.com/p/%s/issues/detail?id=%d#c%d";
 our $GH_ISSUE_URL = "https://github.com/%s/%s/issues/%d";
 
 #
@@ -99,7 +97,7 @@ sub create_issue_url
 	my $project = name();
 	my $issue_tracker = issue_url();
 	
-	my $url = $issue_tracker ? $issue_tracker : "${GC_HOSTING_DOMAIN}/p/${project}/issues/detail?id=%d#c%d";
+	my $url = $issue_tracker ? $issue_tracker : "${GC_ISSUE_URL}/p/${project}/issues/detail?id=%d#c%d";
 	
 	# If there's no comment ID then remove the placeholder from the URL
 	if ($comment_id == 0) {
@@ -119,7 +117,7 @@ sub create_revision_url
 	my $project = name();
 	my $revision_url = revision_url();
 	
-	my $url = $revision_url ? $revision_url : "${GC_HOSTING_DOMAIN}/p/${project}/source/detail?r=%d";
+	my $url = $revision_url ? $revision_url : "${GC_ISSUE_URL}/p/${project}/source/detail?r=%d";
 	
 	return sprintf($url, $issue_id);
 }

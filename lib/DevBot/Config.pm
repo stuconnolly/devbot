@@ -37,15 +37,18 @@ sub get
 	my $config_file;
 	my $filename = shift;
 	
-	my $conf_path = File::Spec->catdir(($DevBot::Utils::ROOT_DIR, 'conf'));
+	my $conf_path = File::Spec->catdir($DevBot::Utils::ROOT_DIR, 'conf');
 	
+	# Check if we supplied an actual filename
+	return _read_config_file($conf_path, $filename) if -e File::Spec->catfile($conf_path, $filename);
+
 	opendir(CONFIG_DIR, $conf_path);
 	
 	my @files = grep(/${filename}.*\.conf$/, readdir(CONFIG_DIR));
 	
 	closedir(CONFIG_DIR);
 	
-	croak 'No config files found' unless (@files > 0);
+	croak 'No config files found' unless @files > 0;
 	
 	if (@files == 1) {
 		$config_file = $files[0];
@@ -60,7 +63,14 @@ sub get
 		}
 	}
 			
-	return Config::File::read_config_file(File::Spec->catfile(($conf_path), $config_file));
+	return _read_config_file($conf_path, $config_file);
+}
+
+sub _read_config_file
+{
+	my ($path, $file) = @_;
+
+	return Config::File::read_config_file(File::Spec->catfile($path, $file));
 }
 
 1;
