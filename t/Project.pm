@@ -23,7 +23,6 @@ package t::Project;
 use strict;
 use warnings;
 
-use Cwd;
 use Test::More;
 
 use base 'Test::Class';
