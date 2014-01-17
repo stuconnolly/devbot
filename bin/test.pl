@@ -28,7 +28,7 @@ use lib '../lib';
 use Cwd;
 use Carp;
 use File::Spec;
-use Test::More tests => 17;
+use Test::More tests => 19;
 use Test::Class::Load '../t';
 
 our $TEST_CONFIG = 
